@@ -1,0 +1,112 @@
+[
+  {
+    "id": "personal_data",
+    "name": "Personal data",
+    "sensitivity": "medium",
+    "synthetic_examples": [
+      "Synthetic Name",
+      "user@example.test"
+    ],
+    "privacy_notes": "Personal identifiers require minimization and redaction.",
+    "recommended_handling": "Redact before analysis and avoid saving raw text unless intentional."
+  },
+  {
+    "id": "customer_data",
+    "name": "Customer data",
+    "sensitivity": "medium",
+    "synthetic_examples": [
+      "Demo customer ticket",
+      "synthetic account tier"
+    ],
+    "privacy_notes": "Customer context can expose private or contractual information.",
+    "recommended_handling": "Keep drafts local and require approval before external messages."
+  },
+  {
+    "id": "hr_candidate_data",
+    "name": "HR / candidate data",
+    "sensitivity": "high",
+    "synthetic_examples": [
+      "Synthetic CV summary",
+      "demo interview slot"
+    ],
+    "privacy_notes": "Candidate data can affect employment opportunities.",
+    "recommended_handling": "Require recruiter review and avoid automated decisions."
+  },
+  {
+    "id": "financial_data",
+    "name": "Financial data",
+    "sensitivity": "high",
+    "synthetic_examples": [
+      "demo invoice amount",
+      "synthetic refund request"
+    ],
+    "privacy_notes": "Financial workflows can affect money movement and accounting.",
+    "recommended_handling": "Require authorized approval and audit trail."
+  },
+  {
+    "id": "medical_health_data",
+    "name": "Medical / health data",
+    "sensitivity": "critical",
+    "synthetic_examples": [
+      "synthetic patient context",
+      "demo appointment note"
+    ],
+    "privacy_notes": "Health information requires specialist controls.",
+    "recommended_handling": "Avoid processing unless reviewed by qualified staff."
+  },
+  {
+    "id": "legal_compliance_data",
+    "name": "Legal / compliance data",
+    "sensitivity": "high",
+    "synthetic_examples": [
+      "demo policy exception",
+      "synthetic contract clause"
+    ],
+    "privacy_notes": "Legal context may create obligations or liability.",
+    "recommended_handling": "Require legal or compliance review."
+  },
+  {
+    "id": "credentials_secrets",
+    "name": "Credentials or secrets",
+    "sensitivity": "critical",
+    "synthetic_examples": [
+      "token=REDACTED123",
+      "api_key=DEMO_ONLY"
+    ],
+    "privacy_notes": "Secrets must never be pasted into prompts or reports.",
+    "recommended_handling": "Remove credentials and rotate if real exposure occurs."
+  },
+  {
+    "id": "security_event_data",
+    "name": "Security event data",
+    "sensitivity": "high",
+    "synthetic_examples": [
+      "synthetic alert ID",
+      "demo incident priority"
+    ],
+    "privacy_notes": "Security context may drive response decisions.",
+    "recommended_handling": "Require analyst review and no autonomous containment."
+  },
+  {
+    "id": "location_logistics_data",
+    "name": "Location / logistics data",
+    "sensitivity": "medium",
+    "synthetic_examples": [
+      "demo delivery address",
+      "synthetic route window"
+    ],
+    "privacy_notes": "Location data can identify people or operations.",
+    "recommended_handling": "Minimize address details and require dispatcher review."
+  },
+  {
+    "id": "business_confidential_data",
+    "name": "Business confidential data",
+    "sensitivity": "medium",
+    "synthetic_examples": [
+      "demo pricing tier",
+      "synthetic roadmap note"
+    ],
+    "privacy_notes": "Internal business details may be sensitive.",
+    "recommended_handling": "Keep local and limit report scope."
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "product": "AI Workflow Risk Auditor Pro",
+  "example": "customer_support",
+  "synthetic": true,
+  "valid": true,
+  "workflow_type": "customer_support",
+  "risk": {
+    "compatibility_score": 10,
+    "compatibility_level": "high",
+    "raw_matrix_score": 17,
+    "raw_matrix_severity": "critical",
+    "score_explanation_simple": "Critical risk estimated from local rules, mainly because customer-facing support, customer context, policy exceptions, and external communication were detected in the workflow text."
+  },
+  "detected_evidence_count": 35,
+  "simulation": {
+    "raw_score": 17,
+    "simulated_residual_score": 9,
+    "simulated_reduction": 8,
+    "meaning": "Estimated remaining risk after selected protections. This is not a guarantee."
+  },
+  "source_of_truth_labels": [
+    "Detected = found in the text",
+    "Calculated = computed by local rules",
+    "Simulated = estimated scenario after protections",
+    "Recommended = proposed action, not an obligation",
+    "Uncertain = needs human review"
+  ],
+  "limitations": [
+    "This score is a rule-based estimate, not a statistical probability.",
+    "Score calculated from local deterministic rules. It is an aid, not a certification.",
+    "Human review remains required."
+  ],
+  "privacy_model": {
+    "local_first": true,
+    "cloud_api_required": false,
+    "explicit_save_required": true,
+    "workflow_text_never_sent_to_cloud_by_app": true
+  }
+}

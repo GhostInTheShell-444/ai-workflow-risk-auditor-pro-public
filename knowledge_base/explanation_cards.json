@@ -1,0 +1,202 @@
+[
+  {
+    "id": "risk_score",
+    "topic": "risk",
+    "title": "Risk score",
+    "short_explanation": "A deterministic number summarizing weighted factors detected in the workflow.",
+    "why_it_matters": "It helps compare raw and residual risk without relying on a model.",
+    "related_ui_area": "audit"
+  },
+  {
+    "id": "evidence",
+    "topic": "evidence",
+    "title": "Evidence",
+    "short_explanation": "The exact text fragment or pattern that triggered a finding.",
+    "why_it_matters": "Evidence makes the audit explainable and reviewable.",
+    "related_ui_area": "audit"
+  },
+  {
+    "id": "control",
+    "topic": "control",
+    "title": "Control",
+    "short_explanation": "A defensive safeguard that can reduce or govern a risk factor.",
+    "why_it_matters": "Controls turn findings into practical implementation boundaries.",
+    "related_ui_area": "audit"
+  },
+  {
+    "id": "residual_risk",
+    "topic": "residual",
+    "title": "Residual risk",
+    "short_explanation": "The estimated risk after selected controls are applied in a local simulation.",
+    "why_it_matters": "It shows what may remain even after safeguards.",
+    "related_ui_area": "audit"
+  },
+  {
+    "id": "human_in_loop",
+    "topic": "human",
+    "title": "Human-in-the-loop",
+    "short_explanation": "A named human role validates high-impact recommendations before action.",
+    "why_it_matters": "Human validation prevents unsafe autonomous decisions.",
+    "related_ui_area": "audit"
+  },
+  {
+    "id": "local_first",
+    "topic": "local",
+    "title": "Local-first privacy",
+    "short_explanation": "Analysis, storage, and reports stay on the local machine.",
+    "why_it_matters": "Local operation reduces exposure and avoids cloud dependencies.",
+    "related_ui_area": "audit"
+  },
+  {
+    "id": "deterministic",
+    "topic": "deterministic",
+    "title": "Deterministic scoring",
+    "short_explanation": "The same workflow text produces the same findings and scores.",
+    "why_it_matters": "Repeatability is essential for tests and audit explanations.",
+    "related_ui_area": "audit"
+  },
+  {
+    "id": "ollama",
+    "topic": "ollama",
+    "title": "Optional local LLM enrichment",
+    "short_explanation": "A local model may rephrase narrative text only.",
+    "why_it_matters": "It must never decide findings, controls, scores, or residual risk.",
+    "related_ui_area": "audit"
+  },
+  {
+    "id": "raw_vs_residual",
+    "topic": "raw",
+    "title": "Raw risk vs residual risk",
+    "short_explanation": "Raw risk is before controls; residual risk is after simulated controls.",
+    "why_it_matters": "This separation keeps planning clear.",
+    "related_ui_area": "audit"
+  },
+  {
+    "id": "simulation_only",
+    "topic": "simulation",
+    "title": "Recommendations are simulated only",
+    "short_explanation": "The tool does not execute email, HR, SOC, finance, CRM, or production actions.",
+    "why_it_matters": "A portfolio-safe boundary avoids real-world side effects.",
+    "related_ui_area": "audit"
+  },
+  {
+    "id": "privacy_11",
+    "topic": "privacy",
+    "title": "Privacy concept 11",
+    "short_explanation": "Short explanation for privacy in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "auditability_12",
+    "topic": "auditability",
+    "title": "Auditability concept 12",
+    "short_explanation": "Short explanation for auditability in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "dashboard_13",
+    "topic": "dashboard",
+    "title": "Dashboard concept 13",
+    "short_explanation": "Short explanation for dashboard in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "reports_14",
+    "topic": "reports",
+    "title": "Reports concept 14",
+    "short_explanation": "Short explanation for reports in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "knowledge_base_15",
+    "topic": "knowledge",
+    "title": "Knowledge Base concept 15",
+    "short_explanation": "Short explanation for knowledge base in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "french_detection_16",
+    "topic": "french",
+    "title": "French Detection concept 16",
+    "short_explanation": "Short explanation for french detection in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "hebrew_rtl_17",
+    "topic": "hebrew",
+    "title": "Hebrew Rtl concept 17",
+    "short_explanation": "Short explanation for hebrew rtl in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "demo_mode_18",
+    "topic": "demo",
+    "title": "Demo Mode concept 18",
+    "short_explanation": "Short explanation for demo mode in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "privacy_19",
+    "topic": "privacy",
+    "title": "Privacy concept 19",
+    "short_explanation": "Short explanation for privacy in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "auditability_20",
+    "topic": "auditability",
+    "title": "Auditability concept 20",
+    "short_explanation": "Short explanation for auditability in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "dashboard_21",
+    "topic": "dashboard",
+    "title": "Dashboard concept 21",
+    "short_explanation": "Short explanation for dashboard in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "reports_22",
+    "topic": "reports",
+    "title": "Reports concept 22",
+    "short_explanation": "Short explanation for reports in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "knowledge_base_23",
+    "topic": "knowledge",
+    "title": "Knowledge Base concept 23",
+    "short_explanation": "Short explanation for knowledge base in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "french_detection_24",
+    "topic": "french",
+    "title": "French Detection concept 24",
+    "short_explanation": "Short explanation for french detection in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "hebrew_rtl_25",
+    "topic": "hebrew",
+    "title": "Hebrew Rtl concept 25",
+    "short_explanation": "Short explanation for hebrew rtl in local AI workflow audits.",
+    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "related_ui_area": "knowledge_base"
+  }
+]

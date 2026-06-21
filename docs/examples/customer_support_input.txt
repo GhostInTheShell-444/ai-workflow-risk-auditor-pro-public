@@ -1,0 +1,6 @@
+A customer support inbox receives anonymized customer emails and support tickets.
+The team classifies each request by topic, urgency, and required department.
+An AI workflow may draft a suggested answer using approved knowledge base content.
+A support agent reviews the draft, checks customer account context, and approves any customer-facing response before sending.
+Complex complaints, refunds, or policy exceptions are escalated to a manager.
+The process keeps an audit log of classification, review, approval, and final message decisions.

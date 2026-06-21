@@ -1,0 +1,41 @@
+name: Feature request
+description: Propose a scoped enhancement that preserves local-first behavior.
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Use case
+      description: Describe the user problem and desired outcome using synthetic examples.
+    validations:
+      required: true
+  - type: textarea
+    id: local_first
+    attributes:
+      label: Local-first impact
+      description: Explain any network, persistence, dependency, Ollama, or offline-use implications.
+    validations:
+      required: true
+  - type: textarea
+    id: security_privacy
+    attributes:
+      label: Security and privacy impact
+      description: Identify new data, trust boundaries, misuse risks, and mitigations.
+    validations:
+      required: true
+  - type: textarea
+    id: i18n
+    attributes:
+      label: Internationalization impact
+      description: List EN/FR/HE and Hebrew RTL changes.
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Tests needed
+      description: Describe automated and manual validation.
+    validations:
+      required: true

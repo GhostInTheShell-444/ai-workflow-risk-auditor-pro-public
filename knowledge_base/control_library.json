@@ -1,0 +1,617 @@
+[
+  {
+    "id": "ctrl_human_approval_external",
+    "version": "1.0",
+    "name": "Human approval before external message",
+    "category": "human_validation",
+    "effectiveness": 5,
+    "enabled": true,
+    "description": "Defensive control for human approval before external message in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "external_communication": 2,
+      "customer_facing_automated_output": 3,
+      "missing_human_validation": 2
+    },
+    "implementation_guidance": "Require a named reviewer to approve every customer-facing or external draft before release.",
+    "human_role_if_relevant": "Support agent or business owner"
+  },
+  {
+    "id": "ctrl_audit_trail",
+    "version": "1.0",
+    "name": "Audit trail",
+    "category": "auditability",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for audit trail in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "missing_audit_trail": 2
+    },
+    "implementation_guidance": "Record inputs, deterministic findings, reviewer decision, selected controls, and final report timestamp.",
+    "human_role_if_relevant": "Process owner"
+  },
+  {
+    "id": "ctrl_data_minimization",
+    "version": "1.0",
+    "name": "Data minimization",
+    "category": "privacy",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for data minimization in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "personal_data": 1,
+      "customer_data": 1,
+      "hr_candidate_data": 1,
+      "financial_data": 1,
+      "medical_health_data": 1,
+      "legal_compliance_data": 1
+    },
+    "implementation_guidance": "Use only synthetic, redacted, or minimum necessary fields during analysis and reporting.",
+    "human_role_if_relevant": "Privacy reviewer"
+  },
+  {
+    "id": "ctrl_disable_autonomous_sending",
+    "version": "1.0",
+    "name": "Disable autonomous sending",
+    "category": "execution_boundary",
+    "effectiveness": 5,
+    "enabled": true,
+    "description": "Defensive control for disable autonomous sending in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "external_communication": 2,
+      "customer_facing_automated_output": 3,
+      "broad_ai_agent_permissions": 2
+    },
+    "implementation_guidance": "Keep the system advisory and prevent direct email, chat, ticket, or notification sending.",
+    "human_role_if_relevant": "System owner"
+  },
+  {
+    "id": "ctrl_least_privilege",
+    "version": "1.0",
+    "name": "Least privilege access",
+    "category": "access_control",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for least privilege access in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "sensitive_system_access": 2,
+      "broad_ai_agent_permissions": 2,
+      "third_party_integration": 1
+    },
+    "implementation_guidance": "Restrict access to local files and approved demo content only; do not grant production credentials.",
+    "human_role_if_relevant": "Security engineer"
+  },
+  {
+    "id": "ctrl_hr_recruiter_review",
+    "version": "1.0",
+    "name": "Recruiter review before candidate decision",
+    "category": "human_validation",
+    "effectiveness": 5,
+    "enabled": true,
+    "description": "Defensive control for recruiter review before candidate decision in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "hr_candidate_data": 2,
+      "decision_affecting_person": 4,
+      "missing_human_validation": 2
+    },
+    "implementation_guidance": "Require a recruiter to review summaries, rankings, and rejection or interview recommendations.",
+    "human_role_if_relevant": "HR recruiter"
+  },
+  {
+    "id": "ctrl_soc_analyst_review",
+    "version": "1.0",
+    "name": "SOC analyst review before escalation",
+    "category": "human_validation",
+    "effectiveness": 5,
+    "enabled": true,
+    "description": "Defensive control for soc analyst review before escalation in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "soc_security_workflow": 3,
+      "irreversible_action": 2,
+      "missing_human_validation": 2
+    },
+    "implementation_guidance": "Require a SOC analyst to validate triage, escalation, closure, or containment recommendations.",
+    "human_role_if_relevant": "SOC analyst"
+  },
+  {
+    "id": "ctrl_dispatcher_approval",
+    "version": "1.0",
+    "name": "Dispatcher approval before route or customer notification",
+    "category": "human_validation",
+    "effectiveness": 5,
+    "enabled": true,
+    "description": "Defensive control for dispatcher approval before route or customer notification in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "location_logistics_data": 1,
+      "external_communication": 2,
+      "missing_human_validation": 2
+    },
+    "implementation_guidance": "Require dispatcher approval before route-impacting changes or customer notifications.",
+    "human_role_if_relevant": "Dispatcher"
+  },
+  {
+    "id": "ctrl_no_irreversible_actions",
+    "version": "1.0",
+    "name": "Block irreversible automation",
+    "category": "execution_boundary",
+    "effectiveness": 5,
+    "enabled": true,
+    "description": "Defensive control for block irreversible automation in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "irreversible_action": 4,
+      "data_modification_deletion": 2,
+      "broad_ai_agent_permissions": 2
+    },
+    "implementation_guidance": "Prohibit automated deletion, account blocking, rejection, containment, or production changes.",
+    "human_role_if_relevant": "System owner"
+  },
+  {
+    "id": "ctrl_prompt_injection_review",
+    "version": "1.0",
+    "name": "Prompt injection review",
+    "category": "security",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for prompt injection review in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "external_communication": 1,
+      "customer_data": 1
+    },
+    "implementation_guidance": "Treat user-submitted text as untrusted and show extracted evidence before any draft is reused.",
+    "human_role_if_relevant": "Security reviewer"
+  },
+  {
+    "id": "ctrl_retention_policy",
+    "version": "1.0",
+    "name": "Retention policy",
+    "category": "privacy",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for retention policy in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "personal_data": 1,
+      "customer_data": 1,
+      "hr_candidate_data": 1
+    },
+    "implementation_guidance": "Define what is saved, why it is saved, and when local records are deleted.",
+    "human_role_if_relevant": "Data owner"
+  },
+  {
+    "id": "ctrl_transparency_notice",
+    "version": "1.0",
+    "name": "Transparency and notice",
+    "category": "privacy",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for transparency and notice in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "decision_affecting_person": 1,
+      "personal_data": 1
+    },
+    "implementation_guidance": "Document when AI assistance is used and which decisions remain human-owned.",
+    "human_role_if_relevant": "Process owner"
+  },
+  {
+    "id": "ctrl_separation_recommend_execute",
+    "version": "1.0",
+    "name": "Separate recommendation from execution",
+    "category": "architecture",
+    "effectiveness": 5,
+    "enabled": true,
+    "description": "Defensive control for separate recommendation from execution in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "broad_ai_agent_permissions": 3,
+      "irreversible_action": 2,
+      "data_modification_deletion": 2
+    },
+    "implementation_guidance": "Design the workflow so recommendations are reviewed outside any production action path.",
+    "human_role_if_relevant": "Architect"
+  },
+  {
+    "id": "ctrl_local_only_operation",
+    "version": "1.0",
+    "name": "Local-only operation",
+    "category": "privacy",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for local-only operation in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "third_party_integration": 2,
+      "customer_data": 1,
+      "personal_data": 1
+    },
+    "implementation_guidance": "Run analysis locally with no cloud API, telemetry, or external database.",
+    "human_role_if_relevant": "System owner"
+  },
+  {
+    "id": "ctrl_sensitive_data_warning",
+    "version": "1.0",
+    "name": "Sensitive data warning",
+    "category": "privacy",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for sensitive data warning in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "personal_data": 1,
+      "financial_data": 1,
+      "medical_health_data": 1
+    },
+    "implementation_guidance": "Warn users before input that real confidential or personal data must not be pasted.",
+    "human_role_if_relevant": "Product owner"
+  },
+  {
+    "id": "ctrl_controlled_export",
+    "version": "1.0",
+    "name": "Controlled report export",
+    "category": "reporting",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for controlled report export in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "customer_data": 1,
+      "business_confidential_data": 1
+    },
+    "implementation_guidance": "Export Markdown and JSON summaries only after the user intentionally downloads or saves them.",
+    "human_role_if_relevant": "Reviewer"
+  },
+  {
+    "id": "ctrl_role_based_review",
+    "version": "1.0",
+    "name": "Role-based review assignment",
+    "category": "human_validation",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for role-based review assignment in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "missing_human_validation": 2,
+      "decision_affecting_person": 2
+    },
+    "implementation_guidance": "Assign each checkpoint to a responsible role instead of a generic approval step.",
+    "human_role_if_relevant": "Process owner"
+  },
+  {
+    "id": "ctrl_evidence_display",
+    "version": "1.0",
+    "name": "Evidence display",
+    "category": "explainability",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for evidence display in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "missing_audit_trail": 1,
+      "decision_affecting_person": 1
+    },
+    "implementation_guidance": "Show matched evidence, rule IDs, and risk score impact for every finding.",
+    "human_role_if_relevant": "Reviewer"
+  },
+  {
+    "id": "ctrl_confidence_labeling",
+    "version": "1.0",
+    "name": "Confidence labeling",
+    "category": "explainability",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for confidence labeling in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "decision_affecting_person": 1
+    },
+    "implementation_guidance": "Display confidence to avoid presenting deterministic pattern matches as certainty.",
+    "human_role_if_relevant": "Reviewer"
+  },
+  {
+    "id": "ctrl_safe_regex_only",
+    "version": "1.0",
+    "name": "Safe local pattern matching",
+    "category": "security",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for safe local pattern matching in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "personal_data": 1,
+      "credentials_secrets": 2
+    },
+    "implementation_guidance": "Use bounded local regex checks for synthetic sensitive-data-like strings only.",
+    "human_role_if_relevant": "Security engineer"
+  },
+  {
+    "id": "ctrl_anonymized_demo_data",
+    "version": "1.0",
+    "name": "Anonymized demo data",
+    "category": "privacy",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for anonymized demo data in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "personal_data": 1,
+      "customer_data": 1,
+      "hr_candidate_data": 1
+    },
+    "implementation_guidance": "Keep seeded examples synthetic and clearly marked as demo content.",
+    "human_role_if_relevant": "Product owner"
+  },
+  {
+    "id": "ctrl_management_exception_review",
+    "version": "1.0",
+    "name": "Manager review for exceptions",
+    "category": "human_validation",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for manager review for exceptions in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "financial_data": 2,
+      "legal_compliance_data": 2,
+      "decision_affecting_person": 1
+    },
+    "implementation_guidance": "Escalate refunds, policy exceptions, legal concerns, and unusual approvals to a manager.",
+    "human_role_if_relevant": "Manager"
+  },
+  {
+    "id": "ctrl_access_logging",
+    "version": "1.0",
+    "name": "Access logging",
+    "category": "auditability",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for access logging in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "sensitive_system_access": 1,
+      "missing_audit_trail": 2
+    },
+    "implementation_guidance": "Log reviewer access to saved local reports and assessment data.",
+    "human_role_if_relevant": "Security reviewer"
+  },
+  {
+    "id": "ctrl_review_before_data_change",
+    "version": "1.0",
+    "name": "Review before data change",
+    "category": "human_validation",
+    "effectiveness": 5,
+    "enabled": true,
+    "description": "Defensive control for review before data change in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "data_modification_deletion": 4,
+      "irreversible_action": 2
+    },
+    "implementation_guidance": "Require approval before any workflow changes records, status, schedules, or account states.",
+    "human_role_if_relevant": "Process owner"
+  },
+  {
+    "id": "ctrl_third_party_boundary",
+    "version": "1.0",
+    "name": "Third-party boundary review",
+    "category": "architecture",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for third-party boundary review in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "third_party_integration": 2,
+      "customer_data": 1
+    },
+    "implementation_guidance": "Document that integrations are out of scope unless separately reviewed and approved.",
+    "human_role_if_relevant": "Architect"
+  },
+  {
+    "id": "ctrl_secure_configuration",
+    "version": "1.0",
+    "name": "Secure local configuration",
+    "category": "security",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for secure local configuration in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "credentials_secrets": 2,
+      "sensitive_system_access": 1
+    },
+    "implementation_guidance": "Avoid secrets in project files and keep local configuration outside reports.",
+    "human_role_if_relevant": "Security engineer"
+  },
+  {
+    "id": "ctrl_medical_specialist_review",
+    "version": "1.0",
+    "name": "Specialist review for health context",
+    "category": "human_validation",
+    "effectiveness": 5,
+    "enabled": true,
+    "description": "Defensive control for specialist review for health context in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "medical_health_data": 4,
+      "decision_affecting_person": 2
+    },
+    "implementation_guidance": "Require qualified review for any health-related workflow output.",
+    "human_role_if_relevant": "Qualified reviewer"
+  },
+  {
+    "id": "ctrl_legal_specialist_review",
+    "version": "1.0",
+    "name": "Legal review for compliance context",
+    "category": "human_validation",
+    "effectiveness": 5,
+    "enabled": true,
+    "description": "Defensive control for legal review for compliance context in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "legal_compliance_data": 3,
+      "decision_affecting_person": 2
+    },
+    "implementation_guidance": "Require qualified review for legal, contract, or compliance-sensitive recommendations.",
+    "human_role_if_relevant": "Legal reviewer"
+  },
+  {
+    "id": "ctrl_finance_approver",
+    "version": "1.0",
+    "name": "Finance approver",
+    "category": "human_validation",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for finance approver in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "financial_data": 3,
+      "data_modification_deletion": 1
+    },
+    "implementation_guidance": "Require an authorized approver before invoices, payments, refunds, or financial changes.",
+    "human_role_if_relevant": "Finance approver"
+  },
+  {
+    "id": "ctrl_output_template",
+    "version": "1.0",
+    "name": "Approved output templates",
+    "category": "quality",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for approved output templates in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "external_communication": 1,
+      "customer_facing_automated_output": 1
+    },
+    "implementation_guidance": "Use reviewed templates for customer, candidate, or vendor-facing drafts.",
+    "human_role_if_relevant": "Business owner"
+  },
+  {
+    "id": "ctrl_redaction_before_analysis",
+    "version": "1.0",
+    "name": "Redaction before analysis",
+    "category": "privacy",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for redaction before analysis in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "personal_data": 2,
+      "customer_data": 1,
+      "hr_candidate_data": 1
+    },
+    "implementation_guidance": "Redact identifiers before entering workflow text into the local tool.",
+    "human_role_if_relevant": "User"
+  },
+  {
+    "id": "ctrl_dual_control_high_risk",
+    "version": "1.0",
+    "name": "Dual control for critical workflows",
+    "category": "human_validation",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for dual control for critical workflows in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "irreversible_action": 2,
+      "decision_affecting_person": 2
+    },
+    "implementation_guidance": "Require two reviewers for critical-risk recommendations before implementation planning.",
+    "human_role_if_relevant": "Manager"
+  },
+  {
+    "id": "ctrl_limit_report_scope",
+    "version": "1.0",
+    "name": "Limit report scope",
+    "category": "reporting",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for limit report scope in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "business_confidential_data": 1,
+      "personal_data": 1
+    },
+    "implementation_guidance": "Keep reports focused on risk evidence and avoid unnecessary operational detail.",
+    "human_role_if_relevant": "Report owner"
+  },
+  {
+    "id": "ctrl_simulation_disclaimer",
+    "version": "1.0",
+    "name": "Simulation disclaimer",
+    "category": "governance",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for simulation disclaimer in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "missing_audit_trail": 1
+    },
+    "implementation_guidance": "State that residual risk is a local planning estimate and not production assurance.",
+    "human_role_if_relevant": "Product owner"
+  },
+  {
+    "id": "ctrl_change_management",
+    "version": "1.0",
+    "name": "Change management",
+    "category": "governance",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for change management in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "data_modification_deletion": 1,
+      "sensitive_system_access": 1
+    },
+    "implementation_guidance": "Treat any future production connection as a separate reviewed change.",
+    "human_role_if_relevant": "Change manager"
+  },
+  {
+    "id": "ctrl_human_feedback_loop",
+    "version": "1.0",
+    "name": "Human feedback loop",
+    "category": "quality",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for human feedback loop in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "missing_human_validation": 1,
+      "customer_facing_automated_output": 1
+    },
+    "implementation_guidance": "Capture reviewer corrections so process owners can refine templates and controls.",
+    "human_role_if_relevant": "Process owner"
+  },
+  {
+    "id": "ctrl_escalation_policy",
+    "version": "1.0",
+    "name": "Escalation policy",
+    "category": "governance",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for escalation policy in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "soc_security_workflow": 1,
+      "legal_compliance_data": 1,
+      "financial_data": 1
+    },
+    "implementation_guidance": "Define when recommendations must be escalated beyond the first reviewer.",
+    "human_role_if_relevant": "Process owner"
+  },
+  {
+    "id": "ctrl_kb_version_review",
+    "version": "1.0",
+    "name": "Knowledge base version review",
+    "category": "governance",
+    "effectiveness": 2,
+    "enabled": true,
+    "description": "Defensive control for knowledge base version review in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "missing_audit_trail": 1
+    },
+    "implementation_guidance": "Version risk patterns and controls so changes are reviewable.",
+    "human_role_if_relevant": "Maintainer"
+  },
+  {
+    "id": "ctrl_test_regression_suite",
+    "version": "1.0",
+    "name": "Regression test suite",
+    "category": "engineering",
+    "effectiveness": 3,
+    "enabled": true,
+    "description": "Defensive control for regression test suite in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "missing_audit_trail": 1,
+      "broad_ai_agent_permissions": 1
+    },
+    "implementation_guidance": "Keep deterministic tests for scoring, evidence, persistence, and local-only behavior.",
+    "human_role_if_relevant": "Engineer"
+  },
+  {
+    "id": "ctrl_safe_failure_mode",
+    "version": "1.0",
+    "name": "Safe failure mode",
+    "category": "security",
+    "effectiveness": 4,
+    "enabled": true,
+    "description": "Defensive control for safe failure mode in local AI workflow reviews.",
+    "reduced_risk_factors": {
+      "broad_ai_agent_permissions": 2,
+      "irreversible_action": 1
+    },
+    "implementation_guidance": "If enrichment or parsing fails, keep deterministic findings and block any execution claims.",
+    "human_role_if_relevant": "Engineer"
+  }
+]

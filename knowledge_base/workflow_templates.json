@@ -1,0 +1,202 @@
+[
+  {
+    "id": "demo_customer_support_email",
+    "version": "1.0",
+    "name": "Customer Support Email Review",
+    "category": "support",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A support agent receives anonymized customer e-mails with order context. AI drafts a proposed response, and a human validates the final customer message while an audit log records the decision.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_hr_candidate_screening",
+    "version": "1.0",
+    "name": "HR Candidate Screening",
+    "category": "hr",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "HR receives anonymized CV material, summarizes skills, and proposes a shortlist. A recruiter validates any decision affecting a candidate before interview or rejection.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_soc_alert_triage",
+    "version": "1.0",
+    "name": "SOC Alert Triage",
+    "category": "soc",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A SOC analyst receives a synthetic security alert. AI summarizes context and proposes escalation priority, but no blocking, deletion, or production action is executed automatically.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_logistics_dispatch",
+    "version": "1.0",
+    "name": "Logistics Dispatch Review",
+    "category": "logistics",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A dispatcher receives a synthetic delivery request with address, delivery window, and customer notification. AI summarizes options while the dispatcher approves route changes.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_finance_refund",
+    "version": "1.0",
+    "name": "Finance Refund Review",
+    "category": "finance",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A finance team reviews a synthetic refund request. AI summarizes the policy match, but an authorized approver validates any payment or account update.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_legal_contract",
+    "version": "1.0",
+    "name": "Legal Contract Intake",
+    "category": "legal",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A legal operations team receives a synthetic contract clause. AI summarizes obligations, and a legal reviewer validates recommendations before any response.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_health_appointment",
+    "version": "1.0",
+    "name": "Health Appointment Routing",
+    "category": "health",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A clinic uses synthetic appointment notes to route requests. AI summarizes scheduling needs, and qualified staff review any health-related output.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_vendor_risk",
+    "version": "1.0",
+    "name": "Vendor Risk Intake",
+    "category": "vendor",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A procurement team receives a synthetic vendor questionnaire. AI summarizes risks while a manager validates third-party handling and no external integration is connected.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_customer_complaint",
+    "version": "1.0",
+    "name": "Customer Complaint Escalation",
+    "category": "support",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A support team receives a synthetic complaint and possible refund request. AI drafts internal notes and a manager approves policy exceptions.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_incident_postmortem",
+    "version": "1.0",
+    "name": "Incident Postmortem Summary",
+    "category": "hr",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A security team summarizes synthetic incident notes. AI proposes lessons learned, and a security lead approves final report language.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_transport_exception",
+    "version": "1.0",
+    "name": "Transport Exception Handling",
+    "category": "soc",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A logistics team receives a synthetic missed-window exception. AI drafts customer notification text, and a dispatcher approves communication.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_employee_request",
+    "version": "1.0",
+    "name": "Employee Request Triage",
+    "category": "logistics",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "An HR team receives a synthetic employee request. AI categorizes the request, and HR reviews any personal or policy-sensitive recommendation.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_invoice_triage",
+    "version": "1.0",
+    "name": "Invoice Triage",
+    "category": "finance",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "Accounts payable receives a synthetic invoice question. AI extracts non-sensitive fields and a finance approver validates any payment decision.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_policy_exception",
+    "version": "1.0",
+    "name": "Policy Exception Review",
+    "category": "legal",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A manager receives a synthetic policy exception request. AI summarizes context, and management approves any exception before action.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_data_access",
+    "version": "1.0",
+    "name": "Data Access Request",
+    "category": "health",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A data owner receives a synthetic access request. AI summarizes purpose and a reviewer validates least privilege before granting anything outside this local demo.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_customer_onboarding",
+    "version": "1.0",
+    "name": "Customer Onboarding Checklist",
+    "category": "vendor",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A team receives synthetic onboarding notes. AI creates a checklist, and a human validates external messages and data minimization.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_ticket_closure",
+    "version": "1.0",
+    "name": "Ticket Closure Draft",
+    "category": "support",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A service team receives a synthetic ticket. AI proposes closure wording, but an agent reviews before closing or notifying the customer.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_security_escalation",
+    "version": "1.0",
+    "name": "Security Escalation Memo",
+    "category": "hr",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A SOC analyst receives synthetic alert details. AI drafts an escalation memo while analyst review remains required.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_delivery_notification",
+    "version": "1.0",
+    "name": "Delivery Notification Draft",
+    "category": "soc",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A dispatcher receives synthetic route details. AI drafts an ETA notification, and the dispatcher approves before customer contact.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  },
+  {
+    "id": "demo_recruiting_interview",
+    "version": "1.0",
+    "name": "Recruiting Interview Checklist",
+    "category": "logistics",
+    "enabled": true,
+    "synthetic": true,
+    "workflow_text": "A recruiter receives anonymized CV notes. AI proposes interview questions, and a recruiter validates fairness and relevance.",
+    "demo_notes": "Synthetic and anonymized local demo scenario; no real personal data or production connection."
+  }
+]

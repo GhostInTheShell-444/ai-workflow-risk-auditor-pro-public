@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Reject tracked runtime files
+        shell: bash
+        run: |
+          if git ls-files | grep -E '(^|/)(\.venv|__pycache__|\.pytest_cache|\.mypy_cache|\.cache)(/|$)|\.pyc$|\.log$|(^|/)data/.*\.db$|(^|/)\.env($|\.)|(^|/)secrets\.toml$'; then
+            echo "Forbidden runtime or sensitive file is tracked."
+            exit 1
+          fi
+
+      - name: Run tests
+        run: python -m pytest
+
+      - name: Compile Python sources
+        run: python -m compileall app.py analyzer.py database.py repositories.py workflow_parser.py report_renderer.py export_json.py score_explainability.py design_tokens.py ui_components.py tests locales
+
+      - name: Validate JSON data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in Path("locales").glob("*.json"):
+              json.loads(path.read_text(encoding="utf-8"))
+          for path in Path("knowledge_base").glob("*.json"):
+              json.loads(path.read_text(encoding="utf-8"))
+          print("json validation ok")
+          PY

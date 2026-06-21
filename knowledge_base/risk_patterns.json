@@ -1,0 +1,3580 @@
+[
+  {
+    "id": "rp_customer_data",
+    "version": "1.0",
+    "name": "Customer data in workflow",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "customer data",
+      "client data",
+      "données clients",
+      "données client",
+      "לקוח"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "customer_data"
+    ],
+    "explanation": "This pattern flags customer data in workflow using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_data_minimization",
+      "ctrl_redaction_before_analysis",
+      "ctrl_sensitive_data_warning"
+    ]
+  },
+  {
+    "id": "rp_personal_data",
+    "version": "1.0",
+    "name": "Personal data in workflow",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "personal data",
+      "données personnelles",
+      "personally identifiable",
+      "address",
+      "adresse",
+      "email address",
+      "טלפון",
+      "כתובת"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "This pattern flags personal data in workflow using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_data_minimization",
+      "ctrl_redaction_before_analysis",
+      "ctrl_retention_policy"
+    ]
+  },
+  {
+    "id": "rp_hr_data",
+    "version": "1.0",
+    "name": "HR or candidate data",
+    "category": "privacy",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "HR data",
+      "données RH",
+      "candidate",
+      "candidat",
+      "CV",
+      "resume",
+      "entretien",
+      "présélection",
+      "recruteur",
+      "מועמד"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "hr_candidate_data",
+      "decision_affecting_person"
+    ],
+    "explanation": "This pattern flags hr or candidate data using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_hr_recruiter_review",
+      "ctrl_data_minimization",
+      "ctrl_transparency_notice"
+    ]
+  },
+  {
+    "id": "rp_people_decision",
+    "version": "1.0",
+    "name": "Decision affecting a person",
+    "category": "governance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "decision affecting a person",
+      "décision affectant une personne",
+      "ranking",
+      "shortlist",
+      "présélection",
+      "reject candidate",
+      "candidate ranking"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "decision_affecting_person"
+    ],
+    "explanation": "This pattern flags decision affecting a person using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_role_based_review",
+      "ctrl_hr_recruiter_review",
+      "ctrl_dual_control_high_risk"
+    ]
+  },
+  {
+    "id": "rp_external_email",
+    "version": "1.0",
+    "name": "External email or message",
+    "category": "security",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "e-mail",
+      "email",
+      "reply",
+      "réponse externe",
+      "external response",
+      "customer notification",
+      "notification client",
+      "message client",
+      "דוא״ל"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "external_communication",
+      "customer_facing_automated_output"
+    ],
+    "explanation": "This pattern flags external email or message using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_human_approval_external",
+      "ctrl_disable_autonomous_sending",
+      "ctrl_output_template"
+    ]
+  },
+  {
+    "id": "rp_human_validation",
+    "version": "1.0",
+    "name": "Human validation present",
+    "category": "human_validation",
+    "severity": "low",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "human validation",
+      "validation humaine",
+      "approbation",
+      "revue humaine",
+      "human review",
+      "approval",
+      "validated by",
+      "אישור אנושי"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "human_validation_present"
+    ],
+    "explanation": "This pattern flags human validation present using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_role_based_review",
+      "ctrl_audit_trail"
+    ]
+  },
+  {
+    "id": "rp_audit_log",
+    "version": "1.0",
+    "name": "Audit trail mentioned",
+    "category": "auditability",
+    "severity": "low",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "audit log",
+      "journal d’audit",
+      "journal d'audit",
+      "audit trail",
+      "record of decision",
+      "log",
+      "יומן ביקורת"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "audit_trail_present"
+    ],
+    "explanation": "This pattern flags audit trail mentioned using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_audit_trail",
+      "ctrl_access_logging"
+    ]
+  },
+  {
+    "id": "rp_soc_alert",
+    "version": "1.0",
+    "name": "SOC or security alert workflow",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "SOC",
+      "security alert",
+      "alerte sécurité",
+      "alerte de sécurité",
+      "incident",
+      "escalade",
+      "escalation",
+      "SIEM",
+      "triage",
+      "אנליסט SOC"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "soc_security_workflow",
+      "sensitive_system_access"
+    ],
+    "explanation": "This pattern flags soc or security alert workflow using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_soc_analyst_review",
+      "ctrl_escalation_policy",
+      "ctrl_separation_recommend_execute"
+    ]
+  },
+  {
+    "id": "rp_blocking_action",
+    "version": "1.0",
+    "name": "Blocking or containment action",
+    "category": "execution_boundary",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "blocking",
+      "blocage",
+      "block account",
+      "containment",
+      "quarantine",
+      "disable user",
+      "suppression",
+      "delete",
+      "deletion"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "irreversible_action",
+      "data_modification_deletion"
+    ],
+    "explanation": "This pattern flags blocking or containment action using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_no_irreversible_actions",
+      "ctrl_review_before_data_change",
+      "ctrl_soc_analyst_review"
+    ]
+  },
+  {
+    "id": "rp_logistics_address",
+    "version": "1.0",
+    "name": "Logistics address or location",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "delivery",
+      "livraison",
+      "transport",
+      "localisation",
+      "adresse",
+      "route",
+      "tournée",
+      "dispatcher",
+      "dispatch",
+      "location",
+      "shipment"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "location_logistics_data",
+      "customer_data"
+    ],
+    "explanation": "This pattern flags logistics address or location using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_dispatcher_approval",
+      "ctrl_data_minimization",
+      "ctrl_human_approval_external"
+    ]
+  },
+  {
+    "id": "rp_financial",
+    "version": "1.0",
+    "name": "Financial workflow data",
+    "category": "privacy",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "invoice",
+      "payment",
+      "refund",
+      "billing",
+      "finance",
+      "salary",
+      "expense",
+      "facture",
+      "paiement",
+      "remboursement"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "financial_data"
+    ],
+    "explanation": "This pattern flags financial workflow data using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_finance_approver",
+      "ctrl_management_exception_review",
+      "ctrl_data_minimization"
+    ]
+  },
+  {
+    "id": "rp_legal",
+    "version": "1.0",
+    "name": "Legal or compliance context",
+    "category": "governance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "legal",
+      "contract",
+      "compliance",
+      "regulation",
+      "policy exception",
+      "juridique",
+      "contrat",
+      "conformité"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "legal_compliance_data"
+    ],
+    "explanation": "This pattern flags legal or compliance context using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_legal_specialist_review",
+      "ctrl_management_exception_review",
+      "ctrl_audit_trail"
+    ]
+  },
+  {
+    "id": "rp_medical",
+    "version": "1.0",
+    "name": "Health or medical context",
+    "category": "privacy",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "medical",
+      "health",
+      "patient",
+      "clinical",
+      "diagnosis",
+      "traitement médical",
+      "santé",
+      "patient"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "medical_health_data",
+      "decision_affecting_person"
+    ],
+    "explanation": "This pattern flags health or medical context using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_medical_specialist_review",
+      "ctrl_data_minimization",
+      "ctrl_dual_control_high_risk"
+    ]
+  },
+  {
+    "id": "rp_credentials",
+    "version": "1.0",
+    "name": "Credential or secret-like text",
+    "category": "security",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "password",
+      "token",
+      "api key",
+      "secret",
+      "credential",
+      "private key",
+      "mot de passe",
+      "jeton"
+    ],
+    "regex_pattern": "(?i)\\b(api[_ -]?key|token|password|secret)\\s*[:=]\\s*[A-Za-z0-9_\\-]{8,}\\b",
+    "risk_factor_mapping": [
+      "credentials_secrets",
+      "sensitive_system_access"
+    ],
+    "explanation": "This pattern flags credential or secret-like text using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_secure_configuration",
+      "ctrl_safe_regex_only",
+      "ctrl_no_irreversible_actions"
+    ]
+  },
+  {
+    "id": "rp_email_like",
+    "version": "1.0",
+    "name": "Synthetic email-like identifier",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "email",
+      "e-mail",
+      "adresse e-mail"
+    ],
+    "regex_pattern": "(?i)\\b[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,}\\b",
+    "risk_factor_mapping": [
+      "personal_data",
+      "external_communication"
+    ],
+    "explanation": "This pattern flags synthetic email-like identifier using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_redaction_before_analysis",
+      "ctrl_data_minimization",
+      "ctrl_human_approval_external"
+    ]
+  },
+  {
+    "id": "rp_phone_like",
+    "version": "1.0",
+    "name": "Synthetic phone-like identifier",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "phone",
+      "telephone",
+      "téléphone",
+      "contact"
+    ],
+    "regex_pattern": "(?<!\\d)(?:\\+\\d{1,3}[ -]?)?(?:\\d[ -]?){8,14}\\d(?!\\d)",
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "This pattern flags synthetic phone-like identifier using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_redaction_before_analysis",
+      "ctrl_data_minimization"
+    ]
+  },
+  {
+    "id": "rp_third_party",
+    "version": "1.0",
+    "name": "Third-party integration boundary",
+    "category": "architecture",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "third-party",
+      "third party",
+      "vendor",
+      "API",
+      "integration",
+      "CRM",
+      "SIEM",
+      "ticketing",
+      "cloud",
+      "fournisseur"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "third_party_integration"
+    ],
+    "explanation": "This pattern flags third-party integration boundary using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_third_party_boundary",
+      "ctrl_local_only_operation",
+      "ctrl_least_privilege"
+    ]
+  },
+  {
+    "id": "rp_sensitive_system",
+    "version": "1.0",
+    "name": "Sensitive system access",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "admin",
+      "privileged",
+      "production",
+      "database",
+      "HR system",
+      "CRM",
+      "SIEM",
+      "sensitive system",
+      "système sensible"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "sensitive_system_access"
+    ],
+    "explanation": "This pattern flags sensitive system access using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_least_privilege",
+      "ctrl_access_logging",
+      "ctrl_separation_recommend_execute"
+    ]
+  },
+  {
+    "id": "rp_autonomous_agent",
+    "version": "1.0",
+    "name": "Broad autonomous agent permission",
+    "category": "security",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "autonomous agent",
+      "agent with access",
+      "full access",
+      "broad permissions",
+      "execute actions",
+      "auto execute",
+      "autonomous workflow"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "broad_ai_agent_permissions"
+    ],
+    "explanation": "This pattern flags broad autonomous agent permission using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_least_privilege",
+      "ctrl_separation_recommend_execute",
+      "ctrl_safe_failure_mode"
+    ]
+  },
+  {
+    "id": "rp_record_change",
+    "version": "1.0",
+    "name": "Record change or deletion",
+    "category": "execution_boundary",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "update record",
+      "modify",
+      "change record",
+      "close ticket",
+      "close incident",
+      "delete",
+      "suppression",
+      "modifier",
+      "clôture"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "data_modification_deletion"
+    ],
+    "explanation": "This pattern flags record change or deletion using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_review_before_data_change",
+      "ctrl_audit_trail",
+      "ctrl_no_irreversible_actions"
+    ]
+  },
+  {
+    "id": "rp_prompt_injection",
+    "version": "1.0",
+    "name": "Untrusted submitted text",
+    "category": "security",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "submitted",
+      "incoming message",
+      "customer email",
+      "support ticket",
+      "intake",
+      "demande client",
+      "e-mails contenant"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "prompt_injection_exposure"
+    ],
+    "explanation": "This pattern flags untrusted submitted text using explicit workflow evidence and maps it to deterministic risk factors.",
+    "recommended_control_ids": [
+      "ctrl_prompt_injection_review",
+      "ctrl_evidence_display",
+      "ctrl_safe_failure_mode"
+    ]
+  },
+  {
+    "id": "rp_privacy_022",
+    "version": "1.0",
+    "name": "Privacy synthetic risk pattern 022",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "privacy review",
+      "privacy workflow",
+      "synthetic privacy signal",
+      "address"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for privacy workflows.",
+    "recommended_control_ids": [
+      "ctrl_access_logging",
+      "ctrl_review_before_data_change",
+      "ctrl_third_party_boundary"
+    ]
+  },
+  {
+    "id": "rp_hr_023",
+    "version": "1.0",
+    "name": "Hr synthetic risk pattern 023",
+    "category": "hr",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "hr review",
+      "hr workflow",
+      "synthetic hr signal",
+      "resume"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "hr_candidate_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for hr workflows.",
+    "recommended_control_ids": [
+      "ctrl_review_before_data_change",
+      "ctrl_third_party_boundary",
+      "ctrl_secure_configuration"
+    ]
+  },
+  {
+    "id": "rp_security_024",
+    "version": "1.0",
+    "name": "Security synthetic risk pattern 024",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "security review",
+      "security workflow",
+      "synthetic security signal",
+      "escalation"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "soc_security_workflow"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for security workflows.",
+    "recommended_control_ids": [
+      "ctrl_third_party_boundary",
+      "ctrl_secure_configuration",
+      "ctrl_medical_specialist_review"
+    ]
+  },
+  {
+    "id": "rp_logistics_025",
+    "version": "1.0",
+    "name": "Logistics synthetic risk pattern 025",
+    "category": "logistics",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "logistics review",
+      "logistics workflow",
+      "synthetic logistics signal",
+      "transport"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "location_logistics_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for logistics workflows.",
+    "recommended_control_ids": [
+      "ctrl_secure_configuration",
+      "ctrl_medical_specialist_review",
+      "ctrl_legal_specialist_review"
+    ]
+  },
+  {
+    "id": "rp_finance_026",
+    "version": "1.0",
+    "name": "Finance synthetic risk pattern 026",
+    "category": "finance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "finance review",
+      "finance workflow",
+      "synthetic finance signal",
+      "invoice"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "financial_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for finance workflows.",
+    "recommended_control_ids": [
+      "ctrl_medical_specialist_review",
+      "ctrl_legal_specialist_review",
+      "ctrl_finance_approver"
+    ]
+  },
+  {
+    "id": "rp_legal_027",
+    "version": "1.0",
+    "name": "Legal synthetic risk pattern 027",
+    "category": "legal",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "legal review",
+      "legal workflow",
+      "synthetic legal signal",
+      "policy"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "legal_compliance_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for legal workflows.",
+    "recommended_control_ids": [
+      "ctrl_legal_specialist_review",
+      "ctrl_finance_approver",
+      "ctrl_output_template"
+    ]
+  },
+  {
+    "id": "rp_medical_028",
+    "version": "1.0",
+    "name": "Medical synthetic risk pattern 028",
+    "category": "medical",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "medical review",
+      "medical workflow",
+      "synthetic medical signal",
+      "clinical"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "medical_health_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for medical workflows.",
+    "recommended_control_ids": [
+      "ctrl_finance_approver",
+      "ctrl_output_template",
+      "ctrl_redaction_before_analysis"
+    ]
+  },
+  {
+    "id": "rp_external_029",
+    "version": "1.0",
+    "name": "External synthetic risk pattern 029",
+    "category": "external",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "external review",
+      "external workflow",
+      "synthetic external signal",
+      "publish"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "external_communication",
+      "customer_facing_automated_output"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for external workflows.",
+    "recommended_control_ids": [
+      "ctrl_output_template",
+      "ctrl_redaction_before_analysis",
+      "ctrl_dual_control_high_risk"
+    ]
+  },
+  {
+    "id": "rp_automation_030",
+    "version": "1.0",
+    "name": "Automation synthetic risk pattern 030",
+    "category": "automation",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "automation review",
+      "automation workflow",
+      "synthetic automation signal",
+      "permission"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "broad_ai_agent_permissions"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for automation workflows.",
+    "recommended_control_ids": [
+      "ctrl_redaction_before_analysis",
+      "ctrl_dual_control_high_risk",
+      "ctrl_limit_report_scope"
+    ]
+  },
+  {
+    "id": "rp_customer_031",
+    "version": "1.0",
+    "name": "Customer synthetic risk pattern 031",
+    "category": "customer",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "customer review",
+      "customer workflow",
+      "synthetic customer signal",
+      "customer"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "customer_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for customer workflows.",
+    "recommended_control_ids": [
+      "ctrl_dual_control_high_risk",
+      "ctrl_limit_report_scope",
+      "ctrl_simulation_disclaimer"
+    ]
+  },
+  {
+    "id": "rp_privacy_032",
+    "version": "1.0",
+    "name": "Privacy synthetic risk pattern 032",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "privacy review",
+      "privacy workflow",
+      "synthetic privacy signal",
+      "address"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for privacy workflows.",
+    "recommended_control_ids": [
+      "ctrl_limit_report_scope",
+      "ctrl_simulation_disclaimer",
+      "ctrl_change_management"
+    ]
+  },
+  {
+    "id": "rp_hr_033",
+    "version": "1.0",
+    "name": "Hr synthetic risk pattern 033",
+    "category": "hr",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "hr review",
+      "hr workflow",
+      "synthetic hr signal",
+      "resume"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "hr_candidate_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for hr workflows.",
+    "recommended_control_ids": [
+      "ctrl_simulation_disclaimer",
+      "ctrl_change_management",
+      "ctrl_human_feedback_loop"
+    ]
+  },
+  {
+    "id": "rp_security_034",
+    "version": "1.0",
+    "name": "Security synthetic risk pattern 034",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "security review",
+      "security workflow",
+      "synthetic security signal",
+      "escalation"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "soc_security_workflow"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for security workflows.",
+    "recommended_control_ids": [
+      "ctrl_change_management",
+      "ctrl_human_feedback_loop",
+      "ctrl_escalation_policy"
+    ]
+  },
+  {
+    "id": "rp_logistics_035",
+    "version": "1.0",
+    "name": "Logistics synthetic risk pattern 035",
+    "category": "logistics",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "logistics review",
+      "logistics workflow",
+      "synthetic logistics signal",
+      "transport"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "location_logistics_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for logistics workflows.",
+    "recommended_control_ids": [
+      "ctrl_human_feedback_loop",
+      "ctrl_escalation_policy",
+      "ctrl_kb_version_review"
+    ]
+  },
+  {
+    "id": "rp_finance_036",
+    "version": "1.0",
+    "name": "Finance synthetic risk pattern 036",
+    "category": "finance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "finance review",
+      "finance workflow",
+      "synthetic finance signal",
+      "invoice"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "financial_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for finance workflows.",
+    "recommended_control_ids": [
+      "ctrl_escalation_policy",
+      "ctrl_kb_version_review",
+      "ctrl_test_regression_suite"
+    ]
+  },
+  {
+    "id": "rp_legal_037",
+    "version": "1.0",
+    "name": "Legal synthetic risk pattern 037",
+    "category": "legal",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "legal review",
+      "legal workflow",
+      "synthetic legal signal",
+      "policy"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "legal_compliance_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for legal workflows.",
+    "recommended_control_ids": [
+      "ctrl_kb_version_review",
+      "ctrl_test_regression_suite",
+      "ctrl_safe_failure_mode"
+    ]
+  },
+  {
+    "id": "rp_medical_038",
+    "version": "1.0",
+    "name": "Medical synthetic risk pattern 038",
+    "category": "medical",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "medical review",
+      "medical workflow",
+      "synthetic medical signal",
+      "clinical"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "medical_health_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for medical workflows.",
+    "recommended_control_ids": [
+      "ctrl_test_regression_suite",
+      "ctrl_safe_failure_mode",
+      "ctrl_human_approval_external"
+    ]
+  },
+  {
+    "id": "rp_external_039",
+    "version": "1.0",
+    "name": "External synthetic risk pattern 039",
+    "category": "external",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "external review",
+      "external workflow",
+      "synthetic external signal",
+      "publish"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "external_communication",
+      "customer_facing_automated_output"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for external workflows.",
+    "recommended_control_ids": [
+      "ctrl_safe_failure_mode",
+      "ctrl_human_approval_external",
+      "ctrl_audit_trail"
+    ]
+  },
+  {
+    "id": "rp_automation_040",
+    "version": "1.0",
+    "name": "Automation synthetic risk pattern 040",
+    "category": "automation",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "automation review",
+      "automation workflow",
+      "synthetic automation signal",
+      "permission"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "broad_ai_agent_permissions"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for automation workflows.",
+    "recommended_control_ids": [
+      "ctrl_human_approval_external",
+      "ctrl_audit_trail",
+      "ctrl_data_minimization"
+    ]
+  },
+  {
+    "id": "rp_customer_041",
+    "version": "1.0",
+    "name": "Customer synthetic risk pattern 041",
+    "category": "customer",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "customer review",
+      "customer workflow",
+      "synthetic customer signal",
+      "customer"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "customer_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for customer workflows.",
+    "recommended_control_ids": [
+      "ctrl_audit_trail",
+      "ctrl_data_minimization",
+      "ctrl_disable_autonomous_sending"
+    ]
+  },
+  {
+    "id": "rp_privacy_042",
+    "version": "1.0",
+    "name": "Privacy synthetic risk pattern 042",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "privacy review",
+      "privacy workflow",
+      "synthetic privacy signal",
+      "address"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for privacy workflows.",
+    "recommended_control_ids": [
+      "ctrl_data_minimization",
+      "ctrl_disable_autonomous_sending",
+      "ctrl_least_privilege"
+    ]
+  },
+  {
+    "id": "rp_hr_043",
+    "version": "1.0",
+    "name": "Hr synthetic risk pattern 043",
+    "category": "hr",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "hr review",
+      "hr workflow",
+      "synthetic hr signal",
+      "resume"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "hr_candidate_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for hr workflows.",
+    "recommended_control_ids": [
+      "ctrl_disable_autonomous_sending",
+      "ctrl_least_privilege",
+      "ctrl_hr_recruiter_review"
+    ]
+  },
+  {
+    "id": "rp_security_044",
+    "version": "1.0",
+    "name": "Security synthetic risk pattern 044",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "security review",
+      "security workflow",
+      "synthetic security signal",
+      "escalation"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "soc_security_workflow"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for security workflows.",
+    "recommended_control_ids": [
+      "ctrl_least_privilege",
+      "ctrl_hr_recruiter_review",
+      "ctrl_soc_analyst_review"
+    ]
+  },
+  {
+    "id": "rp_logistics_045",
+    "version": "1.0",
+    "name": "Logistics synthetic risk pattern 045",
+    "category": "logistics",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "logistics review",
+      "logistics workflow",
+      "synthetic logistics signal",
+      "transport"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "location_logistics_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for logistics workflows.",
+    "recommended_control_ids": [
+      "ctrl_hr_recruiter_review",
+      "ctrl_soc_analyst_review",
+      "ctrl_dispatcher_approval"
+    ]
+  },
+  {
+    "id": "rp_finance_046",
+    "version": "1.0",
+    "name": "Finance synthetic risk pattern 046",
+    "category": "finance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "finance review",
+      "finance workflow",
+      "synthetic finance signal",
+      "invoice"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "financial_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for finance workflows.",
+    "recommended_control_ids": [
+      "ctrl_soc_analyst_review",
+      "ctrl_dispatcher_approval",
+      "ctrl_no_irreversible_actions"
+    ]
+  },
+  {
+    "id": "rp_legal_047",
+    "version": "1.0",
+    "name": "Legal synthetic risk pattern 047",
+    "category": "legal",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "legal review",
+      "legal workflow",
+      "synthetic legal signal",
+      "policy"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "legal_compliance_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for legal workflows.",
+    "recommended_control_ids": [
+      "ctrl_dispatcher_approval",
+      "ctrl_no_irreversible_actions",
+      "ctrl_prompt_injection_review"
+    ]
+  },
+  {
+    "id": "rp_medical_048",
+    "version": "1.0",
+    "name": "Medical synthetic risk pattern 048",
+    "category": "medical",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "medical review",
+      "medical workflow",
+      "synthetic medical signal",
+      "clinical"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "medical_health_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for medical workflows.",
+    "recommended_control_ids": [
+      "ctrl_no_irreversible_actions",
+      "ctrl_prompt_injection_review",
+      "ctrl_retention_policy"
+    ]
+  },
+  {
+    "id": "rp_external_049",
+    "version": "1.0",
+    "name": "External synthetic risk pattern 049",
+    "category": "external",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "external review",
+      "external workflow",
+      "synthetic external signal",
+      "publish"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "external_communication",
+      "customer_facing_automated_output"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for external workflows.",
+    "recommended_control_ids": [
+      "ctrl_prompt_injection_review",
+      "ctrl_retention_policy",
+      "ctrl_transparency_notice"
+    ]
+  },
+  {
+    "id": "rp_automation_050",
+    "version": "1.0",
+    "name": "Automation synthetic risk pattern 050",
+    "category": "automation",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "automation review",
+      "automation workflow",
+      "synthetic automation signal",
+      "permission"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "broad_ai_agent_permissions"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for automation workflows.",
+    "recommended_control_ids": [
+      "ctrl_retention_policy",
+      "ctrl_transparency_notice",
+      "ctrl_separation_recommend_execute"
+    ]
+  },
+  {
+    "id": "rp_customer_051",
+    "version": "1.0",
+    "name": "Customer synthetic risk pattern 051",
+    "category": "customer",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "customer review",
+      "customer workflow",
+      "synthetic customer signal",
+      "customer"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "customer_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for customer workflows.",
+    "recommended_control_ids": [
+      "ctrl_transparency_notice",
+      "ctrl_separation_recommend_execute",
+      "ctrl_local_only_operation"
+    ]
+  },
+  {
+    "id": "rp_privacy_052",
+    "version": "1.0",
+    "name": "Privacy synthetic risk pattern 052",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "privacy review",
+      "privacy workflow",
+      "synthetic privacy signal",
+      "address"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for privacy workflows.",
+    "recommended_control_ids": [
+      "ctrl_separation_recommend_execute",
+      "ctrl_local_only_operation",
+      "ctrl_sensitive_data_warning"
+    ]
+  },
+  {
+    "id": "rp_hr_053",
+    "version": "1.0",
+    "name": "Hr synthetic risk pattern 053",
+    "category": "hr",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "hr review",
+      "hr workflow",
+      "synthetic hr signal",
+      "resume"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "hr_candidate_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for hr workflows.",
+    "recommended_control_ids": [
+      "ctrl_local_only_operation",
+      "ctrl_sensitive_data_warning",
+      "ctrl_controlled_export"
+    ]
+  },
+  {
+    "id": "rp_security_054",
+    "version": "1.0",
+    "name": "Security synthetic risk pattern 054",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "security review",
+      "security workflow",
+      "synthetic security signal",
+      "escalation"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "soc_security_workflow"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for security workflows.",
+    "recommended_control_ids": [
+      "ctrl_sensitive_data_warning",
+      "ctrl_controlled_export",
+      "ctrl_role_based_review"
+    ]
+  },
+  {
+    "id": "rp_logistics_055",
+    "version": "1.0",
+    "name": "Logistics synthetic risk pattern 055",
+    "category": "logistics",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "logistics review",
+      "logistics workflow",
+      "synthetic logistics signal",
+      "transport"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "location_logistics_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for logistics workflows.",
+    "recommended_control_ids": [
+      "ctrl_controlled_export",
+      "ctrl_role_based_review",
+      "ctrl_evidence_display"
+    ]
+  },
+  {
+    "id": "rp_finance_056",
+    "version": "1.0",
+    "name": "Finance synthetic risk pattern 056",
+    "category": "finance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "finance review",
+      "finance workflow",
+      "synthetic finance signal",
+      "invoice"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "financial_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for finance workflows.",
+    "recommended_control_ids": [
+      "ctrl_role_based_review",
+      "ctrl_evidence_display",
+      "ctrl_confidence_labeling"
+    ]
+  },
+  {
+    "id": "rp_legal_057",
+    "version": "1.0",
+    "name": "Legal synthetic risk pattern 057",
+    "category": "legal",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "legal review",
+      "legal workflow",
+      "synthetic legal signal",
+      "policy"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "legal_compliance_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for legal workflows.",
+    "recommended_control_ids": [
+      "ctrl_evidence_display",
+      "ctrl_confidence_labeling",
+      "ctrl_safe_regex_only"
+    ]
+  },
+  {
+    "id": "rp_medical_058",
+    "version": "1.0",
+    "name": "Medical synthetic risk pattern 058",
+    "category": "medical",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "medical review",
+      "medical workflow",
+      "synthetic medical signal",
+      "clinical"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "medical_health_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for medical workflows.",
+    "recommended_control_ids": [
+      "ctrl_confidence_labeling",
+      "ctrl_safe_regex_only",
+      "ctrl_anonymized_demo_data"
+    ]
+  },
+  {
+    "id": "rp_external_059",
+    "version": "1.0",
+    "name": "External synthetic risk pattern 059",
+    "category": "external",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "external review",
+      "external workflow",
+      "synthetic external signal",
+      "publish"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "external_communication",
+      "customer_facing_automated_output"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for external workflows.",
+    "recommended_control_ids": [
+      "ctrl_safe_regex_only",
+      "ctrl_anonymized_demo_data",
+      "ctrl_management_exception_review"
+    ]
+  },
+  {
+    "id": "rp_automation_060",
+    "version": "1.0",
+    "name": "Automation synthetic risk pattern 060",
+    "category": "automation",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "automation review",
+      "automation workflow",
+      "synthetic automation signal",
+      "permission"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "broad_ai_agent_permissions"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for automation workflows.",
+    "recommended_control_ids": [
+      "ctrl_anonymized_demo_data",
+      "ctrl_management_exception_review",
+      "ctrl_access_logging"
+    ]
+  },
+  {
+    "id": "rp_customer_061",
+    "version": "1.0",
+    "name": "Customer synthetic risk pattern 061",
+    "category": "customer",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "customer review",
+      "customer workflow",
+      "synthetic customer signal",
+      "customer"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "customer_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for customer workflows.",
+    "recommended_control_ids": [
+      "ctrl_management_exception_review",
+      "ctrl_access_logging",
+      "ctrl_review_before_data_change"
+    ]
+  },
+  {
+    "id": "rp_privacy_062",
+    "version": "1.0",
+    "name": "Privacy synthetic risk pattern 062",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "privacy review",
+      "privacy workflow",
+      "synthetic privacy signal",
+      "address"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for privacy workflows.",
+    "recommended_control_ids": [
+      "ctrl_access_logging",
+      "ctrl_review_before_data_change",
+      "ctrl_third_party_boundary"
+    ]
+  },
+  {
+    "id": "rp_hr_063",
+    "version": "1.0",
+    "name": "Hr synthetic risk pattern 063",
+    "category": "hr",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "hr review",
+      "hr workflow",
+      "synthetic hr signal",
+      "resume"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "hr_candidate_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for hr workflows.",
+    "recommended_control_ids": [
+      "ctrl_review_before_data_change",
+      "ctrl_third_party_boundary",
+      "ctrl_secure_configuration"
+    ]
+  },
+  {
+    "id": "rp_security_064",
+    "version": "1.0",
+    "name": "Security synthetic risk pattern 064",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "security review",
+      "security workflow",
+      "synthetic security signal",
+      "escalation"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "soc_security_workflow"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for security workflows.",
+    "recommended_control_ids": [
+      "ctrl_third_party_boundary",
+      "ctrl_secure_configuration",
+      "ctrl_medical_specialist_review"
+    ]
+  },
+  {
+    "id": "rp_logistics_065",
+    "version": "1.0",
+    "name": "Logistics synthetic risk pattern 065",
+    "category": "logistics",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "logistics review",
+      "logistics workflow",
+      "synthetic logistics signal",
+      "transport"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "location_logistics_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for logistics workflows.",
+    "recommended_control_ids": [
+      "ctrl_secure_configuration",
+      "ctrl_medical_specialist_review",
+      "ctrl_legal_specialist_review"
+    ]
+  },
+  {
+    "id": "rp_finance_066",
+    "version": "1.0",
+    "name": "Finance synthetic risk pattern 066",
+    "category": "finance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "finance review",
+      "finance workflow",
+      "synthetic finance signal",
+      "invoice"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "financial_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for finance workflows.",
+    "recommended_control_ids": [
+      "ctrl_medical_specialist_review",
+      "ctrl_legal_specialist_review",
+      "ctrl_finance_approver"
+    ]
+  },
+  {
+    "id": "rp_legal_067",
+    "version": "1.0",
+    "name": "Legal synthetic risk pattern 067",
+    "category": "legal",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "legal review",
+      "legal workflow",
+      "synthetic legal signal",
+      "policy"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "legal_compliance_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for legal workflows.",
+    "recommended_control_ids": [
+      "ctrl_legal_specialist_review",
+      "ctrl_finance_approver",
+      "ctrl_output_template"
+    ]
+  },
+  {
+    "id": "rp_medical_068",
+    "version": "1.0",
+    "name": "Medical synthetic risk pattern 068",
+    "category": "medical",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "medical review",
+      "medical workflow",
+      "synthetic medical signal",
+      "clinical"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "medical_health_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for medical workflows.",
+    "recommended_control_ids": [
+      "ctrl_finance_approver",
+      "ctrl_output_template",
+      "ctrl_redaction_before_analysis"
+    ]
+  },
+  {
+    "id": "rp_external_069",
+    "version": "1.0",
+    "name": "External synthetic risk pattern 069",
+    "category": "external",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "external review",
+      "external workflow",
+      "synthetic external signal",
+      "publish"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "external_communication",
+      "customer_facing_automated_output"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for external workflows.",
+    "recommended_control_ids": [
+      "ctrl_output_template",
+      "ctrl_redaction_before_analysis",
+      "ctrl_dual_control_high_risk"
+    ]
+  },
+  {
+    "id": "rp_automation_070",
+    "version": "1.0",
+    "name": "Automation synthetic risk pattern 070",
+    "category": "automation",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "automation review",
+      "automation workflow",
+      "synthetic automation signal",
+      "permission"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "broad_ai_agent_permissions"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for automation workflows.",
+    "recommended_control_ids": [
+      "ctrl_redaction_before_analysis",
+      "ctrl_dual_control_high_risk",
+      "ctrl_limit_report_scope"
+    ]
+  },
+  {
+    "id": "rp_customer_071",
+    "version": "1.0",
+    "name": "Customer synthetic risk pattern 071",
+    "category": "customer",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "customer review",
+      "customer workflow",
+      "synthetic customer signal",
+      "customer"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "customer_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for customer workflows.",
+    "recommended_control_ids": [
+      "ctrl_dual_control_high_risk",
+      "ctrl_limit_report_scope",
+      "ctrl_simulation_disclaimer"
+    ]
+  },
+  {
+    "id": "rp_privacy_072",
+    "version": "1.0",
+    "name": "Privacy synthetic risk pattern 072",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "privacy review",
+      "privacy workflow",
+      "synthetic privacy signal",
+      "address"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for privacy workflows.",
+    "recommended_control_ids": [
+      "ctrl_limit_report_scope",
+      "ctrl_simulation_disclaimer",
+      "ctrl_change_management"
+    ]
+  },
+  {
+    "id": "rp_hr_073",
+    "version": "1.0",
+    "name": "Hr synthetic risk pattern 073",
+    "category": "hr",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "hr review",
+      "hr workflow",
+      "synthetic hr signal",
+      "resume"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "hr_candidate_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for hr workflows.",
+    "recommended_control_ids": [
+      "ctrl_simulation_disclaimer",
+      "ctrl_change_management",
+      "ctrl_human_feedback_loop"
+    ]
+  },
+  {
+    "id": "rp_security_074",
+    "version": "1.0",
+    "name": "Security synthetic risk pattern 074",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "security review",
+      "security workflow",
+      "synthetic security signal",
+      "escalation"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "soc_security_workflow"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for security workflows.",
+    "recommended_control_ids": [
+      "ctrl_change_management",
+      "ctrl_human_feedback_loop",
+      "ctrl_escalation_policy"
+    ]
+  },
+  {
+    "id": "rp_logistics_075",
+    "version": "1.0",
+    "name": "Logistics synthetic risk pattern 075",
+    "category": "logistics",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "logistics review",
+      "logistics workflow",
+      "synthetic logistics signal",
+      "transport"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "location_logistics_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for logistics workflows.",
+    "recommended_control_ids": [
+      "ctrl_human_feedback_loop",
+      "ctrl_escalation_policy",
+      "ctrl_kb_version_review"
+    ]
+  },
+  {
+    "id": "rp_finance_076",
+    "version": "1.0",
+    "name": "Finance synthetic risk pattern 076",
+    "category": "finance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "finance review",
+      "finance workflow",
+      "synthetic finance signal",
+      "invoice"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "financial_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for finance workflows.",
+    "recommended_control_ids": [
+      "ctrl_escalation_policy",
+      "ctrl_kb_version_review",
+      "ctrl_test_regression_suite"
+    ]
+  },
+  {
+    "id": "rp_legal_077",
+    "version": "1.0",
+    "name": "Legal synthetic risk pattern 077",
+    "category": "legal",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "legal review",
+      "legal workflow",
+      "synthetic legal signal",
+      "policy"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "legal_compliance_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for legal workflows.",
+    "recommended_control_ids": [
+      "ctrl_kb_version_review",
+      "ctrl_test_regression_suite",
+      "ctrl_safe_failure_mode"
+    ]
+  },
+  {
+    "id": "rp_medical_078",
+    "version": "1.0",
+    "name": "Medical synthetic risk pattern 078",
+    "category": "medical",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "medical review",
+      "medical workflow",
+      "synthetic medical signal",
+      "clinical"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "medical_health_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for medical workflows.",
+    "recommended_control_ids": [
+      "ctrl_test_regression_suite",
+      "ctrl_safe_failure_mode",
+      "ctrl_human_approval_external"
+    ]
+  },
+  {
+    "id": "rp_external_079",
+    "version": "1.0",
+    "name": "External synthetic risk pattern 079",
+    "category": "external",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "external review",
+      "external workflow",
+      "synthetic external signal",
+      "publish"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "external_communication",
+      "customer_facing_automated_output"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for external workflows.",
+    "recommended_control_ids": [
+      "ctrl_safe_failure_mode",
+      "ctrl_human_approval_external",
+      "ctrl_audit_trail"
+    ]
+  },
+  {
+    "id": "rp_automation_080",
+    "version": "1.0",
+    "name": "Automation synthetic risk pattern 080",
+    "category": "automation",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "automation review",
+      "automation workflow",
+      "synthetic automation signal",
+      "permission"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "broad_ai_agent_permissions"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for automation workflows.",
+    "recommended_control_ids": [
+      "ctrl_human_approval_external",
+      "ctrl_audit_trail",
+      "ctrl_data_minimization"
+    ]
+  },
+  {
+    "id": "rp_customer_081",
+    "version": "1.0",
+    "name": "Customer synthetic risk pattern 081",
+    "category": "customer",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "customer review",
+      "customer workflow",
+      "synthetic customer signal",
+      "customer"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "customer_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for customer workflows.",
+    "recommended_control_ids": [
+      "ctrl_audit_trail",
+      "ctrl_data_minimization",
+      "ctrl_disable_autonomous_sending"
+    ]
+  },
+  {
+    "id": "rp_privacy_082",
+    "version": "1.0",
+    "name": "Privacy synthetic risk pattern 082",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "privacy review",
+      "privacy workflow",
+      "synthetic privacy signal",
+      "address"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for privacy workflows.",
+    "recommended_control_ids": [
+      "ctrl_data_minimization",
+      "ctrl_disable_autonomous_sending",
+      "ctrl_least_privilege"
+    ]
+  },
+  {
+    "id": "rp_hr_083",
+    "version": "1.0",
+    "name": "Hr synthetic risk pattern 083",
+    "category": "hr",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "hr review",
+      "hr workflow",
+      "synthetic hr signal",
+      "resume"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "hr_candidate_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for hr workflows.",
+    "recommended_control_ids": [
+      "ctrl_disable_autonomous_sending",
+      "ctrl_least_privilege",
+      "ctrl_hr_recruiter_review"
+    ]
+  },
+  {
+    "id": "rp_security_084",
+    "version": "1.0",
+    "name": "Security synthetic risk pattern 084",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "security review",
+      "security workflow",
+      "synthetic security signal",
+      "escalation"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "soc_security_workflow"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for security workflows.",
+    "recommended_control_ids": [
+      "ctrl_least_privilege",
+      "ctrl_hr_recruiter_review",
+      "ctrl_soc_analyst_review"
+    ]
+  },
+  {
+    "id": "rp_logistics_085",
+    "version": "1.0",
+    "name": "Logistics synthetic risk pattern 085",
+    "category": "logistics",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "logistics review",
+      "logistics workflow",
+      "synthetic logistics signal",
+      "transport"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "location_logistics_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for logistics workflows.",
+    "recommended_control_ids": [
+      "ctrl_hr_recruiter_review",
+      "ctrl_soc_analyst_review",
+      "ctrl_dispatcher_approval"
+    ]
+  },
+  {
+    "id": "rp_finance_086",
+    "version": "1.0",
+    "name": "Finance synthetic risk pattern 086",
+    "category": "finance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "finance review",
+      "finance workflow",
+      "synthetic finance signal",
+      "invoice"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "financial_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for finance workflows.",
+    "recommended_control_ids": [
+      "ctrl_soc_analyst_review",
+      "ctrl_dispatcher_approval",
+      "ctrl_no_irreversible_actions"
+    ]
+  },
+  {
+    "id": "rp_legal_087",
+    "version": "1.0",
+    "name": "Legal synthetic risk pattern 087",
+    "category": "legal",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "legal review",
+      "legal workflow",
+      "synthetic legal signal",
+      "policy"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "legal_compliance_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for legal workflows.",
+    "recommended_control_ids": [
+      "ctrl_dispatcher_approval",
+      "ctrl_no_irreversible_actions",
+      "ctrl_prompt_injection_review"
+    ]
+  },
+  {
+    "id": "rp_medical_088",
+    "version": "1.0",
+    "name": "Medical synthetic risk pattern 088",
+    "category": "medical",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "medical review",
+      "medical workflow",
+      "synthetic medical signal",
+      "clinical"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "medical_health_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for medical workflows.",
+    "recommended_control_ids": [
+      "ctrl_no_irreversible_actions",
+      "ctrl_prompt_injection_review",
+      "ctrl_retention_policy"
+    ]
+  },
+  {
+    "id": "rp_external_089",
+    "version": "1.0",
+    "name": "External synthetic risk pattern 089",
+    "category": "external",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "external review",
+      "external workflow",
+      "synthetic external signal",
+      "publish"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "external_communication",
+      "customer_facing_automated_output"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for external workflows.",
+    "recommended_control_ids": [
+      "ctrl_prompt_injection_review",
+      "ctrl_retention_policy",
+      "ctrl_transparency_notice"
+    ]
+  },
+  {
+    "id": "rp_automation_090",
+    "version": "1.0",
+    "name": "Automation synthetic risk pattern 090",
+    "category": "automation",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "automation review",
+      "automation workflow",
+      "synthetic automation signal",
+      "permission"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "broad_ai_agent_permissions"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for automation workflows.",
+    "recommended_control_ids": [
+      "ctrl_retention_policy",
+      "ctrl_transparency_notice",
+      "ctrl_separation_recommend_execute"
+    ]
+  },
+  {
+    "id": "rp_customer_091",
+    "version": "1.0",
+    "name": "Customer synthetic risk pattern 091",
+    "category": "customer",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "customer review",
+      "customer workflow",
+      "synthetic customer signal",
+      "customer"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "customer_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for customer workflows.",
+    "recommended_control_ids": [
+      "ctrl_transparency_notice",
+      "ctrl_separation_recommend_execute",
+      "ctrl_local_only_operation"
+    ]
+  },
+  {
+    "id": "rp_privacy_092",
+    "version": "1.0",
+    "name": "Privacy synthetic risk pattern 092",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "privacy review",
+      "privacy workflow",
+      "synthetic privacy signal",
+      "address"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for privacy workflows.",
+    "recommended_control_ids": [
+      "ctrl_separation_recommend_execute",
+      "ctrl_local_only_operation",
+      "ctrl_sensitive_data_warning"
+    ]
+  },
+  {
+    "id": "rp_hr_093",
+    "version": "1.0",
+    "name": "Hr synthetic risk pattern 093",
+    "category": "hr",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "hr review",
+      "hr workflow",
+      "synthetic hr signal",
+      "resume"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "hr_candidate_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for hr workflows.",
+    "recommended_control_ids": [
+      "ctrl_local_only_operation",
+      "ctrl_sensitive_data_warning",
+      "ctrl_controlled_export"
+    ]
+  },
+  {
+    "id": "rp_security_094",
+    "version": "1.0",
+    "name": "Security synthetic risk pattern 094",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "security review",
+      "security workflow",
+      "synthetic security signal",
+      "escalation"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "soc_security_workflow"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for security workflows.",
+    "recommended_control_ids": [
+      "ctrl_sensitive_data_warning",
+      "ctrl_controlled_export",
+      "ctrl_role_based_review"
+    ]
+  },
+  {
+    "id": "rp_logistics_095",
+    "version": "1.0",
+    "name": "Logistics synthetic risk pattern 095",
+    "category": "logistics",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "logistics review",
+      "logistics workflow",
+      "synthetic logistics signal",
+      "transport"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "location_logistics_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for logistics workflows.",
+    "recommended_control_ids": [
+      "ctrl_controlled_export",
+      "ctrl_role_based_review",
+      "ctrl_evidence_display"
+    ]
+  },
+  {
+    "id": "rp_finance_096",
+    "version": "1.0",
+    "name": "Finance synthetic risk pattern 096",
+    "category": "finance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "finance review",
+      "finance workflow",
+      "synthetic finance signal",
+      "invoice"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "financial_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for finance workflows.",
+    "recommended_control_ids": [
+      "ctrl_role_based_review",
+      "ctrl_evidence_display",
+      "ctrl_confidence_labeling"
+    ]
+  },
+  {
+    "id": "rp_legal_097",
+    "version": "1.0",
+    "name": "Legal synthetic risk pattern 097",
+    "category": "legal",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "legal review",
+      "legal workflow",
+      "synthetic legal signal",
+      "policy"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "legal_compliance_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for legal workflows.",
+    "recommended_control_ids": [
+      "ctrl_evidence_display",
+      "ctrl_confidence_labeling",
+      "ctrl_safe_regex_only"
+    ]
+  },
+  {
+    "id": "rp_medical_098",
+    "version": "1.0",
+    "name": "Medical synthetic risk pattern 098",
+    "category": "medical",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "medical review",
+      "medical workflow",
+      "synthetic medical signal",
+      "clinical"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "medical_health_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for medical workflows.",
+    "recommended_control_ids": [
+      "ctrl_confidence_labeling",
+      "ctrl_safe_regex_only",
+      "ctrl_anonymized_demo_data"
+    ]
+  },
+  {
+    "id": "rp_external_099",
+    "version": "1.0",
+    "name": "External synthetic risk pattern 099",
+    "category": "external",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "external review",
+      "external workflow",
+      "synthetic external signal",
+      "publish"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "external_communication",
+      "customer_facing_automated_output"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for external workflows.",
+    "recommended_control_ids": [
+      "ctrl_safe_regex_only",
+      "ctrl_anonymized_demo_data",
+      "ctrl_management_exception_review"
+    ]
+  },
+  {
+    "id": "rp_automation_100",
+    "version": "1.0",
+    "name": "Automation synthetic risk pattern 100",
+    "category": "automation",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "automation review",
+      "automation workflow",
+      "synthetic automation signal",
+      "permission"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "broad_ai_agent_permissions"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for automation workflows.",
+    "recommended_control_ids": [
+      "ctrl_anonymized_demo_data",
+      "ctrl_management_exception_review",
+      "ctrl_access_logging"
+    ]
+  },
+  {
+    "id": "rp_customer_101",
+    "version": "1.0",
+    "name": "Customer synthetic risk pattern 101",
+    "category": "customer",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "customer review",
+      "customer workflow",
+      "synthetic customer signal",
+      "customer"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "customer_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for customer workflows.",
+    "recommended_control_ids": [
+      "ctrl_management_exception_review",
+      "ctrl_access_logging",
+      "ctrl_review_before_data_change"
+    ]
+  },
+  {
+    "id": "rp_privacy_102",
+    "version": "1.0",
+    "name": "Privacy synthetic risk pattern 102",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "privacy review",
+      "privacy workflow",
+      "synthetic privacy signal",
+      "address"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for privacy workflows.",
+    "recommended_control_ids": [
+      "ctrl_access_logging",
+      "ctrl_review_before_data_change",
+      "ctrl_third_party_boundary"
+    ]
+  },
+  {
+    "id": "rp_hr_103",
+    "version": "1.0",
+    "name": "Hr synthetic risk pattern 103",
+    "category": "hr",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "hr review",
+      "hr workflow",
+      "synthetic hr signal",
+      "resume"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "hr_candidate_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for hr workflows.",
+    "recommended_control_ids": [
+      "ctrl_review_before_data_change",
+      "ctrl_third_party_boundary",
+      "ctrl_secure_configuration"
+    ]
+  },
+  {
+    "id": "rp_security_104",
+    "version": "1.0",
+    "name": "Security synthetic risk pattern 104",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "security review",
+      "security workflow",
+      "synthetic security signal",
+      "escalation"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "soc_security_workflow"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for security workflows.",
+    "recommended_control_ids": [
+      "ctrl_third_party_boundary",
+      "ctrl_secure_configuration",
+      "ctrl_medical_specialist_review"
+    ]
+  },
+  {
+    "id": "rp_logistics_105",
+    "version": "1.0",
+    "name": "Logistics synthetic risk pattern 105",
+    "category": "logistics",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "logistics review",
+      "logistics workflow",
+      "synthetic logistics signal",
+      "transport"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "location_logistics_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for logistics workflows.",
+    "recommended_control_ids": [
+      "ctrl_secure_configuration",
+      "ctrl_medical_specialist_review",
+      "ctrl_legal_specialist_review"
+    ]
+  },
+  {
+    "id": "rp_finance_106",
+    "version": "1.0",
+    "name": "Finance synthetic risk pattern 106",
+    "category": "finance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "finance review",
+      "finance workflow",
+      "synthetic finance signal",
+      "invoice"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "financial_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for finance workflows.",
+    "recommended_control_ids": [
+      "ctrl_medical_specialist_review",
+      "ctrl_legal_specialist_review",
+      "ctrl_finance_approver"
+    ]
+  },
+  {
+    "id": "rp_legal_107",
+    "version": "1.0",
+    "name": "Legal synthetic risk pattern 107",
+    "category": "legal",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "legal review",
+      "legal workflow",
+      "synthetic legal signal",
+      "policy"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "legal_compliance_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for legal workflows.",
+    "recommended_control_ids": [
+      "ctrl_legal_specialist_review",
+      "ctrl_finance_approver",
+      "ctrl_output_template"
+    ]
+  },
+  {
+    "id": "rp_medical_108",
+    "version": "1.0",
+    "name": "Medical synthetic risk pattern 108",
+    "category": "medical",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "medical review",
+      "medical workflow",
+      "synthetic medical signal",
+      "clinical"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "medical_health_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for medical workflows.",
+    "recommended_control_ids": [
+      "ctrl_finance_approver",
+      "ctrl_output_template",
+      "ctrl_redaction_before_analysis"
+    ]
+  },
+  {
+    "id": "rp_external_109",
+    "version": "1.0",
+    "name": "External synthetic risk pattern 109",
+    "category": "external",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "external review",
+      "external workflow",
+      "synthetic external signal",
+      "publish"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "external_communication",
+      "customer_facing_automated_output"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for external workflows.",
+    "recommended_control_ids": [
+      "ctrl_output_template",
+      "ctrl_redaction_before_analysis",
+      "ctrl_dual_control_high_risk"
+    ]
+  },
+  {
+    "id": "rp_automation_110",
+    "version": "1.0",
+    "name": "Automation synthetic risk pattern 110",
+    "category": "automation",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "automation review",
+      "automation workflow",
+      "synthetic automation signal",
+      "permission"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "broad_ai_agent_permissions"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for automation workflows.",
+    "recommended_control_ids": [
+      "ctrl_redaction_before_analysis",
+      "ctrl_dual_control_high_risk",
+      "ctrl_limit_report_scope"
+    ]
+  },
+  {
+    "id": "rp_customer_111",
+    "version": "1.0",
+    "name": "Customer synthetic risk pattern 111",
+    "category": "customer",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "customer review",
+      "customer workflow",
+      "synthetic customer signal",
+      "customer"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "customer_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for customer workflows.",
+    "recommended_control_ids": [
+      "ctrl_dual_control_high_risk",
+      "ctrl_limit_report_scope",
+      "ctrl_simulation_disclaimer"
+    ]
+  },
+  {
+    "id": "rp_privacy_112",
+    "version": "1.0",
+    "name": "Privacy synthetic risk pattern 112",
+    "category": "privacy",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "privacy review",
+      "privacy workflow",
+      "synthetic privacy signal",
+      "address"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "personal_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for privacy workflows.",
+    "recommended_control_ids": [
+      "ctrl_limit_report_scope",
+      "ctrl_simulation_disclaimer",
+      "ctrl_change_management"
+    ]
+  },
+  {
+    "id": "rp_hr_113",
+    "version": "1.0",
+    "name": "Hr synthetic risk pattern 113",
+    "category": "hr",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "hr review",
+      "hr workflow",
+      "synthetic hr signal",
+      "resume"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "hr_candidate_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for hr workflows.",
+    "recommended_control_ids": [
+      "ctrl_simulation_disclaimer",
+      "ctrl_change_management",
+      "ctrl_human_feedback_loop"
+    ]
+  },
+  {
+    "id": "rp_security_114",
+    "version": "1.0",
+    "name": "Security synthetic risk pattern 114",
+    "category": "security",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "security review",
+      "security workflow",
+      "synthetic security signal",
+      "escalation"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "soc_security_workflow"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for security workflows.",
+    "recommended_control_ids": [
+      "ctrl_change_management",
+      "ctrl_human_feedback_loop",
+      "ctrl_escalation_policy"
+    ]
+  },
+  {
+    "id": "rp_logistics_115",
+    "version": "1.0",
+    "name": "Logistics synthetic risk pattern 115",
+    "category": "logistics",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "logistics review",
+      "logistics workflow",
+      "synthetic logistics signal",
+      "transport"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "location_logistics_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for logistics workflows.",
+    "recommended_control_ids": [
+      "ctrl_human_feedback_loop",
+      "ctrl_escalation_policy",
+      "ctrl_kb_version_review"
+    ]
+  },
+  {
+    "id": "rp_finance_116",
+    "version": "1.0",
+    "name": "Finance synthetic risk pattern 116",
+    "category": "finance",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "finance review",
+      "finance workflow",
+      "synthetic finance signal",
+      "invoice"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "financial_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for finance workflows.",
+    "recommended_control_ids": [
+      "ctrl_escalation_policy",
+      "ctrl_kb_version_review",
+      "ctrl_test_regression_suite"
+    ]
+  },
+  {
+    "id": "rp_legal_117",
+    "version": "1.0",
+    "name": "Legal synthetic risk pattern 117",
+    "category": "legal",
+    "severity": "high",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "legal review",
+      "legal workflow",
+      "synthetic legal signal",
+      "policy"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "legal_compliance_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for legal workflows.",
+    "recommended_control_ids": [
+      "ctrl_kb_version_review",
+      "ctrl_test_regression_suite",
+      "ctrl_safe_failure_mode"
+    ]
+  },
+  {
+    "id": "rp_medical_118",
+    "version": "1.0",
+    "name": "Medical synthetic risk pattern 118",
+    "category": "medical",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "medical review",
+      "medical workflow",
+      "synthetic medical signal",
+      "clinical"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "medical_health_data"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for medical workflows.",
+    "recommended_control_ids": [
+      "ctrl_test_regression_suite",
+      "ctrl_safe_failure_mode",
+      "ctrl_human_approval_external"
+    ]
+  },
+  {
+    "id": "rp_external_119",
+    "version": "1.0",
+    "name": "External synthetic risk pattern 119",
+    "category": "external",
+    "severity": "medium",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "external review",
+      "external workflow",
+      "synthetic external signal",
+      "publish"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "external_communication",
+      "customer_facing_automated_output"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for external workflows.",
+    "recommended_control_ids": [
+      "ctrl_safe_failure_mode",
+      "ctrl_human_approval_external",
+      "ctrl_audit_trail"
+    ]
+  },
+  {
+    "id": "rp_automation_120",
+    "version": "1.0",
+    "name": "Automation synthetic risk pattern 120",
+    "category": "automation",
+    "severity": "critical",
+    "languages_supported": [
+      "en",
+      "fr",
+      "he"
+    ],
+    "enabled": true,
+    "keywords": [
+      "automation review",
+      "automation workflow",
+      "synthetic automation signal",
+      "permission"
+    ],
+    "regex_pattern": null,
+    "risk_factor_mapping": [
+      "broad_ai_agent_permissions"
+    ],
+    "explanation": "Synthetic portfolio-safe rule that demonstrates structured detection for automation workflows.",
+    "recommended_control_ids": [
+      "ctrl_human_approval_external",
+      "ctrl_audit_trail",
+      "ctrl_data_minimization"
+    ]
+  }
+]
