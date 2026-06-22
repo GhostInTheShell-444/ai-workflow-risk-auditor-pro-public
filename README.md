@@ -51,16 +51,18 @@ Public screenshots are intentionally not committed until a final human visual an
 
 | Planned view | File |
 |---|---|
-| Home audit | `screenshots/01_home_audit.png` |
-| Score explainability | `screenshots/02_score_explainability.png` |
-| Dashboard overview | `screenshots/03_dashboard_overview.png` |
-| Risk heatmap | `screenshots/04_risk_heatmap.png` |
-| Evidence drill-down | `screenshots/05_evidence_drilldown.png` |
-| Local AI / Ollama | `screenshots/06_local_ai_ollama.png` |
-| Reports preview | `screenshots/07_reports_preview.png` |
-| Knowledge Base | `screenshots/08_knowledge_base.png` |
-| French UI | `screenshots/09_french_ui.png` |
-| Hebrew RTL UI | `screenshots/10_hebrew_rtl_ui.png` |
+| View | Screenshot |
+| --- | --- |
+| Home audit | ![Home audit](screenshots/01_home_audit.png) |
+| Score explainability | ![Score explainability](screenshots/02_score_explainability.png) |
+| Dashboard overview | ![Dashboard overview](screenshots/03_dashboard_overview.png) |
+| Risk heatmap | ![Risk heatmap](screenshots/04_risk_heatmap.png) |
+| Evidence drill-down | ![Evidence drill-down](screenshots/05_evidence_drilldown.png) |
+| Local AI / Ollama | ![Local AI / Ollama](screenshots/06_local_ai_ollama.png) |
+| Reports preview | ![Reports preview](screenshots/07_reports_preview.png) |
+| Knowledge Base | ![Knowledge Base](screenshots/08_knowledge_base.png) |
+| French UI | ![French UI](screenshots/09_french_ui.png) |
+| Hebrew RTL UI | ![Hebrew RTL UI](screenshots/10_hebrew_rtl_ui.png) |
 
 See [the screenshot capture specification](docs/SCREENSHOTS_TODO.md) before adding images.
 
