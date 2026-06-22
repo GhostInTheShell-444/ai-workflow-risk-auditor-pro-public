@@ -1,6 +1,6 @@
 # AI Workflow Risk Auditor Pro
 
-> **Official repository.** AI Workflow Risk Auditor Pro is maintained by **GhostInTheShell-444**.  
+> **Official repository.** AI Workflow Risk Auditor Pro is maintained by **GhostInTheShell-444**.
 > This repository is publicly visible for review and transparency, but it is released under a **source-available non-commercial license**. Commercial use, hosted clones, redistribution, rebranding, and competing derivative products are not permitted without prior written permission.
 
 
@@ -9,7 +9,7 @@ Local-first Streamlit tool to explain, score, simulate, and document AI workflow
 [![CI](https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro/actions/workflows/ci.yml)
 ![Python 3.12](https://img.shields.io/badge/Python-3.12-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-local--first-ff4b4b)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: Source-available non-commercial](https://img.shields.io/badge/license-source--available%20non--commercial-blue.svg)](LICENSE)
 
 > **Status:** Private iteration. The [public release checklist](docs/PUBLIC_RELEASE_CHECKLIST.md) is not complete. Keep the repository private until explicit human approval.
 >

@@ -1,6 +1,6 @@
 # NOTICE
 
-AI Workflow Risk Auditor Pro  
+AI Workflow Risk Auditor Pro
 Official repository: https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro
 
 Copyright © 2026 GhostInTheShell-444.
