@@ -38,5 +38,5 @@ Hebrew uses RTL layout for human-facing UI. Prompt blocks, JSON, code, paths, en
 ## Known Limits
 
 - Rule-library source text remains mostly English because it is the local deterministic knowledge source.
-- A native Hebrew review is still recommended before public release.
+- A native Hebrew review remains a recommended, non-blocking language-quality improvement.
 - Some existing report helper sentences remain English to avoid broad report regression.

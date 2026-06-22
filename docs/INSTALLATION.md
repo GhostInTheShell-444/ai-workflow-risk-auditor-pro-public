@@ -9,7 +9,7 @@ AI Workflow Risk Auditor Pro is a local Streamlit application. The deterministic
 - A terminal with permission to create a virtual environment
 - A current desktop browser
 
-Use the private repository clone URL only if your GitHub account has access.
+Use the official public repository URL shown below.
 
 ## Ubuntu and Debian Linux
 
@@ -23,8 +23,8 @@ sudo apt install python3.12 python3.12-venv git
 Clone, create an isolated environment, and install dependencies:
 
 ```bash
-git clone https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro.git
-cd ai-workflow-risk-auditor-pro
+git clone https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro-public.git
+cd ai-workflow-risk-auditor-pro-public
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
@@ -43,8 +43,8 @@ brew install python@3.12 git
 Then:
 
 ```bash
-git clone https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro.git
-cd ai-workflow-risk-auditor-pro
+git clone https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro-public.git
+cd ai-workflow-risk-auditor-pro-public
 python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
@@ -57,8 +57,8 @@ python -m streamlit run app.py --server.address 127.0.0.1
 Install Python 3.12 and Git from trusted official installers, then open a new PowerShell window:
 
 ```powershell
-git clone https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro.git
-Set-Location ai-workflow-risk-auditor-pro
+git clone https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro-public.git
+Set-Location ai-workflow-risk-auditor-pro-public
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip

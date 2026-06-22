@@ -47,7 +47,7 @@ Place French and Hebrew RTL screenshots in a separate internationalization secti
 - `07_reports_preview.png`: show a synthetic Markdown or JSON preview and export controls.
 - `08_knowledge_base.png`: show rule/control/category counts and representative read-only rows.
 
-Keep the current images for private iteration until improved captures pass human review.
+Keep the current privacy-reviewed images until improved captures pass the same review. Visual recaptures that do not address a privacy defect are non-blocking polish.
 
 ## Validation
 

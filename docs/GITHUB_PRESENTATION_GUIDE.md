@@ -23,6 +23,6 @@
 
 ## Repository metadata and launch controls
 
-Use [GitHub Repository Setup](GITHUB_REPOSITORY_SETUP.md) for the approved description, topic list, private-visibility check, and social-preview requirements. Use the [Public Release Checklist](PUBLIC_RELEASE_CHECKLIST.md) as the human launch gate.
+Use [GitHub Repository Setup](GITHUB_REPOSITORY_SETUP.md) for the approved description, topic list, public repository identity check, and social-preview requirements. Use the [Public Release Checklist](PUBLIC_RELEASE_CHECKLIST.md) for ongoing publication verification.
 
 Do not change visibility, create a tag, or create a release during documentation review.

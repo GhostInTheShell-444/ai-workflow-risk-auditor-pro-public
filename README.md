@@ -6,12 +6,12 @@
 
 Local-first Streamlit tool to explain, score, simulate, and document AI workflow risks before automation.
 
-[![CI](https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro/actions/workflows/ci.yml)
+[![CI](https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro-public/actions/workflows/ci.yml/badge.svg)](https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro-public/actions/workflows/ci.yml)
 ![Python 3.12](https://img.shields.io/badge/Python-3.12-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-local--first-ff4b4b)
 [![License: Source-available non-commercial](https://img.shields.io/badge/license-source--available%20non--commercial-blue.svg)](LICENSE)
 
-> **Status:** Private iteration. The [public release checklist](docs/PUBLIC_RELEASE_CHECKLIST.md) is not complete. Keep the repository private until explicit human approval.
+> **Status:** Public source-available release for review, transparency, and non-commercial evaluation.
 >
 > **Privacy boundary:** Deterministic analysis runs locally. Workflow text is saved only after an explicit local save; optional Ollama support is restricted to loopback. Use synthetic or properly anonymized data only.
 
@@ -26,8 +26,8 @@ Prerequisites: Git and Python 3.12. Ollama is optional.
 Linux or macOS:
 
 ```bash
-git clone https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro.git
-cd ai-workflow-risk-auditor-pro
+git clone https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro-public.git
+cd ai-workflow-risk-auditor-pro-public
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
@@ -37,8 +37,8 @@ python -m streamlit run app.py --server.address 127.0.0.1
 Windows PowerShell:
 
 ```powershell
-git clone https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro.git
-Set-Location ai-workflow-risk-auditor-pro
+git clone https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro-public.git
+Set-Location ai-workflow-risk-auditor-pro-public
 py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
@@ -65,7 +65,7 @@ Open `http://127.0.0.1:8501`. See the full [installation guide](docs/INSTALLATIO
 
 ### Local AI, reports, and knowledge base
 
-These are current private-review captures. The release checklist calls for stronger recaptures that show more tab-specific content before any public launch.
+These captures document the current tab layouts. Screenshots 06–08 can be recaptured later with more tab-specific content as a non-blocking presentation improvement.
 
 ![Optional Local AI and Ollama tab with localhost-only boundaries](screenshots/06_local_ai_ollama.png)
 
@@ -204,7 +204,6 @@ CI uses Python 3.12 and verifies tests, compilation, JSON parsing, and that comm
 - [Security policy](SECURITY.md)
 - [Contributing guide](CONTRIBUTING.md)
 - [Roadmap](ROADMAP.md)
-- [Public release checklist](docs/PUBLIC_RELEASE_CHECKLIST.md)
 
 ## License
 

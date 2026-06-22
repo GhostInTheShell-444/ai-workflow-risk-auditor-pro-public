@@ -1,13 +1,12 @@
 # Public Release Checklist
 
-This checklist is a human approval gate. The repository must remain private until every P0 item is complete and an authorized owner explicitly approves a visibility change.
+Use this checklist for public-repository verification and future republishes. Privacy, secret, identity, licensing, history, and test failures are blockers; presentation improvements may remain tracked as non-blocking work.
 
 ## P0 — blockers
 
-- [ ] Complete a final human privacy and visual review of every screenshot.
-- [x] Verify the repository remains private during iteration.
-- [ ] Obtain explicit final human approval before any visibility change.
-- [x] Select and include a license (currently MIT; confirm this remains the intended legal choice).
+- [ ] Complete a final human privacy review of every screenshot.
+- [ ] Verify the official public repository identity and visibility.
+- [x] Include the intended restrictive source-available, non-commercial license.
 - [ ] Render and review the README as an external visitor would see it.
 - [ ] Test installation on Ubuntu/Debian Linux.
 - [ ] Test installation on macOS.
@@ -17,11 +16,11 @@ This checklist is a human approval gate. The repository must remain private unti
 - [ ] Scan tracked and proposed files for credentials, secrets, tokens, cookies, and environment values.
 - [ ] Confirm no private review reports or internal instruction files are tracked or linked.
 - [ ] Confirm no runtime database, virtual environment, cache, bytecode, log, environment file, or Streamlit secrets file is tracked.
-- [x] Set the GitHub About description to the approved one-sentence description; recheck before launch.
+- [x] Set the GitHub About description to the approved one-sentence description; recheck during publication verification.
 - [ ] Set and review repository topics.
 - [ ] Add and privacy-review a 1280×640 social preview.
 - [ ] Run final link, image-path, Markdown, test, and localhost smoke checks.
-- [ ] Record final human GO decision to switch visibility; automation must not make this decision.
+- [ ] Record the publication verification result and responsible owner.
 
 ## P1 — quality
 
@@ -37,7 +36,7 @@ This checklist is a human approval gate. The repository must remain private unti
 - [ ] Perform French wording review.
 - [ ] Perform Hebrew wording and RTL review.
 
-## Final launch record
+## Publication verification record
 
 - Approval owner:
 - Approval date:
@@ -45,13 +44,13 @@ This checklist is a human approval gate. The repository must remain private unti
 - Final CI run:
 - Screenshot review completed by:
 - License confirmed by:
-- Visibility changed manually by:
+- Repository identity verified by:
 
-Leave this record blank during private iteration.
+Maintainers may complete this record for a specific publication review without committing private operational details.
 
 ## Licensing and project ownership gate
 
-Before changing repository visibility to public, verify:
+Before publishing or republishing, verify:
 
 - [ ] `LICENSE` is present and reflects the intended source-available non-commercial license.
 - [ ] `NOTICE.md` is present.

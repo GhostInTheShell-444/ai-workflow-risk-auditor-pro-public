@@ -1,6 +1,6 @@
 # GitHub Repository Setup
 
-These are human-run repository-administration instructions. Keep the repository private until the [Public Release Checklist](PUBLIC_RELEASE_CHECKLIST.md) is complete and an authorized owner approves a visibility change.
+These are human-run administration instructions for the official public repository. Repository visibility changes require separate owner authorization and are outside this setup guide.
 
 ## Authenticate GitHub CLI safely
 
@@ -15,17 +15,17 @@ Do not paste access tokens into Codex, AI prompts, issues, pull requests, docume
 
 GitHub CLI normally stores credentials in the operating system's credential store. If no supported credential store is available, it may fall back to storing a token in a plain-text configuration file. Review the authentication output and local security posture before proceeding.
 
-## Verify private visibility
+## Verify public repository identity and visibility
 
 Read-only check:
 
 ```bash
-gh repo view GhostInTheShell-444/ai-workflow-risk-auditor-pro --json visibility,isPrivate
+gh repo view GhostInTheShell-444/ai-workflow-risk-auditor-pro-public --json nameWithOwner,visibility,isPrivate,url
 ```
 
-Expected during iteration: `visibility` is `PRIVATE` and `isPrivate` is `true`. If that is not the result, stop the release review and have the repository owner investigate.
+Expected: `nameWithOwner` is `GhostInTheShell-444/ai-workflow-risk-auditor-pro-public`, `visibility` is `PUBLIC`, `isPrivate` is `false`, and the URL identifies that same repository. If any field differs, stop repository administration and have the owner investigate.
 
-Do not make public from Codex. Only after the checklist and explicit human approval may an authorized repository owner change visibility manually in GitHub settings if desired.
+Do not change repository visibility as part of routine setup or publication.
 
 ## About section
 
@@ -78,9 +78,9 @@ In the GitHub UI, verify:
 - the About description is exact and topics are present;
 - Actions have least-privilege read-only contents permission where possible;
 - issue forms and pull-request template render correctly;
-- private vulnerability reporting is available before public launch;
+- private vulnerability reporting is enabled for the public repository;
 - README images render with meaningful alt text;
-- the license is detected as MIT and remains the intended legal choice;
+- the restrictive source-available, non-commercial terms in `LICENSE`, `NOTICE.md`, and `LICENSING_AND_COMMERCIAL_USE.md` remain consistent;
 - branch protection and required CI checks match the maintainer workflow.
 
 Do not create a tag or release as part of repository setup. Those require a separate human-approved release decision.
