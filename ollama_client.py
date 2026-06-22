@@ -7,6 +7,7 @@ import requests
 
 DEFAULT_BASE_URL = "http://localhost:11434"
 CLOUD_MODEL_MARKERS = (":cloud", "-cloud")
+DIRECT_CONNECTION_PROXIES = {"http": None, "https": None, "all": None}
 SYNTHETIC_TEST_WORKFLOW = (
     "Synthetic local-only test: an internal support team asks AI to draft a customer response "
     "from anonymized ticket notes. A human reviewer must approve the message before sending. "
@@ -39,7 +40,12 @@ def check_ollama_status(base_url: str = DEFAULT_BASE_URL, timeout: float = 1.5) 
         }
 
     try:
-        response = requests.get(f"{base_url.rstrip('/')}/api/tags", timeout=timeout)
+        response = requests.get(
+            f"{base_url.rstrip('/')}/api/tags",
+            timeout=timeout,
+            allow_redirects=False,
+            proxies=DIRECT_CONNECTION_PROXIES,
+        )
         response.raise_for_status()
         payload = response.json()
     except requests.RequestException as exc:
@@ -133,7 +139,13 @@ def generate_local_prompt_response(
     }
 
     try:
-        response = requests.post(f"{base_url.rstrip('/')}/api/generate", json=payload, timeout=timeout)
+        response = requests.post(
+            f"{base_url.rstrip('/')}/api/generate",
+            json=payload,
+            timeout=timeout,
+            allow_redirects=False,
+            proxies=DIRECT_CONNECTION_PROXIES,
+        )
         response.raise_for_status()
         data = response.json()
     except requests.RequestException:

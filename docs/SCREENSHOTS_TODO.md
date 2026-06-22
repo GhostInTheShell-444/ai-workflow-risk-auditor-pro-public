@@ -1,6 +1,6 @@
 # Screenshot Capture Specification
 
-The current ten screenshots are committed for private review. Follow [Screenshot Guidelines](SCREENSHOT_GUIDELINES.md) for privacy, naming, gallery structure, string scans, and public-polish rules before replacing or publishing them.
+The current ten screenshots are published in the README gallery and must remain synthetic and privacy-reviewed. Follow [Screenshot Guidelines](SCREENSHOT_GUIDELINES.md) for privacy, naming, gallery structure, string scans, and public-polish rules before replacing them.
 
 | Filename | Purpose | What must be visible | What must not be visible | Privacy checks | README placement |
 |---|---|---|---|---|---|

@@ -38,7 +38,7 @@ Fixed rules and factor weights make the same input reproducible and let reviewer
 
 ## What should I do if GitHub screenshots do not render?
 
-Confirm the file exists, is tracked in the viewed branch, matches path capitalization, is a non-empty PNG, and is referenced with repository-relative Markdown such as `![Description](../screenshots/01_home_audit.png)`. Also check that private-repository viewers have access. See [Screenshot Guidelines](SCREENSHOT_GUIDELINES.md).
+Confirm the file exists, is tracked in the viewed branch, matches path capitalization, is a non-empty PNG, and is referenced with repository-relative Markdown such as `![Description](../screenshots/01_home_audit.png)`. Confirm the image commit is present on the public branch being viewed. See [Screenshot Guidelines](SCREENSHOT_GUIDELINES.md).
 
 ## How do I run tests?
 

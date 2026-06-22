@@ -18,7 +18,7 @@ AI Workflow Risk Auditor Pro is designed for local review of synthetic or anonym
 
 The deterministic application requires no cloud API, cloud SDK, vendor key, telemetry service, or external database. No hidden analytics or telemetry code is implemented. The application has no production-system integration and does not automatically transmit workflow text.
 
-The only optional model integration is Ollama through a loopback URL. `ollama_client.py` accepts `localhost`, `127.0.0.1`, or `::1`; non-loopback endpoints are rejected. Models identified by cloud-like names or remote model metadata are blocked. There is no cloud fallback.
+The only optional model integration is Ollama through a loopback URL. `ollama_client.py` accepts `localhost`, `127.0.0.1`, or `::1`; non-loopback endpoints are rejected. Ollama requests disable HTTP redirects and environment proxy routing. Models identified by cloud-like names or remote model metadata are blocked. There is no cloud fallback.
 
 Important boundary: a locally installed third-party service or model remains part of the user's environment. Users are responsible for verifying their Ollama installation and model provenance. The app's endpoint and model guards reduce accidental remote use but cannot attest to all behavior of external local software.
 

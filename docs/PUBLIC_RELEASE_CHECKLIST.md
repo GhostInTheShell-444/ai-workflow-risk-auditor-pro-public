@@ -21,6 +21,12 @@ Use this checklist for public-repository verification and future republishes. Pr
 - [ ] Add and privacy-review a 1280×640 social preview.
 - [ ] Run final link, image-path, Markdown, test, and localhost smoke checks.
 - [ ] Record the publication verification result and responsible owner.
+- [ ] Confirm the public contributor list contains only the intended maintainer identity.
+- [ ] Confirm pull requests, releases, and tags are empty for the initial publication state.
+- [ ] Confirm remote refs contain only `HEAD` and `refs/heads/main`.
+- [ ] Confirm `.github/dependabot.yml` is absent and `.github/dependabot.yml.disabled` is present while automated dependency pull requests remain intentionally disabled.
+- [ ] Confirm any legacy repository remains private and is not presented as the official public repository.
+- [ ] Verify the `Protect main` ruleset, or record the missing ruleset as manual follow-up.
 
 ## P1 — quality
 
@@ -60,4 +66,4 @@ Before publishing or republishing, verify:
 - [ ] README links to `LICENSE`, `NOTICE.md`, and `docs/LICENSING_AND_COMMERCIAL_USE.md`.
 - [ ] `docs/README.md` links to `LICENSING_AND_COMMERCIAL_USE.md`.
 - [ ] No unintended permissive or copyleft license file remains.
-- [ ] No private business roadmap, private prompts, Codex GOAL files, local review files, or internal notes are tracked.
+- [ ] No private business roadmap, private prompts, assistant instruction files, local review files, or internal notes are tracked.

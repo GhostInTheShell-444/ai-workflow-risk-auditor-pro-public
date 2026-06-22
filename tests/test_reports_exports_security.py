@@ -1,7 +1,12 @@
 from analyzer import analyze_workflow
 from examples import get_example_text
 from export_json import build_json_summary, render_json_summary
-from ollama_client import check_ollama_status, generate_enrichment, is_cloud_or_proxy_model
+from ollama_client import (
+    check_ollama_status,
+    generate_enrichment,
+    generate_local_prompt_response,
+    is_cloud_or_proxy_model,
+)
 from report_renderer import markdown_to_html, render_markdown_report
 from residual_risk import default_control_selection, simulate_residual_risk
 
@@ -97,6 +102,51 @@ def test_ollama_status_separates_local_and_cloud_models(monkeypatch):
     assert status["available"] is True
     assert status["models"] == ["qwen3:8b"]
     assert status["cloud_models"] == ["gemma3:cloud"]
+
+
+def test_ollama_status_disables_redirects_and_environment_proxies(monkeypatch):
+    observed = {}
+
+    class Response:
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {"models": []}
+
+    def fake_get(*args, **kwargs):
+        observed.update(kwargs)
+        return Response()
+
+    monkeypatch.setattr("ollama_client.requests.get", fake_get)
+    assert check_ollama_status()["available"] is True
+    assert observed["allow_redirects"] is False
+    assert observed["proxies"] == {"http": None, "https": None, "all": None}
+
+
+def test_ollama_generation_disables_redirects_and_environment_proxies(monkeypatch):
+    observed = {}
+
+    class Response:
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {"response": "Local synthetic response."}
+
+    monkeypatch.setattr(
+        "ollama_client.check_ollama_status",
+        lambda **kwargs: {"available": True, "models": ["llama3"]},
+    )
+
+    def fake_post(*args, **kwargs):
+        observed.update(kwargs)
+        return Response()
+
+    monkeypatch.setattr("ollama_client.requests.post", fake_post)
+    assert generate_local_prompt_response("Synthetic prompt.") == "Local synthetic response."
+    assert observed["allow_redirects"] is False
+    assert observed["proxies"] == {"http": None, "https": None, "all": None}
 
 
 def test_cloud_ollama_model_names_are_rejected():

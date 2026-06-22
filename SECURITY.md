@@ -24,7 +24,7 @@ The application is local-first:
 
 ## Ollama policy
 
-Ollama support is optional. The client accepts only loopback endpoints and blocks models identified as cloud/proxy models. There is no cloud fallback. Optional narrative output cannot change deterministic findings, scores, controls, or residual-risk simulation.
+Ollama support is optional. The client accepts only loopback endpoints, disables HTTP redirects and environment proxy routing for those requests, and blocks models identified as cloud/proxy models. There is no cloud fallback. Optional narrative output cannot change deterministic findings, scores, controls, or residual-risk simulation.
 
 Users remain responsible for the security and behavior of their local Ollama installation and model files. Use only synthetic or anonymized workflow content even when a model is local.
 
