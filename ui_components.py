@@ -475,33 +475,21 @@ def render_heatmap(findings: list[dict[str, Any]], language: str = "en") -> None
     for cell in cells:
         grouped[cell["category"]][cell["severity"]] = int(cell["count"])
 
-    header_cells = "".join(
-        f"<div class='aiwra-heatmap-head'>{_escape(severity_token(severity, language)['label'])}</div>"
-        for severity in SEVERITY_ORDER
-    )
-    rows = [
-        f"<div class='aiwra-heatmap-row'><div class='aiwra-heatmap-head'>{_escape(t('category_label', language, 'Category'))}</div>{header_cells}</div>"
+    headers = [t("category_label", language, "Category")] + [
+        severity_token(severity, language)["label"] for severity in SEVERITY_ORDER
     ]
+    header_columns = st.columns([1.4, 1, 1, 1, 1])
+    for column, header in zip(header_columns, headers):
+        column.markdown(f"**{header}**")
+
     for category, severity_counts in grouped.items():
-        category_label = translate_category(category, language)
-        row_cells = [f"<div class='aiwra-heatmap-label'>{_escape(category_label)}</div>"]
-        for severity in SEVERITY_ORDER:
+        row_columns = st.columns([1.4, 1, 1, 1, 1])
+        row_columns[0].markdown(f"**{translate_category(category, language)}**")
+        for column, severity in zip(row_columns[1:], SEVERITY_ORDER):
             token = severity_token(severity, language)
             count = int(severity_counts.get(severity, 0))
             text = t("heatmap_cell_text", language, "{count} finding(s)").format(count=count)
-            row_cells.append(
-                f"""
-                <div class="aiwra-heatmap-cell"
-                     style="background:{token['background']}; border-color:{token['border']};">
-                    <strong>{_escape(token['label'])}: {_escape(count)}</strong>
-                    <span>{_escape(text)}</span><br>
-                    <small>{_escape(token['description'])}</small>
-                </div>
-                """
-            )
-        rows.append(f"<div class='aiwra-heatmap-row'>{''.join(row_cells)}</div>")
-
-    st.markdown(f"<div class='aiwra-heatmap'>{''.join(rows)}</div>", unsafe_allow_html=True)
+            column.metric(token["label"], count, help=f"{text}. {token['description']}")
 
 
 def build_matrix_cells(entries: list[dict[str, Any]]) -> list[dict[str, Any]]:
