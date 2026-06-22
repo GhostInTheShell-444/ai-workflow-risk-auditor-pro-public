@@ -43,3 +43,4 @@ User and evaluator documentation for AI Workflow Risk Auditor Pro:
 - [Glossary](GLOSSARY_SIMPLE.md)
 
 Current behavior is defined by the source code and tests. Documentation describes boundaries and intended use; it does not certify a workflow, control, or organization.
+- [Licensing and commercial use](LICENSING_AND_COMMERCIAL_USE.md)

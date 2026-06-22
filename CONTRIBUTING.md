@@ -59,3 +59,11 @@ Every new visible UI string must be represented in English, French, and Hebrew l
 ## Pull requests
 
 Describe the use case, deterministic scoring impact, local-first impact, security/privacy impact, localization impact, tests, documentation, and manual visual checks. Keep pull requests focused and avoid unrelated generated artifacts.
+
+## Licensing of contributions
+
+By submitting a pull request, patch, issue suggestion, documentation update, screenshot recommendation, example, or other contribution to this repository, you agree that your contribution may be incorporated into AI Workflow Risk Auditor Pro under the project license.
+
+Do not submit code, documentation, screenshots, reports, examples, test data, or other material that you do not have the right to contribute.
+
+Do not submit real secrets, credentials, tokens, personal data, regulated records, private workflow content, internal company data, customer data, confidential documents, or production data.

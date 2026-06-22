@@ -48,3 +48,17 @@ This checklist is a human approval gate. The repository must remain private unti
 - Visibility changed manually by:
 
 Leave this record blank during private iteration.
+
+## Licensing and project ownership gate
+
+Before changing repository visibility to public, verify:
+
+- [ ] `LICENSE` is present and reflects the intended source-available non-commercial license.
+- [ ] `NOTICE.md` is present.
+- [ ] `docs/LICENSING_AND_COMMERCIAL_USE.md` is present.
+- [ ] README clearly identifies the official repository and maintainer.
+- [ ] README states that commercial use, hosted clones, redistribution, rebranding, and competing derivative products require written permission.
+- [ ] README links to `LICENSE`, `NOTICE.md`, and `docs/LICENSING_AND_COMMERCIAL_USE.md`.
+- [ ] `docs/README.md` links to `LICENSING_AND_COMMERCIAL_USE.md`.
+- [ ] No unintended permissive or copyleft license file remains.
+- [ ] No private business roadmap, private prompts, Codex GOAL files, local review files, or internal notes are tracked.

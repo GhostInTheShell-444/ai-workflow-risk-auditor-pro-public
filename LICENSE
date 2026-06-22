@@ -1,21 +1,56 @@
-MIT License
+# AI Workflow Risk Auditor Pro Source-Available Non-Commercial License v1.0
 
-Copyright (c) 2026 AI Workflow Risk Auditor Contributors
+Copyright © 2026 GhostInTheShell-444.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+All rights reserved except for the permissions expressly granted below.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+## 1. Official project
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+This license applies to **AI Workflow Risk Auditor Pro**, maintained by **GhostInTheShell-444**.
+
+Official repository:
+
+https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro
+
+## 2. Source-visible permission
+
+You may view, read, inspect, and evaluate the source code for personal learning, educational review, security review, research review, and non-commercial evaluation.
+
+## 3. Local non-commercial use
+
+You may run the software locally for personal, educational, research, internal evaluation, or non-commercial security review purposes.
+
+## 4. Restrictions
+
+Without prior written permission from GhostInTheShell-444, you may not:
+
+- sell, license, sublicense, rent, lease, or commercially distribute this project;
+- offer this project, a modified version, or a substantially similar derivative as a paid product or hosted service;
+- rebrand this project as your own;
+- remove copyright notices, project identity, authorship notices, or official repository references;
+- redistribute modified or unmodified copies as a competing project;
+- use the project name, screenshots, documentation, or branding in a misleading way;
+- imply endorsement by GhostInTheShell-444 without permission;
+- use this project to process real secrets, regulated records, or personal data in a way that violates applicable law.
+
+## 5. Contributions
+
+Unless explicitly agreed otherwise in writing, contributions submitted to the official repository are provided under this same license and may be incorporated into the project by GhostInTheShell-444.
+
+Do not submit code, documentation, screenshots, reports, examples, test data, or other material that you do not have the right to contribute.
+
+## 6. No warranty
+
+This software is provided “as is”, without warranty of any kind, express or implied, including but not limited to warranties of merchantability, fitness for a particular purpose, title, and non-infringement.
+
+## 7. No legal, compliance, or security guarantee
+
+This project is a local-first AI workflow risk review tool. It does not provide legal advice, compliance certification, security certification, audit certification, or a guarantee that an AI workflow is safe, compliant, production-ready, or risk-free.
+
+## 8. Commercial permission
+
+Commercial use, redistribution, hosted deployment, integration into a commercial product, integration into a paid service, or creation of competing derivative products requires prior written permission from GhostInTheShell-444.
+
+## 9. Reservation of rights
+
+All rights not expressly granted in this license are reserved by GhostInTheShell-444.

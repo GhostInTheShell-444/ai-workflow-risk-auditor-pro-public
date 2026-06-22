@@ -1,5 +1,9 @@
 # AI Workflow Risk Auditor Pro
 
+> **Official repository.** AI Workflow Risk Auditor Pro is maintained by **GhostInTheShell-444**.  
+> This repository is publicly visible for review and transparency, but it is released under a **source-available non-commercial license**. Commercial use, hosted clones, redistribution, rebranding, and competing derivative products are not permitted without prior written permission.
+
+
 Local-first Streamlit tool to explain, score, simulate, and document AI workflow risks before automation.
 
 [![CI](https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro/actions/workflows/ci.yml/badge.svg)](https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro/actions/workflows/ci.yml)
@@ -204,4 +208,14 @@ CI uses Python 3.12 and verifies tests, compilation, JSON parsing, and that comm
 
 ## License
 
-Licensed under the [MIT License](LICENSE).
+Released under a [source-available non-commercial license](LICENSE). See [NOTICE.md](NOTICE.md) and [Licensing and commercial use](docs/LICENSING_AND_COMMERCIAL_USE.md).
+
+## Licensing and commercial use
+
+AI Workflow Risk Auditor Pro is released under a source-available non-commercial license.
+
+- License: [LICENSE](LICENSE)
+- Notice: [NOTICE.md](NOTICE.md)
+- Commercial-use details: [docs/LICENSING_AND_COMMERCIAL_USE.md](docs/LICENSING_AND_COMMERCIAL_USE.md)
+
+Commercial use, hosted clones, redistribution, rebranding, and competing derivative products require prior written permission from GhostInTheShell-444.
