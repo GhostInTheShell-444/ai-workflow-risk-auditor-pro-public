@@ -1,6 +1,6 @@
-# Public Screenshot Capture Specification
+# Screenshot Capture Specification
 
-Capture screenshots only with bundled synthetic scenarios and a clean local database. Crop browser chrome where possible. Check every image at full resolution before adding it.
+The current ten screenshots are committed for private review. Follow [Screenshot Guidelines](SCREENSHOT_GUIDELINES.md) for privacy, naming, gallery structure, string scans, and public-polish rules before replacing or publishing them.
 
 | Filename | Purpose | What must be visible | What must not be visible | Privacy checks | README placement |
 |---|---|---|---|---|---|
@@ -22,4 +22,4 @@ Capture screenshots only with bundled synthetic scenarios and a clean local data
 - Search visible text for personal names, usernames, machine names, paths, credentials, and real identifiers.
 - Confirm every input and report is synthetic.
 - Confirm light and dark contrast where each theme is promoted.
-- Obtain a final human visual approval before commit and push.
+- Obtain a final human visual approval before any public launch.

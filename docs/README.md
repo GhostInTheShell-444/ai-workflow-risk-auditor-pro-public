@@ -6,6 +6,8 @@ User and evaluator documentation for AI Workflow Risk Auditor Pro:
 
 - [Installation](INSTALLATION.md)
 - [Usage](USAGE.md)
+- [Frequently Asked Questions](FAQ.md)
+- [Synthetic Workflow Examples](../examples/README.md)
 - [Public Demo Guide](PUBLIC_DEMO_GUIDE.md)
 - [Product Overview](PRODUCT_OVERVIEW.md)
 
@@ -32,8 +34,11 @@ User and evaluator documentation for AI Workflow Risk Auditor Pro:
 ## Examples and presentation
 
 - [Sample Report Explained](SAMPLE_REPORT_EXPLAINED.md)
-- [Public Screenshot Specification](SCREENSHOTS_TODO.md)
+- [Screenshot Guidelines](SCREENSHOT_GUIDELINES.md)
+- [Screenshot Capture Specification](SCREENSHOTS_TODO.md)
 - [GitHub Presentation Guide](GITHUB_PRESENTATION_GUIDE.md)
+- [GitHub Repository Setup](GITHUB_REPOSITORY_SETUP.md)
+- [Public Release Checklist](PUBLIC_RELEASE_CHECKLIST.md)
 - [Case Study](CASE_STUDY.md)
 - [Glossary](GLOSSARY_SIMPLE.md)
 

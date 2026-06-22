@@ -1,42 +1,28 @@
 # GitHub Presentation Guide
 
-## Repository metadata
+## Presentation order
 
-- Recommended repository name: `ai-workflow-risk-auditor-pro`
-- Short description: Local-first Streamlit tool to explain, score, simulate, and document AI workflow risks before automation.
-- Website: leave blank unless a reviewed public project page exists.
+1. Project name, one-sentence local-first positioning, and private-iteration status.
+2. Cross-platform quick start.
+3. Privacy-reviewed English product gallery.
+4. Problem, implemented capabilities, and explicit non-capabilities.
+5. Deterministic scoring and local-first boundaries.
+6. Architecture, tests, synthetic examples, and detailed documentation.
+7. Separate French and Hebrew RTL presentation.
+8. Security, contribution, roadmap, release-checklist, and license links.
 
-## Topics
+## Accuracy rules
 
-```text
-python
-streamlit
-cybersecurity
-ai-governance
-local-first
-privacy
-risk-assessment
-sqlite
-ollama
-explainability
-ai-safety
-workflow-automation
-security-audit
-```
+- Describe findings as detected attention points, not proof.
+- Describe scores and confidence as deterministic heuristics, not probabilities.
+- Describe controls as recommendations and reductions as simulations.
+- State that saving is explicit and SQLite is not encrypted by the app.
+- Keep optional Ollama separate from authoritative deterministic results.
+- Do not call the project production-grade, certified, or legally compliant.
+- Use synthetic or appropriately anonymized examples only.
 
-## Social preview
+## Repository metadata and launch controls
 
-Create a 1280×640 image from a synthetic dashboard view. Use the title **AI Workflow Risk Auditor Pro** and subtitle **Local-first AI workflow risk review**. Do not include personal data, local paths, browser profiles, terminal content, real report history, secrets, machine names, or unreviewed model output.
+Use [GitHub Repository Setup](GITHUB_REPOSITORY_SETUP.md) for the approved description, topic list, private-visibility check, and social-preview requirements. Use the [Public Release Checklist](PUBLIC_RELEASE_CHECKLIST.md) as the human launch gate.
 
-## Repository presentation order
-
-1. README value proposition and limitations.
-2. Human-reviewed synthetic dashboard screenshot.
-3. Explainability and privacy boundaries.
-4. Five-minute demo.
-5. Architecture, tests, sample reports, and documentation.
-6. Contributing, security, license, and roadmap.
-
-## Before enabling public visibility
-
-Complete the public release checklist, capture and inspect screenshots, run CI-equivalent commands, verify the Git tree contains no runtime data, and have a human review the rendered README on GitHub. Do not enable a public release or tag until those checks are complete.
+Do not change visibility, create a tag, or create a release during documentation review.

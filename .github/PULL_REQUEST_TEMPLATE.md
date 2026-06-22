@@ -22,3 +22,9 @@ Describe the problem, solution, and user-visible behavior.
 - [ ] EN/FR/HE impact and Hebrew RTL behavior were considered.
 - [ ] Documentation and limitations were updated.
 - [ ] Relevant UI was checked manually with synthetic data.
+- [ ] Documentation links and image paths affected by this change were checked.
+- [ ] New examples are synthetic and contain no usable credential-like values.
+
+## Screenshots
+
+For UI changes, link privacy-reviewed synthetic captures or state why none are needed. Follow `docs/SCREENSHOT_GUIDELINES.md`; do not attach local paths, personal data, real report history, terminals, or credentials.

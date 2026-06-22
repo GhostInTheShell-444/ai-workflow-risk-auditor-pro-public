@@ -11,6 +11,8 @@ We commit to a welcoming, harassment-free community for everyone, regardless of 
 - Accept feedback and correct mistakes.
 - Protect privacy; never share another person's private information.
 - Use synthetic data in project discussions and demonstrations.
+- Never post credentials, access tokens, secrets, or confidential workflow content.
+- Perform security testing only on systems you own or are explicitly authorized to test.
 
 ## Unacceptable behavior
 
@@ -18,7 +20,7 @@ Harassment, threats, discrimination, sexualized conduct, trolling, sustained dis
 
 ## Enforcement
 
-Project maintainers may edit or remove comments, commits, issues, and other contributions that violate this policy and may temporarily or permanently restrict participation. Report conduct concerns privately through repository maintainer or moderation channels. Reports will be reviewed as confidentially and fairly as practical.
+Project maintainers may edit or remove comments, commits, issues, and other contributions that violate this policy and may temporarily or permanently restrict participation. Report conduct concerns through a private repository-owner or moderation channel. Report vulnerabilities through the private process in [SECURITY.md](SECURITY.md), not through a public conduct report. Reports will be reviewed as confidentially and fairly as practical.
 
 ## Scope
 

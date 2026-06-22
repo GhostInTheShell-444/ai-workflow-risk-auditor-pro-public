@@ -1,0 +1,35 @@
+name: Documentation issue
+description: Report missing, inaccurate, or unclear documentation using no private data.
+title: "[Docs]: "
+labels:
+  - documentation
+body:
+  - type: markdown
+    attributes:
+      value: Do not include secrets, personal data, private repository notes, local paths, or real workflow content.
+  - type: textarea
+    id: location
+    attributes:
+      label: Documentation location
+      description: Provide the repository-relative file and heading or public page URL.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Explain what is missing, inaccurate, outdated, or unclear.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_change
+    attributes:
+      label: Proposed change
+      description: Suggest concise wording or structure using synthetic examples only.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety confirmation
+      options:
+        - label: I removed secrets, personal data, private notes, local paths, and real workflow content.
+          required: true

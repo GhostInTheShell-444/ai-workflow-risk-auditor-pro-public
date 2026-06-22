@@ -4,7 +4,7 @@
 
 Use GitHub's private security advisory feature for this repository when available. Include the affected version or commit, impact, reproduction steps using synthetic data, and any suggested mitigation. If private reporting is unavailable, contact the maintainers through a private repository-owner channel before opening a public issue.
 
-Do not post secrets, personal data, real workflow content, exploit details, or sensitive screenshots in a public issue. Do not test against systems you do not own or have explicit permission to assess.
+Do not post secrets, personal data, real workflow content, exploit details, or sensitive screenshots in a public issue. Use synthetic reproduction data. Security testing is authorized only for systems you own or have explicit written permission to assess; do not target third-party or production systems through this project.
 
 ## Supported versions
 
@@ -12,7 +12,7 @@ Before the first published release, the default branch is the only supported lin
 
 ## Security boundaries
 
-AI Workflow Risk Auditor Pro is a local defensive review aid, not a hardened multi-user service. It provides no authentication, authorization, encrypted database, tenant isolation, secure deletion guarantee, production integration, vulnerability scanner, or automated remediation. Run it on a trusted machine and bind Streamlit to loopback.
+AI Workflow Risk Auditor Pro is a local defensive review aid, not a hardened multi-user service. It provides no authentication, authorization, encrypted database, tenant isolation, secure deletion guarantee, production integration, vulnerability scanner, or automated remediation. Run it on a trusted machine, bind Streamlit to `127.0.0.1`, and do not expose it to untrusted networks.
 
 The application is local-first:
 
