@@ -7,8 +7,10 @@ from examples import get_example_text
 from repositories import (
     create_audit_event,
     create_project,
+    delete_project,
     get_dashboard_metrics,
     get_report,
+    list_audit_events,
     list_projects,
     list_reports,
     save_assessment,
@@ -83,12 +85,70 @@ def test_reset_demo_db_recreates_seed_data(tmp_path):
     assert "Temporary user project" not in project_names
 
 
+def test_reset_demo_db_only_replaces_requested_database(tmp_path):
+    db_path = tmp_path / "data" / "aiwra.db"
+    docs_file = tmp_path / "docs" / "keep.md"
+    screenshot_file = tmp_path / "screenshots" / "keep.png"
+    test_file = tmp_path / "tests" / "keep.py"
+    for path in (docs_file, screenshot_file, test_file):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(b"synthetic keep file")
+    init_db(db_path, seed=True)
+    reset_demo_db(db_path)
+    assert db_path.exists()
+    assert docs_file.read_bytes() == b"synthetic keep file"
+    assert screenshot_file.read_bytes() == b"synthetic keep file"
+    assert test_file.read_bytes() == b"synthetic keep file"
+
+
 def test_create_project_is_listed(tmp_path):
     db_path = tmp_path / "aiwra.db"
     init_db(db_path, seed=True)
     project_id = create_project("Privacy review", "Local only", db_path=db_path)
     projects = list_projects(db_path)
     assert any(project["id"] == project_id and project["name"] == "Privacy review" for project in projects)
+
+
+def test_delete_project_removes_only_requested_project_and_saved_history(tmp_path):
+    db_path = tmp_path / "aiwra.db"
+    deleted_project_id = create_project("Delete me", db_path=db_path)
+    kept_project_id = create_project("Keep me", db_path=db_path)
+    analysis = analyze_workflow(get_example_text("customer_support"))
+    workflow_id = save_workflow(
+        deleted_project_id,
+        "Support",
+        get_example_text("customer_support"),
+        db_path=db_path,
+    )
+    save_workflow_steps(workflow_id, analysis["steps"], db_path=db_path)
+    assessment_id = save_assessment(deleted_project_id, workflow_id, analysis, db_path=db_path)
+    save_findings(assessment_id, analysis["findings"], db_path=db_path)
+    save_recommended_controls(assessment_id, analysis["recommended_controls"], db_path=db_path)
+    save_report(assessment_id, deleted_project_id, "Delete report", "# Delete", analysis=analysis, db_path=db_path)
+
+    assert delete_project(deleted_project_id, db_path=db_path) is True
+
+    projects = list_projects(db_path)
+    assert any(project["id"] == kept_project_id for project in projects)
+    assert all(project["id"] != deleted_project_id for project in projects)
+    assert _count(db_path, "workflows") == 0
+    assert _count(db_path, "assessments") == 0
+    assert _count(db_path, "reports") == 0
+    events = list_audit_events(db_path=db_path)
+    assert events[0]["event_type"] == "project_deleted"
+    assert events[0]["entity_id"] == deleted_project_id
+
+
+def test_delete_project_rejects_synthetic_demo_project(tmp_path):
+    db_path = tmp_path / "aiwra.db"
+    init_db(db_path, seed=True)
+    try:
+        delete_project(1, db_path=db_path)
+    except ValueError as error:
+        assert "demo project" in str(error)
+    else:
+        raise AssertionError("Deleting the synthetic demo project must be rejected.")
+    assert any(project["id"] == 1 for project in list_projects(db_path))
 
 
 def test_save_workflow_requires_explicit_call(tmp_path):

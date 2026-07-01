@@ -18,30 +18,30 @@ This score is a rule-based estimate, not a statistical probability. Score calcul
 
 ## What this score means
 
-Raw matrix score: 17, Critical.
+Raw matrix score: 34, Critical.
 
 Plain meaning: Critical risk estimated from local rules, mainly because the workflow mentions customer-facing support, customer context, policy exceptions, and external communication. This does not mean the workflow is forbidden. It means a human should review evidence and controls before automation.
 
 ## What is detected
 
-- 35 evidence findings were detected in the text.
+- 16 evidence findings were detected in the text.
 - Examples include customer emails, support tickets, customer-facing response, policy exceptions, and audit log.
 - Each detected finding links to a local rule id in the app/report.
 
 ## What is calculated
 
-- Compatibility score: 10, High.
-- Raw matrix score: 17, Critical.
+- Compatibility score: 20, Critical.
+- Raw matrix score: 34, Critical.
 - Severity thresholds: low 0-4, medium 5-9, high 10-15, critical 16+.
 
 ## What is simulated
 
 After default selected protections:
 
-- Simulated residual score: 9, Medium.
+- Simulated residual score: 26, Critical.
 - Simulated reduction: 8.
 
-This is not a guarantee.
+Selected controls are hypothetical unless implementation evidence is reviewed. This is not a guarantee.
 
 ## What is recommended
 

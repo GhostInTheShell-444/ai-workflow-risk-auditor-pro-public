@@ -64,3 +64,9 @@ strings -a -n 8 screenshots/*.png | grep -Ei "(/(Users|home)/|token|secret|passw
 ```
 
 Also inspect pixels manually; a string scan cannot detect visible text rendered into the image.
+
+## Visual redesign recapture gate
+
+The current gallery predates the latest command-center styling. Do not replace it until a human has reviewed both Light and Dark modes at desktop and narrow widths. The review must include the risk cockpit, a High or Critical evidence card, the simulation assumptions banner, the Local AI authority boundary, the integrated sidebar, disabled reset button, and Hebrew RTL behavior.
+
+Temporary automated captures, if created, belong under `.aiwra-audit-output/visual-smoke/` and must not be added to Git.

@@ -1,5 +1,7 @@
 from __future__ import annotations
+import subprocess
 
+import html
 import os
 from collections import Counter
 
@@ -10,7 +12,7 @@ import streamlit as st
 from analyzer import analyze_workflow
 from dashboard import load_dashboard_metrics
 from database import init_db, reset_demo_db
-from design_tokens import THEME_OPTIONS, normalize_theme, resolved_theme, theme_label
+from design_tokens import normalize_theme
 from demo_mode import get_demo_scenario_options, get_demo_steps
 from examples import EXAMPLES, get_example_label, get_example_text
 from export_json import render_json_summary
@@ -46,7 +48,9 @@ from ollama_client import (
 from report_history import load_audit_trail, load_report_history, open_report
 from report_renderer import markdown_to_html, render_markdown_report
 from repositories import (
+    create_audit_event,
     create_project,
+    delete_project,
     list_projects,
     save_assessment,
     save_findings,
@@ -70,58 +74,194 @@ from ui_components import (
     humanize_key,
     render_accessibility_note,
     render_ai_output_panel,
+    render_app_status_header,
     render_bento_cards,
+    render_command_cockpit,
+    render_control_card,
+    render_deterministic_loading_panel,
     render_empty_state,
     render_evidence_card,
+    render_export_loading_panel,
     render_heatmap,
     render_how_to_read_panel,
     render_info_card,
+    render_local_ai_loading_panel,
     render_issue_card,
+    render_local_ai_brain_panel,
+    render_local_pipeline_strip,
     render_metric_card,
+    render_mission_pulse,
+    render_html,
     render_read_only_notice,
     render_risk_matrix,
+    render_risk_cockpit,
     render_section_header,
+    render_simulation_comparison,
+    render_simulation_loading_panel,
+    render_state_panel,
     render_status_badge,
     render_timeline,
+    render_workbench_frame,
     render_workflow_graph,
 )
 
 
-st.set_page_config(page_title="AI Workflow Risk Auditor Pro", layout="wide")
+st.set_page_config(
+    page_title="AI Workflow Risk Auditor Pro",
+    page_icon="🛡️",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 init_db()
+
+
+NAVIGATION_PAGE_IDS = ("start", "risk", "controls", "exports", "knowledge", "local_ai")
+LEGACY_NAVIGATION_PAGE_IDS = {
+    "audit": "start",
+    "dashboard": "risk",
+    "simulation": "controls",
+    "reports": "exports",
+    "kb": "knowledge",
+}
+NAVIGATION_PAGE_LABEL_KEYS = {
+    "start": ("nav_start_input", "Start / Input"),
+    "risk": ("nav_risk_cockpit", "Risk cockpit"),
+    "controls": ("nav_controls_simulation", "Controls / Simulation"),
+    "exports": ("nav_exports_reports", "Exports / Reports"),
+    "knowledge": ("nav_knowledge_base", "Knowledge base"),
+    "local_ai": ("nav_local_ai", "Local AI / Ollama"),
+}
+WORKFLOW_SOURCE_MODE_IDS = ("custom", "examples", "demos")
+LEGACY_WORKFLOW_SOURCE_MODE_IDS = {
+    "example": "examples",
+    "demo": "demos",
+}
+WORKFLOW_SOURCE_LABEL_KEYS = {
+    "custom": ("custom_workflow", "Custom workflow"),
+    "examples": ("workflow_source_examples", "Examples"),
+    "demos": ("workflow_source_demos", "Demos"),
+}
+THEME_MODE_TOGGLE_KEY = "theme_mode_toggle_header"
+LANGUAGE_ACTION_KEYS = {
+    "en": "language_action_en",
+    "fr": "language_action_fr",
+    "he": "language_action_he",
+}
+THEME_DARK_LEGACY_VALUES = ("dark", "sombre", "כהה", "night", "nuit", "true", "1")
+THEME_LIGHT_LEGACY_VALUES = ("light", "clair", "בהיר", "day", "jour", "false", "0")
+
+
+def _set_language(language_code: str) -> None:
+    languages = available_languages()
+    selected = language_code if language_code in languages else "en"
+    st.session_state["language"] = selected
+    st.session_state["language_selector_header"] = selected
+
+
+def _set_theme_state(theme_is_dark: bool) -> str:
+    st.session_state[THEME_MODE_TOGGLE_KEY] = bool(theme_is_dark)
+    theme_mode = "dark" if theme_is_dark else "light"
+    st.session_state["theme_mode"] = theme_mode
+    return theme_mode
+
+
+def _initialize_language_state() -> str:
+    languages = available_languages()
+    current = str(
+        st.session_state.get(
+            "language_selector_header",
+            st.session_state.get("language", "en"),
+        )
+    )
+    if current not in languages:
+        current = "en"
+    _set_language(current)
+    return current
+
+
+def _initialize_theme_state() -> str:
+    fallback_theme = normalize_theme(st.session_state.get("theme_mode", "light"))
+    if fallback_theme == "system":
+        fallback_theme = "light"
+    theme_is_dark = _normalize_theme_toggle_state(
+        st.session_state.get(THEME_MODE_TOGGLE_KEY, fallback_theme),
+        fallback_theme,
+    )
+    return _set_theme_state(theme_is_dark)
+
+
+def _toggle_theme_header() -> None:
+    current_is_dark = _normalize_theme_toggle_state(
+        st.session_state.get(THEME_MODE_TOGGLE_KEY),
+        st.session_state.get("theme_mode", "light"),
+    )
+    _set_theme_state(not current_is_dark)
+
+
+
+def _schedule_aiwra_shutdown() -> None:
+    # Stop only the current AIWRA Streamlit server process.
+    # This does not stop the OS and does not kill unrelated local tools.
+    if st.session_state.get("aiwra_shutdown_requested"):
+        return
+    st.session_state["aiwra_shutdown_requested"] = True
+    current_pid = os.getpid()
+    subprocess.Popen(
+        [
+            "bash",
+            "-lc",
+            f"sleep 0.9; kill -TERM {current_pid} 2>/dev/null || kill -KILL {current_pid} 2>/dev/null",
+        ],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        start_new_session=True,
+    )
 
 
 def _language_selector() -> str:
     languages = list(available_languages().keys())
-    current = str(st.session_state.get("language", "en"))
-    if current not in languages:
-        current = "en"
-    labels = {str(available_languages()[code]["native"]): code for code in languages}
-    selected_label = st.sidebar.selectbox(
-        t("language_selector", current, "Language"),
-        list(labels.keys()),
-        index=languages.index(current),
-    )
-    selected = labels[selected_label]
-    st.session_state["language"] = selected
-    return selected
+    current = _initialize_language_state()
+    with st.container(key="language_control_cluster"):
+        cols = st.columns(len(languages), gap="small")
+        for column, code in zip(cols, languages):
+            with column:
+                st.button(
+                    code.upper(),
+                    key=LANGUAGE_ACTION_KEYS.get(code, f"language_action_{code}"),
+                    type="primary" if code == current else "secondary",
+                    on_click=_set_language,
+                    args=(code,),
+                )
+    return current
+
+
+def _normalize_theme_toggle_state(value: object, fallback_theme: object = "light") -> bool:
+    if isinstance(value, bool):
+        return value
+    normalized_theme = normalize_theme(value)
+    if normalized_theme == "dark":
+        return True
+    if normalized_theme == "light":
+        return False
+
+    text = str(value or "").casefold().strip()
+    if any(marker in text for marker in THEME_DARK_LEGACY_VALUES):
+        return True
+    if any(marker in text for marker in THEME_LIGHT_LEGACY_VALUES):
+        return False
+    return normalize_theme(fallback_theme) == "dark"
 
 
 def _theme_selector(language: str) -> str:
-    st.session_state.setdefault("theme_mode", "system")
-    current = normalize_theme(st.session_state.get("theme_mode"))
-    selected = st.sidebar.selectbox(
-        t("appearance_label", language, "Appearance"),
-        options=list(THEME_OPTIONS),
-        index=list(THEME_OPTIONS).index(current),
-        format_func=lambda value: theme_label(value, language),
-        key="theme_mode_selector",
-    )
-    selected = normalize_theme(selected)
-    st.session_state["theme_mode"] = selected
-    if selected == "system":
-        st.sidebar.caption(t("theme_system_fallback_note", language, "System uses the light theme in this local Streamlit build."))
-    return selected
+    theme_mode = _initialize_theme_state()
+    theme_label = t(f"theme_{theme_mode}_option", language, theme_mode.title())
+    with st.container(key="theme_control_cluster"):
+        st.button(
+            theme_label,
+            key="theme_action_toggle_header",
+            on_click=_toggle_theme_header,
+        )
+    return theme_mode
 
 
 def _scenario_options(language: str) -> list[tuple[str, str, str]]:
@@ -133,9 +273,116 @@ def _scenario_options(language: str) -> list[tuple[str, str, str]]:
     return options
 
 
+def _normalize_active_page(value: object) -> str:
+    page = str(value or "start")
+    page = LEGACY_NAVIGATION_PAGE_IDS.get(page, page)
+    return page if page in NAVIGATION_PAGE_IDS else "start"
+
+
+def _scenario_key_from_state(value: object, scenario_options: list[tuple[str, str, str]]) -> str:
+    stored = str(value or "custom")
+    scenario_keys = {key for key, _, _ in scenario_options}
+    if stored in scenario_keys:
+        return stored
+    for key, label, _ in scenario_options:
+        if stored == label:
+            return key
+    for example_key, example in EXAMPLES.items():
+        labels = example.get("labels", {})
+        if isinstance(labels, dict) and stored in {str(label) for label in labels.values()}:
+            return f"example:{example_key}"
+    return "custom"
+
+
+def _scenario_mode_for_key(key: str) -> str:
+    if key.startswith("example:"):
+        return "examples"
+    if key.startswith("demo:"):
+        return "demos"
+    return "custom"
+
+
+def _source_mode_labels(language: str) -> dict[str, str]:
+    return {
+        key: t(label_key, language, fallback)
+        for key, (label_key, fallback) in WORKFLOW_SOURCE_LABEL_KEYS.items()
+    }
+
+
+def _workflow_source_for_key(key: str) -> str:
+    return _scenario_mode_for_key(key)
+
+
+def _select_workflow_source(
+    scenario_options: list[tuple[str, str, str]],
+    selected_key: str,
+    language: str,
+) -> tuple[str, str, str]:
+    current_option = next((option for option in scenario_options if option[0] == selected_key), scenario_options[0])
+    mode_keys = list(WORKFLOW_SOURCE_MODE_IDS)
+    mode_labels = _source_mode_labels(language)
+    current_mode = _scenario_mode_for_key(current_option[0])
+    if "main_example_selector_mode" not in st.session_state:
+        st.session_state["main_example_selector_mode"] = "custom"
+    stored_mode = str(st.session_state.get("main_example_selector_mode", current_mode))
+    stored_mode = LEGACY_WORKFLOW_SOURCE_MODE_IDS.get(stored_mode, stored_mode)
+    if stored_mode not in WORKFLOW_SOURCE_MODE_IDS:
+        stored_mode = current_mode
+    if st.session_state.get("main_example_selector_mode") != stored_mode:
+        st.session_state["main_example_selector_mode"] = stored_mode
+    selected_mode = st.radio(
+        t("main_example_selector_label", language, "Workflow source"),
+        mode_keys,
+        format_func=lambda key: mode_labels[key],
+        horizontal=True,
+        key="main_example_selector_mode",
+        help=t(
+            "main_example_selector_help",
+            language,
+            "Choose custom input, example, or demo.",
+        ),
+    )
+    if selected_mode == "custom":
+        st.session_state["main_example_selector"] = scenario_options[0][0]
+        return scenario_options[0]
+
+    prefix = "example:" if selected_mode == "examples" else "demo:"
+    choices = [option for option in scenario_options if option[0].startswith(prefix)]
+    if not choices:
+        st.session_state["main_example_selector"] = scenario_options[0][0]
+        return scenario_options[0]
+    choice_labels = {key: label for key, label, _ in choices}
+    choice_keys = list(choice_labels)
+    current_key = selected_key if selected_key in choice_keys else choice_keys[0]
+    st.session_state["main_example_selector"] = current_key
+    title_key = "workflow_source_example_picker_title" if selected_mode == "examples" else "workflow_source_demo_picker_title"
+    title_fallback = "Choose an example" if selected_mode == "examples" else "Choose a demo"
+    with st.expander(t(title_key, language, title_fallback), expanded=True):
+        selected_choice_key = st.radio(
+            t("workflow_source_choice_label", language, "Choose source"),
+            choice_keys,
+            format_func=lambda key: choice_labels[key],
+            key="main_example_selector",
+            label_visibility="collapsed",
+        )
+    st.caption(t("workflow_source_choice_help", language, "Selected source fills the input below."))
+    return choices[choice_keys.index(selected_choice_key)]
+
+
+def _navigation_options(language: str) -> list[tuple[str, str]]:
+    return [
+        (key, t(label_key, language, fallback))
+        for key, (label_key, fallback) in NAVIGATION_PAGE_LABEL_KEYS.items()
+    ]
+
+
 def _show_explanation(topic: str, fallback: str = "") -> None:
+    localized = t(f"explanation_{topic}_body", language, "")
+    if localized:
+        st.info(localized)
+        return
     card = get_explanation_card(topic)
-    if card:
+    if card and language == "en":
         st.info(f"{card['short_explanation']} {card['why_it_matters']}")
     elif fallback:
         st.info(fallback)
@@ -281,7 +528,15 @@ def _build_control_checklist(analysis: dict[str, object] | None, language: str) 
         rows.append(
             {
                 columns["name"]: t(key, language, key.replace("_", " ").title()),
-                columns["status"]: _status_text(status, language),
+                columns["status"]: (
+                    t(
+                        "checklist_status_recommended_not_verified",
+                        language,
+                        "Recommended — not verified",
+                    )
+                    if status == "recommended"
+                    else _status_text(status, language)
+                ),
                 columns["evidence"]: evidence,
                 columns["limit"]: t(
                     "checklist_limit",
@@ -404,25 +659,21 @@ def _render_dashboard_executive_overview(
 
 
 def _render_product_hero(language: str) -> None:
-    st.markdown(
+    render_html(
         f"""
         <div class="aiwra-hero">
-            <h2>{t("home_hero_title", language, "Local-first AI workflow risk auditor")}</h2>
+            <div class="aiwra-hero-title">{t("home_hero_title", language, "Local-first AI workflow risk auditor")}</div>
             <p>{t("home_hero_body", language, "Audit AI-assisted business workflows with deterministic local rules, evidence, controls, reports, and optional localhost-only Ollama narrative support.")}</p>
+            <div class="aiwra-hero-badges">
+                <span class="aiwra-badge" style="color:var(--aiwra-low); background:var(--aiwra-low-soft); border-color:var(--aiwra-low-border);">{t("home_badge_local_first", language, "Local-first")}</span>
+                <span class="aiwra-badge" style="color:var(--aiwra-calculated); background:var(--aiwra-calculated-soft); border-color:var(--aiwra-calculated-border);">{t("home_badge_deterministic", language, "Deterministic engine")}</span>
+                <span class="aiwra-badge" style="color:var(--aiwra-primary); background:var(--aiwra-primary-soft); border-color:var(--aiwra-primary);">{t("home_badge_optional_ai", language, "Optional local AI")}</span>
+                <span class="aiwra-badge" style="color:var(--aiwra-low); background:var(--aiwra-low-soft); border-color:var(--aiwra-low-border);">{t("home_badge_no_cloud", language, "No cloud required")}</span>
+                <span class="aiwra-badge" style="color:var(--aiwra-medium); background:var(--aiwra-medium-soft); border-color:var(--aiwra-medium-border);">{t("home_badge_human_review", language, "Human review required")}</span>
+            </div>
         </div>
-        """,
-        unsafe_allow_html=True,
+        """
     )
-    hero_cols = st.columns(4)
-    cards = [
-        ("home_card_no_cloud_title", "home_card_no_cloud_body", "local_only"),
-        ("home_card_explainable_title", "home_card_explainable_body", "calculated"),
-        ("home_card_evidence_title", "home_card_evidence_body", "detected"),
-        ("home_card_exports_title", "home_card_exports_body", "recommended"),
-    ]
-    for column, (title_key, body_key, status) in zip(hero_cols, cards):
-        with column:
-            render_info_card(t(title_key, language), t(body_key, language), status=status, language=language)
 
 
 def _render_findings(findings: list[dict[str, object]], language: str) -> None:
@@ -461,22 +712,11 @@ def _render_findings(findings: list[dict[str, object]], language: str) -> None:
     for index, finding in enumerate(filtered[:5], start=1):
         severity = translate_severity(finding.get("severity", "medium"), language)
         category = translate_category(finding.get("category", "general"), language)
-        evidence = str(finding.get("matched_text_evidence", ""))
-        controls = ", ".join(str(item) for item in finding.get("recommended_controls", [])[:3])
-        with st.expander(f"{index}. {severity} {category} - {t('badge_detected', language, 'Detected in text')}", expanded=index <= 3):
-            st.write(
-                t(
-                    "finding_plain_sentence",
-                    language,
-                    "The workflow may be risky because this evidence matched a local rule. A human should confirm whether it matters.",
-                )
-            )
-            st.markdown(f"**{t('evidence_label', language, 'Evidence')}**: {evidence}")
-            st.markdown(f"**{t('rule_used_label', language, 'Rule used')}**: `{finding.get('matched_rule_id', '')}`")
-            st.markdown(f"**{t('severity_label', language, 'Severity')}**: {severity}")
-            st.markdown(f"**{t('confidence_label', language, 'Confidence')}**: {finding.get('confidence', '')} ({t('badge_uncertain', language, 'Uncertain until human review')})")
-            if controls:
-                st.markdown(f"**{t('recommended_action_label', language, 'Recommended action')}**: {controls}")
+        with st.expander(
+            f"◆ {severity} · {category} · +{finding.get('score_impact', 0)}",
+            expanded=index <= 3,
+        ):
+            render_evidence_card(finding, index, language)
     with st.expander(t("all_findings_table_title", language, "View matching findings"), expanded=False):
         st.dataframe(
             [
@@ -494,6 +734,189 @@ def _render_findings(findings: list[dict[str, object]], language: str) -> None:
         )
 
 
+def _navigate_to(page: str) -> None:
+    st.session_state["active_page"] = _normalize_active_page(page)
+
+
+def _render_post_analysis_shortcuts(language: str) -> None:
+    render_section_header(
+        t("post_analysis_actions_title", language, "Next local actions"),
+        t(
+            "post_analysis_actions_body",
+            language,
+            "Jump directly to evidence, simulation, reports, or optional localhost-only AI without changing deterministic results.",
+        ),
+        "recommended",
+        language,
+    )
+    actions = [
+        (
+            "evidence",
+            "risk",
+            "post_action_evidence",
+            "Review evidence",
+            "post_action_evidence_help",
+            "Open the risk cockpit evidence view for source phrases, rules, and limits.",
+        ),
+        (
+            "simulation",
+            "controls",
+            "post_action_simulation",
+            "Simulate residual risk",
+            "post_action_simulation_help",
+            "Open the local hypothetical residual-risk controls.",
+        ),
+        (
+            "reports",
+            "exports",
+            "post_action_reports",
+            "Reports and history",
+            "post_action_reports_help",
+            "Open saved local reports, Markdown, JSON, and audit trail.",
+        ),
+        (
+            "local_ai",
+            "local_ai",
+            "post_action_local_ai",
+            "Local AI prompt",
+            "post_action_local_ai_help",
+            "Open optional Ollama prompt and response display. This never changes scores.",
+        ),
+    ]
+    columns = st.columns(4)
+    for column, (key, page, label_key, fallback, help_key, help_fallback) in zip(columns, actions):
+        with column:
+            st.button(
+                t(label_key, language, fallback),
+                key=f"post_analysis_shortcut_{key}",
+                help=t(help_key, language, help_fallback),
+                on_click=_navigate_to,
+                args=(page,),
+            )
+
+
+def _render_residual_simulation_controls(language: str, analysis: dict[str, object] | None, context_key: str) -> None:
+    render_section_header(
+        t("section_residual_risk_simulation", language, "Residual risk simulation"),
+        t(
+            "simulation_inline_subtitle",
+            language,
+            "Select recommended controls to model a hypothetical local residual-risk result. This does not apply controls.",
+        ),
+        "simulated",
+        language,
+    )
+    if not analysis or not analysis.get("valid"):
+        st.info(t("run_audit_first", language, "Run an audit before simulating residual risk."))
+        return
+
+    controls = list(analysis.get("recommended_controls", []))
+    if not controls:
+        st.info(t("no_controls_for_simulation", language, "No controls were mapped from the current evidence."))
+        return
+
+    names_by_id = {control["id"]: control["name"] for control in controls}
+    default_ids = default_control_selection(controls)
+    selected_names = st.multiselect(
+        t("control_selector", language, "Select controls to simulate"),
+        options=[control["name"] for control in controls],
+        default=[names_by_id[control_id] for control_id in default_ids if control_id in names_by_id],
+        key=f"control_selector_{context_key}",
+    )
+    selected_ids = [control["id"] for control in controls if control["name"] in selected_names]
+    simulate_key = (
+        "simulate_residual_risk_action"
+        if context_key == "audit_inline"
+        else f"simulate_residual_risk_action_{context_key}"
+    )
+    save_simulation_key = (
+        "save_simulation_secondary"
+        if context_key == "audit_inline"
+        else f"save_simulation_secondary_{context_key}"
+    )
+    if st.button(
+        t("simulate_button", language, "Simulate residual risk"),
+        key=simulate_key,
+    ):
+        simulation_loader = st.empty()
+        try:
+            render_simulation_loading_panel(language, target=simulation_loader)
+            st.session_state["simulation"] = simulate_residual_risk(
+                analysis["risk_matrix"],
+                selected_control_ids=selected_ids,
+                controls=controls,
+            )
+            st.session_state["report_markdown"] = render_markdown_report(
+                analysis,
+                language=language,
+                enrichment=st.session_state.get("enrichment"),
+                simulation=st.session_state["simulation"],
+            )
+        finally:
+            simulation_loader.empty()
+
+    simulation = st.session_state.get("simulation")
+    if not simulation:
+        return
+
+    simulation_explainability = build_explainability_payload(analysis, simulation, language)
+    render_simulation_comparison(simulation, language)
+    st.caption(simulation_explainability["simulation_explanation"]["summary"])
+    st.write(t("simulation_local_explanation_report", language, "Residual risk is a local simulation based on mapped control effects. It does not execute actions or guarantee production risk reduction."))
+    st.warning(
+        t(
+            "simulation_not_proof_warning",
+            language,
+            "Selected controls are hypothetical unless implementation evidence proves they exist and are used. Simulation is not a guarantee.",
+        )
+    )
+    selected_control_rows = []
+    for control in simulation.get("selected_controls", []):
+        selected_control_rows.append(
+            {
+                t("column_name", language, "Name"): control.get("name"),
+                t("mapped_risk_factors_label", language, "Mapped risk factors"): ", ".join(control.get("mapped_factors", [])),
+                t("reduction_metric", language, "Reduction"): control.get("estimated_reduction", 0),
+                t("simulation_assumption_label", language, "Assumption"): control.get("assumption"),
+                t("evidence_required_label", language, "Evidence required"): control.get("evidence_required"),
+                t("implementation_check_label", language, "Implementation check"): control.get("implementation_check"),
+                t("limit_label", language, "Limit"): control.get("limitation"),
+            }
+        )
+    if selected_control_rows:
+        st.dataframe(selected_control_rows, width="stretch", hide_index=True)
+    st.caption(
+        f"{t('human_review_required_label', language, 'Human review required')}: "
+        f"{t('yes_label', language, 'Yes') if simulation.get('human_review_required') else t('no_label', language, 'No')}"
+    )
+    st.dataframe(
+        [
+            {
+                t("factor_label", language, "Factor"): t(f"factor_{item.get('factor')}", language, humanize_key(item.get("factor"))),
+                t("remaining_score_label", language, "Remaining score"): item.get("remaining_score"),
+            }
+            for item in simulation["remaining_risks"]
+        ],
+        width="stretch",
+        hide_index=True,
+    )
+    if st.session_state.get("assessment_id"):
+        if st.button(
+            t("save_simulation_button", language, "Save simulation run"),
+            key=save_simulation_key,
+        ):
+            save_simulation_run(int(st.session_state["assessment_id"]), simulation)
+            st.success(t("simulation_saved_success", language, "Simulation saved locally."))
+    else:
+        st.caption(
+            t(
+                "save_analysis_before_simulation",
+                language,
+                "Save the analysis first if you want this simulation in history.",
+            )
+        )
+
+
 def _current_project_id(language: str) -> int:
     projects = list_projects()
     project_options = {f"{project['name']} #{project['id']}": int(project["id"]) for project in projects}
@@ -503,40 +926,110 @@ def _current_project_id(language: str) -> int:
     if selected_id:
         return selected_id
     name = st.sidebar.text_input(t("new_project_name", language, "New project name"), value="Local Workflow Review")
-    if st.sidebar.button(t("create_project_button", language, "Create Project")):
+    if st.sidebar.button(
+        t("create_project_button", language, "Create Project"),
+        key="create_project_secondary",
+    ):
         return create_project(name, "User-created local project.", is_demo=False)
     return int(projects[0]["id"]) if projects else create_project("Local Workflow Review")
+
+
+def _clear_input(widget_key: str) -> None:
+    st.session_state[widget_key] = ""
+    st.session_state["last_workflow_text"] = ""
+
+
+def _load_workflow_text(widget_key: str, workflow_text: str) -> None:
+    st.session_state[widget_key] = workflow_text
+    st.session_state["last_workflow_text"] = workflow_text
+
+
+def _clear_analysis_session() -> None:
+    for key in (
+        "analysis",
+        "enrichment",
+        "simulation",
+        "assessment_id",
+        "report_id",
+        "report_markdown",
+        "local_ai_current_response",
+        "local_ai_advisory_notice_key",
+    ):
+        st.session_state.pop(key, None)
+
+
+def _clear_session(widget_key: str) -> None:
+    _clear_input(widget_key)
+    _clear_analysis_session()
+
+
+def _set_local_ai_advisory_notice(message_key: str) -> None:
+    st.session_state["local_ai_advisory_notice_key"] = message_key
+
+
+def _clear_local_ai_advisory_notice() -> None:
+    st.session_state.pop("local_ai_advisory_notice_key", None)
+
+
+def _local_ai_advisory_message(language: str) -> str:
+    message_key = st.session_state.get("local_ai_advisory_notice_key")
+    return t(str(message_key), language, "") if message_key else ""
+
+
+def _technical_inline(message: str) -> str:
+    escaped = html.escape(str(message or ""))
+    for term in ("Ollama", "AIWRA", "JSON", "localhost", "127.0.0.1"):
+        escaped = escaped.replace(term, f'<bdi class="aiwra-technical">{term}</bdi>')
+    return escaped
+
+
+def _render_local_ai_compact_note(language: str) -> None:
+    message = _local_ai_advisory_message(language)
+    if not message:
+        return
+    render_html(
+        f"""
+        <div class="aiwra-compact-note aiwra-compact-note--advisory">
+            {_technical_inline(message)}
+        </div>
+        """
+    )
 
 
 def _run_enrichment(workflow_text: str, analysis: dict[str, object], language: str, model_name: str) -> str | None:
     status = check_ollama_status()
     if not status["available"]:
-        st.info(f"{t('ollama_fallback_used', language)} {status.get('message', '')}")
+        _set_local_ai_advisory_notice("local_ai_unavailable_compact")
         return None
 
     local_models = [str(name) for name in status.get("models", [])]
     cloud_models = [str(name) for name in status.get("cloud_models", [])]
     selected_model = model_name.strip() or "llama3"
     if is_cloud_or_proxy_model(selected_model) or selected_model in cloud_models:
-        st.warning(t("ollama_cloud_model_blocked", language, "Cloud/proxy-like model names were detected. Local-only deterministic fallback was used."))
+        _set_local_ai_advisory_notice("local_ai_advisory_not_generated")
         return None
     if not local_models:
-        st.info(t("ollama_no_local_models", language, "Ollama is reachable, but no local-only models were listed. Deterministic report was used."))
+        _set_local_ai_advisory_notice("local_ai_unavailable_compact")
         return None
     if selected_model not in local_models:
-        st.info(t("ollama_model_missing", language, "Ollama is reachable, but the selected model is not installed. Deterministic report was used."))
+        _set_local_ai_advisory_notice("local_ai_unavailable_compact")
         return None
 
-    enrichment = generate_enrichment(
-        workflow_text=workflow_text,
-        analysis=analysis,
-        language_name=str(available_languages()[language]["name"]),
-        model=selected_model,
-    )
+    local_ai_loader = st.empty()
+    try:
+        render_local_ai_loading_panel(language, target=local_ai_loader)
+        enrichment = generate_enrichment(
+            workflow_text=workflow_text,
+            analysis=analysis,
+            language_name=str(available_languages()[language]["name"]),
+            model=selected_model,
+        )
+    finally:
+        local_ai_loader.empty()
     if enrichment:
-        st.info(t("ollama_enrichment_used", language))
+        _clear_local_ai_advisory_notice()
     else:
-        st.info(t("ollama_enrichment_failed", language))
+        _set_local_ai_advisory_notice("local_ai_advisory_not_generated")
     return enrichment
 
 
@@ -551,7 +1044,7 @@ def _save_current_report(language: str, project_id: int, workflow_text: str, sce
         name=scenario_label,
         workflow_text=workflow_text,
         source=source,
-        is_demo=source != "user",
+        is_demo=source in {"examples", "demos"},
     )
     save_workflow_steps(workflow_id, [str(step) for step in analysis.get("steps", [])])
     assessment_id = save_assessment(project_id, workflow_id, analysis)
@@ -584,41 +1077,74 @@ def _save_current_report(language: str, project_id: int, workflow_text: str, sce
     st.success(f"{t('report_saved_success', language, 'Report saved locally.')} #{report_id}")
 
 
-language = _language_selector()
-theme_mode = _theme_selector(language)
+language = _initialize_language_state()
+theme_mode = _initialize_theme_state()
 rtl = is_rtl(language)
-apply_global_styles(language, resolved_theme(theme_mode))
+apply_global_styles(language, theme_mode)
 
-if rtl:
-    st.markdown(
-        """
-        <style>
-        textarea, input { direction: rtl; text-align: right; }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+with st.container(key="settings_toolbar_header"):
+    settings_language_col, settings_theme_col = st.columns([1.15, 0.85], vertical_alignment="center")
+    with settings_language_col:
+        language = _language_selector()
+    with settings_theme_col:
+        theme_mode = _theme_selector(language)
+rtl = is_rtl(language)
 
+render_html(
+    f"""
+    <div class="aiwra-sidebar-brand">
+        <strong>◆ {html.escape(t('product_title', language, 'AI Workflow Risk Auditor Pro'))}</strong>
+        <span>{html.escape(t('sidebar_command_center', language, 'Local-first deterministic audit command center'))}</span>
+    </div>
+    """,
+    target=st.sidebar,
+)
 st.sidebar.header(t("sidebar_title", language))
+nav_options = _navigation_options(language)
+nav_labels = {key: label for key, label in nav_options}
+st.session_state["active_page"] = _normalize_active_page(
+    st.session_state.get("active_page", st.session_state.get("sidebar_primary_navigation", "start"))
+)
+render_html(
+    f"<div class='aiwra-sidebar-divider'>{html.escape(t('sidebar_navigation_section', language, 'Navigation'))}</div>",
+    target=st.sidebar,
+)
+selected_page = st.sidebar.radio(
+    t("sidebar_navigation_label", language, "Primary cockpit view"),
+    options=list(NAVIGATION_PAGE_IDS),
+    format_func=lambda key: nav_labels[key],
+    key="active_page",
+)
+render_html(
+    f"<div class='aiwra-sidebar-divider'>{html.escape(t('sidebar_session_section', language, 'Session setup'))}</div>",
+    target=st.sidebar,
+)
 project_id = _current_project_id(language)
 demo_guidance = st.sidebar.toggle(t("guided_demo_toggle", language, "Guided demo mode"), value=False)
 
 scenario_options = _scenario_options(language)
-scenario_labels = [label for _, label, _ in scenario_options]
-selected_label = st.sidebar.selectbox(t("example_selector", language), scenario_labels)
-selected_key, scenario_label, selected_text = scenario_options[scenario_labels.index(selected_label)]
-source = "user"
-if selected_key.startswith("example:"):
-    source = "v1_example"
-elif selected_key.startswith("demo:"):
-    source = "demo"
+scenario_keys = [key for key, _, _ in scenario_options]
+selected_scenario_key = _scenario_key_from_state(
+    st.session_state.get("main_example_selector", scenario_keys[0]),
+    scenario_options,
+)
+selected_key, scenario_label, selected_text = scenario_options[scenario_keys.index(selected_scenario_key)]
+source = _workflow_source_for_key(selected_key)
 
+render_html(
+    f"<div class='aiwra-sidebar-divider'>{html.escape(t('sidebar_optional_ai_section', language, 'Optional local AI'))}</div>",
+    target=st.sidebar,
+)
 use_ollama = st.sidebar.toggle(t("ollama_toggle", language), value=False)
 model_name = "llama3"
+sidebar_ollama_status: dict[str, object] | None = None
+local_ai_header_state = t("local_ai_header_off", language, "Off / advisory only")
 
 if use_ollama:
     status = check_ollama_status()
+    sidebar_ollama_status = status
     if status["available"]:
+        local_ai_header_state = t("local_ai_header_available", language, "Available locally / advisory")
         local_models = [str(name) for name in status.get("models", [])]
         cloud_models = [str(name) for name in status.get("cloud_models", [])]
         if local_models:
@@ -627,10 +1153,15 @@ if use_ollama:
                 t("ollama_model", language),
                 local_models,
                 index=default_index,
+                key="sidebar_ollama_model",
             )
             st.sidebar.success(f"{t('ollama_available', language)} {', '.join(local_models[:5])}")
         else:
-            model_name = st.sidebar.text_input(t("ollama_model", language), value="llama3")
+            model_name = st.sidebar.text_input(
+                t("ollama_model", language),
+                value="llama3",
+                key="sidebar_ollama_model",
+            )
             st.sidebar.info(t("ollama_no_local_models", language, "Ollama is reachable, but no local-only models were listed."))
         if cloud_models:
             st.sidebar.warning(
@@ -641,121 +1172,507 @@ if use_ollama:
                 )
             )
     else:
+        local_ai_header_state = t("local_ai_header_unavailable", language, "Unavailable / deterministic only")
         st.sidebar.info(f"{t('ollama_unavailable', language)} {status.get('message', '')}")
 else:
     st.sidebar.caption(t("ollama_disabled", language))
 
-st.sidebar.caption(t("reset_demo_db_warning", language, "Reset deletes saved local reports and recreates synthetic seed data."))
-confirm_reset = st.sidebar.checkbox(t("reset_demo_db_confirm", language, "I understand this deletes saved local reports."))
-if st.sidebar.button(t("reset_demo_db_button", language, "Reset demo database"), disabled=not confirm_reset):
-    reset_demo_db()
-    st.sidebar.success(t("demo_db_reset_success", language, "Demo database reset with synthetic seed data."))
+render_html(
+    f"<div class='aiwra-sidebar-divider'>{html.escape(t('sidebar_local_data_section', language, 'Local data controls'))}</div>",
+    target=st.sidebar,
+)
+active_project = next((project for project in list_projects() if int(project["id"]) == project_id), None)
+if active_project and not bool(active_project["is_demo"]):
+    with st.sidebar.expander(t("delete_project_title", language, "Delete active project"), expanded=False):
+        st.warning(
+            t(
+                "delete_project_warning",
+                language,
+                "Deletes only the active project and its saved workflows, assessments, findings, simulations, and reports from local SQLite.",
+            )
+        )
+        confirm_delete = st.checkbox(
+            t(
+                "delete_project_confirm",
+                language,
+                "I understand this permanently deletes the active project from local SQLite.",
+            ),
+            key="confirm_delete_project_danger",
+        )
+        if st.button(
+            t("delete_project_button", language, "Delete active project"),
+            disabled=not confirm_delete,
+            key="delete_project_danger",
+        ):
+            deleted_name = str(active_project["name"])
+            delete_project(project_id)
+            _clear_analysis_session()
+            st.session_state["local_data_notice"] = (
+                "project_deleted_success",
+                deleted_name,
+            )
+            st.rerun()
+elif active_project:
+    st.sidebar.caption(
+        t(
+            "delete_demo_project_blocked",
+            language,
+            "The synthetic demo project cannot be deleted individually. Use the separate demo database reset only if you intend to replace all saved local history.",
+        )
+    )
+st.sidebar.caption(
+    t(
+        "reset_demo_db_short_warning",
+        language,
+        "Danger reset is closed by default.",
+    )
+)
+with st.sidebar.expander(t("reset_demo_db_danger_title", language, "Danger reset"), expanded=False):
+    st.warning(
+        t(
+            "reset_demo_db_warning_v2",
+            language,
+            "Reset deletes the local SQLite database at data/aiwra.db and recreates synthetic seed data.",
+        )
+    )
+    st.caption(
+        t(
+            "reset_demo_db_deletes",
+            language,
+            "Deleted: saved local projects, workflows, assessments, findings, simulations, reports, and audit events stored in data/aiwra.db.",
+        )
+    )
+    st.caption(
+        t(
+            "reset_demo_db_keeps",
+            language,
+            "Not deleted: source code, docs, screenshots, tests, examples, knowledge-base JSON, and exported files outside the database.",
+        )
+    )
+    st.caption(
+        t(
+            "reset_demo_db_backup",
+            language,
+            "Back up data/aiwra.db first if you need saved history.",
+        )
+    )
+    confirm_reset = st.checkbox(
+        t("reset_demo_db_confirm_v2", language, "I understand this deletes data/aiwra.db saved history."),
+        key="confirm_reset_demo_database_danger",
+    )
+    if st.button(
+        t("reset_demo_db_button", language, "Reset demo database"),
+        disabled=not confirm_reset,
+        key="reset_demo_database_danger",
+    ):
+        reset_demo_db()
+        create_audit_event(
+            "database_reset",
+            "database",
+            None,
+            {"path": "data/aiwra.db", "seed": "synthetic"},
+        )
+        _clear_analysis_session()
+        st.session_state["local_data_notice"] = ("demo_db_reset_success", "")
+        st.rerun()
+
+local_data_notice = st.session_state.pop("local_data_notice", None)
+if local_data_notice:
+    notice_key, notice_suffix = local_data_notice
+    st.sidebar.success(
+        t(
+            notice_key,
+            language,
+            "Local data action completed.",
+        )
+        + (f" {notice_suffix}" if notice_suffix else "")
+    )
+
+
+st.sidebar.divider()
+with st.sidebar.container(key="aiwra_power_shutdown_zone"):
+    st.button(
+        "⏻",
+        key="aiwra_power_shutdown_button",
+        on_click=_schedule_aiwra_shutdown,
+    )
+    st.caption(t("shutdown_system_caption", language, "Shut down the local AIWRA system."))
+    if st.session_state.get("aiwra_shutdown_requested"):
+        st.info(t("shutdown_system_notice", language, "Shutdown requested. The local server is stopping."))
+
 
 st.sidebar.caption(t("project_status", language))
 
-st.title(t("product_title", language, "AI Workflow Risk Auditor Pro"))
-_render_product_hero(language)
-st.write(t("app_pitch", language))
-st.warning(t("privacy_warning", language))
-st.info(one_minute_explanation(language))
-st.caption(score_disclaimer(language))
-_show_simple_legend(language)
-
-start_col, local_col, next_col = st.columns(3)
-with start_col:
-    st.markdown(f"#### {t('start_here_title', language, 'Start here')}")
-    st.caption(t("start_here_body", language, "Choose a synthetic example or paste an anonymized workflow, then run the audit."))
-with local_col:
-    st.markdown(f"#### {t('local_privacy_title', language, 'What stays local')}")
-    st.caption(t("local_privacy_body", language, "Analysis runs locally. User workflow text is saved only when you click the local save button."))
-with next_col:
-    st.markdown(f"#### {t('next_after_analysis_title', language, 'After analysis')}")
-    st.caption(t("next_after_analysis_body", language, "Review evidence, simulate controls, save intentionally, then download Markdown or JSON."))
+active_project_name = str(active_project["name"]) if active_project else t("not_available_label", language, "Not available")
+language_label = str(available_languages()[language]["native"])
+theme_display = t(f"theme_{theme_mode}_option", language, theme_mode.title())
+render_app_status_header(
+    t("product_title", language, "AI Workflow Risk Auditor Pro"),
+    t("app_pitch", language),
+    [
+        {
+            "label": t("header_local_first_label", language, "Local-first"),
+            "value": t("header_local_first_value", language, "Deterministic engine is authoritative"),
+        },
+        {
+            "label": t("header_active_project_label", language, "Active project"),
+            "value": active_project_name,
+        },
+        {
+            "label": t("header_language_theme_label", language, "Language / theme"),
+            "value": f"{language_label} / {theme_display}",
+        },
+        {
+            "label": t("header_local_ai_label", language, "Local AI"),
+            "value": local_ai_header_state,
+        },
+    ],
+    language,
+)
+if selected_page != "start":
+    st.caption(score_disclaimer(language))
+    _show_simple_legend(language)
 
 if demo_guidance:
     with st.sidebar.expander(t("demo_steps_title", language, "5-minute demo flow"), expanded=False):
         for step in get_demo_steps():
             st.caption(step)
 
-tab_audit, tab_simulation, tab_dashboard, tab_reports, tab_kb, tab_local_ai = st.tabs(
-    [
-        t("tab_audit", language, "Audit"),
-        t("tab_simulation", language, "Simulation"),
-        t("tab_dashboard", language, "Dashboard"),
-        t("tab_reports", language, "Reports"),
-        t("tab_knowledge_base", language, "Knowledge Base"),
-        t("tab_local_ai", language, "Local AI / Ollama"),
-    ]
-)
-
-with tab_audit:
+if selected_page == "start":
     if demo_guidance:
         _show_explanation("local_first")
 
-    default_text = "" if selected_key == "custom" else selected_text
-    st.caption(t("workflow_input_help", language, "Use synthetic or anonymized text. Analysis does not save this workflow until you explicitly save a report."))
-    workflow_text = st.text_area(
-        t("workflow_input_label", language),
-        value=default_text,
-        height=240,
-        placeholder=t("workflow_input_placeholder", language),
-        key=f"workflow_text_{language}_{selected_key}",
+    current_state_analysis = st.session_state.get("analysis")
+    current_state_findings = (
+        [item for item in current_state_analysis.get("findings", []) if isinstance(item, dict)]
+        if isinstance(current_state_analysis, dict) and current_state_analysis.get("valid")
+        else []
     )
-    st.session_state["last_workflow_text"] = workflow_text
+    current_score = (
+        str(current_state_analysis.get("risk", {}).get("score", t("not_ready_label", language, "Not ready")))
+        if isinstance(current_state_analysis, dict) and current_state_analysis.get("valid")
+        else t("not_ready_label", language, "Not ready")
+    )
+    review_required = (
+        _needs_human_review(
+            current_state_findings,
+            str(current_state_analysis.get("risk", {}).get("level", "unknown"))
+            if isinstance(current_state_analysis, dict)
+            else "unknown",
+        )
+        if current_state_findings
+        else True
+    )
+    render_command_cockpit(
+        [
+            {
+                "title": t("command_engine_title", language, "Deterministic engine"),
+                "value": t("command_engine_value", language, "Source of truth"),
+                "body": t("command_engine_body", language, "Score, findings, evidence, controls, and simulation come from local rules."),
+                "status": "calculated",
+            },
+            {
+                "title": t("command_local_title", language, "Local-first boundary"),
+                "value": "127.0.0.1",
+                "technical_value": True,
+                "body": t("command_local_body", language, "No cloud API is required; optional Ollama is localhost-only and advisory."),
+                "status": "local_only",
+            },
+            {
+                "title": t("command_session_title", language, "Project / session"),
+                "value": active_project_name,
+                "body": t("command_session_body", language, "Input is unsaved until you explicitly save a local report."),
+                "status": "local_only",
+            },
+            {
+                "title": t("command_review_title", language, "Human review gate"),
+                "value": (
+                    t("yes_label", language, "Yes")
+                    if review_required
+                    else t("no_label", language, "No")
+                )
+                + f" · {current_score}",
+                "body": t("command_review_body", language, "AIWRA supports review; it does not certify, approve, or deploy workflows."),
+                "status": "needs_human_review" if review_required else "recommended",
+            },
+        ],
+        language,
+    )
+    render_workbench_frame(
+        t("start_workbench_title", language, "Start local workflow audit"),
+        t(
+            "start_workbench_subtitle",
+            language,
+            "Paste, import, or describe the workflow to audit.",
+        ),
+        [
+            t("workbench_check_paste_import", language, "Paste, import, or describe"),
+            t("workbench_check_local_only", language, "Local analysis by default"),
+            t("workbench_check_human_review", language, "Human review required"),
+            t("workbench_check_save_explicit", language, "Save locally only on command"),
+        ],
+        language,
+    )
+    input_col, support_col = st.columns([1.45, 0.85])
+    with input_col:
+        selected_key, scenario_label, selected_text = _select_workflow_source(
+            scenario_options,
+            selected_scenario_key,
+            language,
+        )
+        source = _workflow_source_for_key(selected_key)
 
-    analyze = st.button(t("analyze_button", language), type="primary")
-    if analyze:
-        analysis = analyze_workflow(workflow_text)
-        if not analysis["valid"]:
-            st.warning(t("empty_input_warning", language))
-        else:
-            enrichment = _run_enrichment(workflow_text, analysis, language, model_name) if use_ollama else None
-            st.session_state["analysis"] = analysis
-            st.session_state["enrichment"] = enrichment
-            st.session_state["simulation"] = None
-            st.session_state["report_markdown"] = render_markdown_report(
-                analysis,
-                language=language,
-                enrichment=enrichment,
+        default_text = "" if selected_key == "custom" else selected_text
+        uploaded_marker = "manual"
+        import_payload = st.session_state.get("workflow_import_payload")
+        if isinstance(import_payload, dict):
+            payload_text = str(import_payload.get("text", ""))
+            if payload_text:
+                uploaded_marker = str(import_payload.get("marker", "manual"))
+                default_text = payload_text
+                source = "custom"
+                scenario_label = str(import_payload.get("name", scenario_label))
+        workflow_widget_key = f"workflow_text_{selected_key}_{uploaded_marker}"
+        if workflow_widget_key not in st.session_state:
+            st.session_state[workflow_widget_key] = default_text
+        st.caption(t("workflow_input_help", language, "Use synthetic or anonymized text."))
+        workflow_text = st.text_area(
+            t("workflow_input_label", language),
+            height=300,
+            placeholder=t("workflow_input_placeholder", language),
+            key=workflow_widget_key,
+        )
+        st.session_state["last_workflow_text"] = workflow_text
+        st.caption(
+            t(
+                "workflow_optional_import_caption",
+                language,
+                "Optional local import is secondary; pasting text remains the main path.",
             )
+        )
+        with st.expander(t("workflow_optional_import_expander", language, "Optional local import"), expanded=False):
+            uploaded_workflow = st.file_uploader(
+                t("workflow_file_uploader", language, "Import local text or Markdown"),
+                type=("txt", "md", "markdown"),
+                key="workflow_file_import_control",
+                help=t(
+                    "workflow_file_uploader_help",
+                    language,
+                    "Optional local text import for this session.",
+                ),
+            )
+            if uploaded_workflow is not None:
+                uploaded_bytes = uploaded_workflow.getvalue()
+                uploaded_file_marker = f"{uploaded_workflow.name}_{len(uploaded_bytes)}"
+                if st.session_state.get("workflow_file_import_processed_marker") == uploaded_file_marker:
+                    st.caption(
+                        t(
+                            "workflow_file_loaded",
+                            language,
+                            "Loaded local file: {name}.",
+                        ).format(name=uploaded_workflow.name)
+                    )
+                else:
+                    st.session_state["workflow_file_import_processed_marker"] = uploaded_file_marker
+                    try:
+                        uploaded_text = uploaded_bytes.decode("utf-8")
+                    except UnicodeDecodeError:
+                        st.warning(
+                            t(
+                                "workflow_file_decode_error",
+                                language,
+                                "This file could not be decoded as UTF-8 text. Paste anonymized text manually instead.",
+                            )
+                        )
+                    else:
+                        st.session_state["workflow_import_payload"] = {
+                            "marker": uploaded_file_marker,
+                            "name": str(uploaded_workflow.name),
+                            "text": uploaded_text,
+                        }
+                        st.rerun()
+
+        analyze_col, load_example_col, clear_input_col, clear_session_col = st.columns([1.35, 1, 1, 1])
+        with analyze_col:
+            analyze = st.button(
+                t("analyze_button", language),
+                type="primary",
+                disabled=not bool(workflow_text.strip()),
+                key="analyze_workflow_primary",
+            )
+        with load_example_col:
+            st.button(
+                t("load_example_button", language, "Load example"),
+                disabled=not bool(selected_text.strip()),
+                on_click=_load_workflow_text,
+                args=(workflow_widget_key, selected_text),
+                key="load_example_secondary",
+            )
+        with clear_input_col:
+            st.button(
+                t("clear_input_button", language, "Clear input only"),
+                on_click=_clear_input,
+                args=(workflow_widget_key,),
+                key="clear_input_secondary",
+            )
+        with clear_session_col:
+            confirm_clear_session = st.checkbox(
+                t(
+                    "clear_session_confirm",
+                    language,
+                    "Confirm clearing the current unsaved session.",
+                ),
+                key="confirm_clear_session_secondary",
+            )
+            st.button(
+                t("clear_session_button", language, "Clear current session"),
+                disabled=not confirm_clear_session,
+                on_click=_clear_session,
+                args=(workflow_widget_key,),
+                key="clear_session_secondary",
+            )
+        st.caption(
+            t(
+                "workflow_action_row_hint",
+                language,
+                "Actions affect only this local session unless you explicitly save a report.",
+            )
+        )
+    with support_col:
+        render_section_header(
+            t("workbench_session_compact_title", language, "Local session"),
+            t("workbench_status_subtitle", language, "System state for this unsaved local session."),
+            "local_only",
+            language,
+        )
+        render_info_card(
+            t("workbench_session_compact_title", language, "Local session"),
+            f"{active_project_name} · {local_ai_header_state}",
+            "local_only",
+            language,
+        )
+        with st.expander(t("workbench_trust_details_title", language, "Trust details"), expanded=False):
+            st.caption(
+                t(
+                    "workbench_source_of_truth",
+                    language,
+                    "Score, findings, evidence, controls, and simulation come from deterministic rules.",
+                )
+            )
+            st.caption(
+                t(
+                    "workbench_local_ai_boundary",
+                    language,
+                    "Local AI state: {state}. It can draft wording only and never changes deterministic results.",
+                ).format(state=local_ai_header_state)
+            )
+            st.caption(t("privacy_warning", language))
+
+    if analyze:
+        analysis_result: dict[str, object] | None = None
+        analysis_loader = st.empty()
+        try:
+            render_deterministic_loading_panel(language, target=analysis_loader)
+            analysis_result = analyze_workflow(workflow_text)
+        except Exception:
+            st.session_state["analysis_error"] = True
+            _clear_analysis_session()
+            st.error(
+                t(
+                    "analysis_error_public_message",
+                    language,
+                    "Analysis stopped before producing a deterministic result. No score or evidence was created.",
+                )
+            )
+        finally:
+            analysis_loader.empty()
+        if analysis_result is not None:
+            st.session_state.pop("analysis_error", None)
+            if not analysis_result["valid"]:
+                st.warning(t("empty_input_warning", language))
+            else:
+                if use_ollama:
+                    enrichment = _run_enrichment(workflow_text, analysis_result, language, model_name)
+                else:
+                    _set_local_ai_advisory_notice("local_ai_disabled_compact")
+                    enrichment = None
+                export_loader = st.empty()
+                try:
+                    render_export_loading_panel(language, target=export_loader)
+                    st.session_state["analysis"] = analysis_result
+                    st.session_state["enrichment"] = enrichment
+                    st.session_state["simulation"] = None
+                    st.session_state["assessment_id"] = None
+                    st.session_state["report_id"] = None
+                    st.session_state["report_markdown"] = render_markdown_report(
+                        analysis_result,
+                        language=language,
+                        enrichment=enrichment,
+                    )
+                finally:
+                    export_loader.empty()
 
     analysis = st.session_state.get("analysis")
+    if st.session_state.get("analysis_error"):
+        render_mission_pulse(
+            "error",
+            t("analysis_error_state_title", language, "Analysis could not complete"),
+            t("analysis_error_public_message", language, "Analysis stopped before producing a deterministic result. No score or evidence was created."),
+            language,
+            t("analysis_error_state_detail", language, "No score, finding, evidence, control, or simulation was created from the failed run."),
+        )
+    elif isinstance(analysis, dict) and analysis.get("valid"):
+        render_mission_pulse(
+            "deterministic_ready",
+            t("deterministic_ready_title", language, "Deterministic analysis ready"),
+            t("deterministic_ready_body", language, "Evidence-linked findings are available for review."),
+            language,
+            t(
+                "deterministic_ready_detail",
+                language,
+                "Local AI can help draft wording only and never changes deterministic results.",
+            ),
+        )
+        render_local_pipeline_strip("report", language)
+        _render_local_ai_compact_note(language)
+    elif workflow_text.strip():
+        render_mission_pulse(
+            "ready_to_analyze",
+            t("analysis_ready_state_title", language, "Ready to analyze"),
+            t(
+                "analysis_ready_state_body",
+                language,
+                "The local deterministic engine is ready for this workflow text.",
+            ),
+            language,
+            t("analyze_button_help", language, "Run the local deterministic risk engine on the current workflow text."),
+        )
+        render_local_pipeline_strip("input", language)
     if analysis and analysis.get("valid"):
         risk = analysis["risk"]
         matrix = analysis.get("risk_matrix", {})
         explainability = build_explainability_payload(analysis, st.session_state.get("simulation"), language)
         score_summary = explainability["score_summary"]
-        score_col, level_col, finding_col = st.columns(3)
-        with score_col:
-            render_metric_card(
-                t("residual_indicator_label", language, "Raw risk indicator"),
-                f"{score_summary['score']} {t('score_point_unit', language, 'score point(s)')}",
-                t("score_metric_source", language, "Calculated from local deterministic rules and detected workflow evidence."),
-                explainability["score_explanation_simple"],
-                score_disclaimer(language),
-                status="calculated",
-                language=language,
-            )
-        with level_col:
-            render_metric_card(
-                t("label_risk_level", language),
-                score_summary["level_label"],
-                t("risk_level_metric_source", language, "Mapped from fixed local score thresholds."),
-                score_summary["scale"],
-                t("risk_level_metric_limit", language, "Severity is an advisory review priority, not a compliance result."),
-                status="calculated",
-                language=language,
-            )
-        with finding_col:
-            render_metric_card(
-                t("finding_count_label", language, "Findings"),
-                f"{len(analysis.get('findings', []))} {t('finding_count_unit', language, 'detected item(s)')}",
-                t("finding_metric_source", language, "Detected from local text evidence and rule matches."),
-                t("finding_metric_explanation", language, "Attention points detected in the text; not proof by themselves."),
-                t("finding_metric_limit", language, "A human must confirm whether each finding matters."),
-                status="detected",
-                language=language,
-            )
+        all_findings = list(analysis.get("findings", []))
+        render_section_header(
+            t("risk_cockpit_title", language, "Risk cockpit"),
+            t(
+                "risk_cockpit_subtitle",
+                language,
+                "Live deterministic posture for this session. Color reinforces labels but never replaces them.",
+            ),
+            "calculated",
+            language,
+        )
+        render_risk_cockpit(
+            score=score_summary["score"],
+            severity=score_summary["level"],
+            finding_count=len(all_findings),
+            human_review_required=_needs_human_review(all_findings, str(score_summary["level"])),
+            saved=bool(st.session_state.get("assessment_id")),
+            simulation_state="simulated" if st.session_state.get("simulation") else "not_run",
+            language=language,
+        )
 
         st.info(t("after_analysis_summary", language, "The score and findings came from local deterministic rules. Review the evidence, simulate controls, then save only if you want local history."))
         st.caption(score_disclaimer(language))
@@ -764,7 +1681,6 @@ with tab_audit:
             f"{matrix.get('raw_risk_score', risk['score'])} / {translate_severity(matrix.get('severity', risk['level']), language)}. "
             f"{t('raw_matrix_explanation_ui', language, 'Calculated by summing local risk-factor weights mapped from evidence.')}"
         )
-        all_findings = list(analysis.get("findings", []))
         severity_counts = Counter(str(item.get("severity", "unknown")) for item in all_findings)
         if severity_counts:
             summary = ", ".join(
@@ -772,6 +1688,21 @@ with tab_audit:
                 for severity, count in sorted(severity_counts.items())
             )
             st.caption(f"{t('findings_summary_label', language, 'Findings summary')}: {summary}")
+        else:
+            render_state_panel(
+                t("analysis_partial_no_findings_title", language, "Valid analysis with no findings"),
+                t(
+                    "analysis_partial_no_findings_body",
+                    language,
+                    "The deterministic engine did not map this input to risk findings. That is an honest empty result, not proof that the workflow is safe.",
+                ),
+                "uncertain",
+                t("analysis_partial_no_findings_detail", language, "Consider adding more process detail before relying on the absence of findings."),
+                "!",
+                language,
+            )
+
+        _render_post_analysis_shortcuts(language)
 
         simple_col, why_col = st.columns(2)
         with simple_col:
@@ -811,117 +1742,79 @@ with tab_audit:
         recommended = list(analysis.get("recommended_controls", []))
         if recommended:
             st.subheader(t("next_actions_title", language, "Top 3 actions"))
-            for action in explainability["next_actions"]:
-                st.markdown(f"**{t('badge_recommended', language, 'Recommended')}: {action['name']}**")
-                st.caption(
-                    f"{action['implementation']} "
-                    f"{t('expected_effect_label', language, 'Expected effect')}: {action['expected_effect']}"
+            st.caption(
+                t(
+                    "controls_recommended_not_applied_caption",
+                    language,
+                    "These controls are recommended from deterministic evidence. They are not applied or verified by AIWRA.",
                 )
+            )
+            for index, control in enumerate(recommended[:3], start=1):
+                if isinstance(control, dict):
+                    render_control_card(control, index, language)
+        else:
+            render_state_panel(
+                t("controls_partial_empty_title", language, "No recommended controls mapped"),
+                t(
+                    "controls_partial_empty_body",
+                    language,
+                    "The current deterministic output did not include recommended controls. The UI will not invent controls or mark remediation as applied.",
+                ),
+                "uncertain",
+                t("controls_partial_empty_detail", language, "Add more workflow details or review the evidence manually if controls are still expected."),
+                "!",
+                language,
+            )
+
+        _render_residual_simulation_controls(language, analysis, "audit_inline")
 
         with st.expander(t("risk_matrix_title", language, "Risk Matrix")):
             st.dataframe(matrix.get("entries", []), width="stretch", hide_index=True)
 
+        render_state_panel(
+            t("export_state_title", language, "Export/report state"),
+            t("export_state_body", language, "Markdown and JSON are generated locally from the deterministic result."),
+            "calculated",
+            t("export_state_detail", language, "Downloading does not save local history. Saving is explicit and writes to local SQLite."),
+            "↓",
+            language,
+        )
         st.caption(t("export_save_hint", language, "Downloads are available immediately. Local history is created only after you click Save."))
         st.download_button(
             label=t("download_button", language),
             data=st.session_state["report_markdown"],
             file_name="ai_workflow_risk_auditor_pro_report.md",
             mime="text/markdown",
+            key="download_markdown_action",
         )
         st.download_button(
             label=t("download_json_button", language, "Download JSON summary"),
             data=render_json_summary(analysis, st.session_state.get("simulation"), language=language),
             file_name="ai_workflow_risk_auditor_pro_summary.json",
             mime="application/json",
+            key="download_json_action",
         )
-        if st.button(t("save_report_button", language, "Save analysis and report locally")):
-            _save_current_report(language, project_id, workflow_text, scenario_label, source)
-    else:
-        st.caption(t("ready_hint", language))
+        if st.button(
+            t("save_report_button", language, "Save analysis and report locally"),
+            key="save_report_secondary",
+        ):
+            save_loader = st.empty()
+            try:
+                render_export_loading_panel(language, target=save_loader)
+                _save_current_report(language, project_id, workflow_text, scenario_label, source)
+            finally:
+                save_loader.empty()
 
-with tab_simulation:
+if selected_page == "controls":
     _show_explanation("residual_risk")
     analysis = st.session_state.get("analysis")
-    if not analysis or not analysis.get("valid"):
-        st.info(t("run_audit_first", language, "Run an audit before simulating residual risk."))
-    else:
-        controls = list(analysis.get("recommended_controls", []))
-        if not controls:
-            st.info(t("no_controls_for_simulation", language, "No controls were mapped from the current evidence."))
-        else:
-            names_by_id = {control["id"]: control["name"] for control in controls}
-            default_ids = default_control_selection(controls)
-            selected_names = st.multiselect(
-                t("control_selector", language, "Select controls to simulate"),
-                options=[control["name"] for control in controls],
-                default=[names_by_id[control_id] for control_id in default_ids if control_id in names_by_id],
-            )
-            selected_ids = [control["id"] for control in controls if control["name"] in selected_names]
-            if st.button(t("simulate_button", language, "Simulate residual risk"), type="primary"):
-                st.session_state["simulation"] = simulate_residual_risk(
-                    analysis["risk_matrix"],
-                    selected_control_ids=selected_ids,
-                    controls=controls,
-                )
-                st.session_state["report_markdown"] = render_markdown_report(
-                    analysis,
-                    language=language,
-                    enrichment=st.session_state.get("enrichment"),
-                    simulation=st.session_state["simulation"],
-                )
-            simulation = st.session_state.get("simulation")
-            if simulation:
-                simulation_explainability = build_explainability_payload(analysis, simulation, language)
-                raw_col, residual_col, reduction_col = st.columns(3)
-                raw_col.metric(
-                    t("raw_risk_metric", language, "Raw risk"),
-                    f"{simulation['raw_risk']['score']} / {translate_severity(simulation['raw_risk']['severity'], language)}",
-                )
-                raw_col.caption(t("raw_risk_metric_help", language, "Calculated local rule score before selected protections."))
-                residual_col.metric(
-                    t("residual_risk_metric", language, "Residual risk"),
-                    f"{simulation['residual_risk']['score']} / {translate_severity(simulation['residual_risk']['severity'], language)}",
-                )
-                residual_col.caption(t("residual_risk_metric_help", language, "Simulated remaining score after selected protections. Not a guarantee."))
-                reduction_col.metric(t("reduction_metric", language, "Reduction"), f"-{simulation['score_reduction']}")
-                reduction_col.caption(t("reduction_metric_help", language, "Simulated reduction from mapped control effects only."))
-                st.caption(simulation_explainability["simulation_explanation"]["summary"])
-                st.write(t("simulation_local_explanation_report", language, "Residual risk is a local simulation based on mapped control effects. It does not execute actions or guarantee production risk reduction."))
-                st.dataframe(
-                    [
-                        {
-                            t("factor_label", language, "Factor"): t(f"factor_{item.get('factor')}", language, humanize_key(item.get("factor"))),
-                            t("remaining_score_label", language, "Remaining score"): item.get("remaining_score"),
-                        }
-                        for item in simulation["remaining_risks"]
-                    ],
-                    width="stretch",
-                    hide_index=True,
-                )
-                if st.session_state.get("assessment_id"):
-                    if st.button(t("save_simulation_button", language, "Save simulation run")):
-                        save_simulation_run(int(st.session_state["assessment_id"]), simulation)
-                        st.success(t("simulation_saved_success", language, "Simulation saved locally."))
-                else:
-                    st.caption(
-                        t(
-                            "save_analysis_before_simulation",
-                            language,
-                            "Save the analysis first if you want this simulation in history.",
-                        )
-                    )
+    _render_residual_simulation_controls(language, analysis, "simulation_page")
 
-with tab_dashboard:
+if selected_page == "risk":
     _show_explanation("risk_score")
     metrics = load_dashboard_metrics()
     current_analysis = st.session_state.get("analysis")
     current_findings = _current_findings()
-    render_how_to_read_panel(
-        language,
-        "dashboard_how_to_read",
-        "Use Overview for saved local audit signals, Risks for heatmap and evidence, Controls for follow-up items, and History for local audit events.",
-    )
-    st.caption(t("dashboard_help", language, "Dashboard metrics are built only from reports you intentionally saved in local SQLite."))
     if metrics["saved_analyses"] == 0:
         render_empty_state(
             t("dashboard_empty_title", language, "No saved audits yet"),
@@ -936,19 +1829,21 @@ with tab_dashboard:
                 "This dashboard is based on very few saved reports. Treat averages as orientation, not trend evidence.",
             )
         )
-    st.caption(
-        t("dashboard_sample_basis", language, "Average based on saved reports in local SQLite.")
-        + " "
-        + t(
-            "dashboard_sample_counts",
-            language,
-            "{saved} saved report(s): {user_saved} user-saved, {demo_saved} demo/sample.",
-        ).format(
-            saved=metrics["saved_analyses"],
-            user_saved=metrics.get("user_saved_analyses", 0),
-            demo_saved=metrics.get("demo_saved_analyses", 0),
+    with st.expander(t("dashboard_scope_details_title", language, "Dashboard scope"), expanded=False):
+        st.caption(t("dashboard_help", language, "Dashboard metrics are built only from reports you intentionally saved in local SQLite."))
+        st.caption(
+            t("dashboard_sample_basis", language, "Average based on saved reports in local SQLite.")
+            + " "
+            + t(
+                "dashboard_sample_counts",
+                language,
+                "{saved} saved report(s): {user_saved} user-saved, {demo_saved} demo/sample.",
+            ).format(
+                saved=metrics["saved_analyses"],
+                user_saved=metrics.get("user_saved_analyses", 0),
+                demo_saved=metrics.get("demo_saved_analyses", 0),
+            )
         )
-    )
 
     dashboard_overview, dashboard_risks, dashboard_controls, dashboard_history = st.tabs(
         [
@@ -1008,14 +1903,15 @@ with tab_dashboard:
                 "simulated",
                 language,
             )
-        render_section_header(
-            t("dashboard_workflow_graph_title", language, "Local audit pipeline"),
-            t("dashboard_workflow_graph_subtitle", language, "A product map of how the app interprets workflow text locally."),
-            "local_only",
-            language,
-        )
-        render_workflow_graph(language)
-        render_accessibility_note(language)
+        with st.expander(t("dashboard_secondary_details_title", language, "Local pipeline and accessibility"), expanded=False):
+            render_section_header(
+                t("dashboard_workflow_graph_title", language, "Local audit pipeline"),
+                t("dashboard_workflow_graph_subtitle", language, "A product map of how the app interprets workflow text locally."),
+                "local_only",
+                language,
+            )
+            render_workflow_graph(language)
+            render_accessibility_note(language)
 
     with dashboard_risks:
         render_section_header(
@@ -1172,7 +2068,7 @@ with tab_dashboard:
             st.caption(t("dashboard_metric_note", language, "Average raw risk uses deterministic matrix scores. Average reduction uses saved residual-risk simulations."))
             st.dataframe(metrics["risk_trend"], width="stretch", hide_index=True)
 
-with tab_reports:
+if selected_page == "exports":
     _show_explanation("auditability")
     render_how_to_read_panel(
         language,
@@ -1208,12 +2104,13 @@ with tab_reports:
                 ]
             )
             with markdown_preview:
-                st.markdown(markdown_to_html(str(report["markdown"]), language=language), unsafe_allow_html=True)
+                render_html(markdown_to_html(str(report["markdown"]), language=language))
                 st.download_button(
                     t("download_button", language),
                     data=str(report["markdown"]),
                     file_name=f"aiwra_pro_report_{report_id}.md",
                     mime="text/markdown",
+                    key=f"download_markdown_action_saved_{report_id}",
                 )
             with json_preview:
                 st.caption(t("reports_json_notice", language, "JSON keeps stable English technical keys for automation; explanatory fields may be localized."))
@@ -1223,11 +2120,12 @@ with tab_reports:
                     data=str(report["json_summary"]),
                     file_name=f"aiwra_pro_summary_{report_id}.json",
                     mime="application/json",
+                    key=f"download_json_action_saved_{report_id}",
                 )
     with st.expander(t("audit_trail_title", language, "Local audit trail")):
         st.dataframe(load_audit_trail(), width="stretch", hide_index=True)
 
-with tab_kb:
+if selected_page == "knowledge":
     _show_explanation("knowledge_base")
     render_read_only_notice(language)
     counts = knowledge_counts()
@@ -1370,16 +2268,24 @@ with tab_kb:
             hide_index=True,
         )
 
-with tab_local_ai:
+if selected_page == "local_ai":
     render_how_to_read_panel(
         language,
         "local_ai_how_to_read",
         "This page shows what Ollama can add locally, what it cannot add, and the exact prompt/response when a local model is used.",
     )
-    status = check_ollama_status()
+    status = sidebar_ollama_status if sidebar_ollama_status is not None else check_ollama_status()
     local_models = [str(name) for name in status.get("models", [])]
     cloud_models = [str(name) for name in status.get("cloud_models", [])]
     availability = t("available_label", language, "Available") if status.get("available") else t("not_available_label", language, "Not available")
+
+    render_local_ai_brain_panel(
+        available=bool(status.get("available")),
+        endpoint=DEFAULT_BASE_URL,
+        local_model_count=len(local_models),
+        blocked_model_count=len(cloud_models),
+        language=language,
+    )
 
     ai_cols = st.columns(4)
     with ai_cols[0]:
@@ -1423,12 +2329,21 @@ with tab_local_ai:
             language,
         )
 
-    st.warning(
+    render_state_panel(
+        t("shell_advisory_ai_badge", language, "Advisory AI only"),
         t(
             "local_ai_score_guardrail",
             language,
             "Local AI output never changes deterministic findings, scores, controls, or residual-risk simulation.",
-        )
+        ),
+        "local_only",
+        t(
+            "deterministic_ready_detail",
+            language,
+            "Local AI can help draft wording only and never changes deterministic results.",
+        ),
+        "·",
+        language,
     )
     local_ai_value, local_ai_limits = st.columns(2)
     with local_ai_value:
@@ -1439,6 +2354,8 @@ with tab_local_ai:
                 for item in [
                     t("local_ai_adds_narrative", language, "Local narrative drafting."),
                     t("local_ai_adds_explanation", language, "Optional explanation wording."),
+                    t("local_ai_adds_questions", language, "Reviewer and challenge questions."),
+                    t("local_ai_adds_missing_context", language, "Missing-context prompts for human review."),
                     t("local_ai_adds_synthetic", language, "Local-only synthetic test."),
                     t("local_ai_adds_wording", language, "Report wording assistance."),
                 ]
@@ -1467,9 +2384,14 @@ with tab_local_ai:
             t("local_ai_selected_model", language, "Selected local model"),
             local_models,
             index=default_index,
+            key="local_ai_selected_model",
         )
     else:
-        selected_ai_model = st.text_input(t("local_ai_selected_model", language, "Selected local model"), value="llama3")
+        selected_ai_model = st.text_input(
+            t("local_ai_selected_model", language, "Selected local model"),
+            value="llama3",
+            key="local_ai_selected_model",
+        )
 
     synthetic_prompt = build_synthetic_test_prompt(language_name)
     st.session_state.setdefault("local_ai_synthetic_response", None)
@@ -1479,11 +2401,19 @@ with tab_local_ai:
         "local_only",
         language,
     )
-    if st.button(t("local_ai_run_synthetic_test", language, "Run local synthetic AI test")):
-        st.session_state["local_ai_synthetic_response"] = generate_local_prompt_response(
-            synthetic_prompt,
-            model=selected_ai_model,
-        )
+    if st.button(
+        t("local_ai_run_synthetic_test", language, "Run local synthetic AI test"),
+        key="local_ai_synthetic_test_action",
+    ):
+        local_ai_loader = st.empty()
+        try:
+            render_local_ai_loading_panel(language, target=local_ai_loader)
+            st.session_state["local_ai_synthetic_response"] = generate_local_prompt_response(
+                synthetic_prompt,
+                model=selected_ai_model,
+            )
+        finally:
+            local_ai_loader.empty()
     render_ai_output_panel(
         synthetic_prompt,
         st.session_state.get("local_ai_synthetic_response"),
@@ -1504,11 +2434,19 @@ with tab_local_ai:
             current_analysis,
             language_name,
         )
-        if st.button(t("local_ai_generate_current", language, "Generate local narrative for current report")):
-            st.session_state["local_ai_current_response"] = generate_local_prompt_response(
-                current_prompt,
-                model=selected_ai_model,
-            )
+        if st.button(
+            t("local_ai_generate_current", language, "Generate local narrative for current report"),
+            key="local_ai_generate_action",
+        ):
+            local_ai_loader = st.empty()
+            try:
+                render_local_ai_loading_panel(language, target=local_ai_loader)
+                st.session_state["local_ai_current_response"] = generate_local_prompt_response(
+                    current_prompt,
+                    model=selected_ai_model,
+                )
+            finally:
+                local_ai_loader.empty()
         explainability = build_explainability_payload(current_analysis, st.session_state.get("simulation"), language)
         render_ai_output_panel(
             current_prompt,

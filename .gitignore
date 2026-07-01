@@ -22,3 +22,6 @@ data/*.db
 .mypy_cache/
 .cache/
 .ipynb_checkpoints/
+
+# AIWRA local audit outputs
+.aiwra-audit-output/

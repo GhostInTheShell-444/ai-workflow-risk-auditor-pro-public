@@ -18,11 +18,11 @@ The tool detected:
 
 ## Calculated
 
-Current output from the code:
+Current v2 snapshot from the code:
 
-- Compatibility score: 10, High.
-- Raw matrix score: 17, Critical.
-- Findings: 35.
+- Compatibility score: 20, Critical.
+- Raw matrix score: 34, Critical.
+- Findings: 16.
 
 Plain meaning:
 
@@ -32,11 +32,11 @@ The workflow has useful safeguards, but the text still mentions customer data, e
 
 With default selected controls:
 
-- Raw score: 17.
-- Simulated residual score: 9.
+- Raw score: 34.
+- Simulated residual score: 26.
 - Simulated reduction: 8.
 
-This is a planning estimate, not a guarantee.
+Selected controls are hypothetical unless implementation evidence is reviewed. This is a planning estimate, not a guarantee.
 
 ## Recommended
 

@@ -24,6 +24,14 @@ Use bundled synthetic workflows or carefully anonymized descriptions. Do not pas
 
 No. Scores and confidence values are deterministic heuristics. The app does not certify compliance, provide legal advice, approve production use, or know every contextual obligation. Qualified humans remain responsible.
 
+## Does selecting a control prove it exists?
+
+No. Simulation controls are hypothetical unless a reviewer provides implementation evidence. The app shows mapped factors, assumptions, evidence required, implementation checks, limitations, and remaining factors. Unrelated factors are not reduced.
+
+## What does optional local AI add?
+
+Local AI can draft wording, summarize deterministic evidence, identify missing context, and propose reviewer or challenge questions. It cannot change findings, scores, controls, or residual-risk math.
+
 ## Can I expose the Streamlit app on the internet?
 
 Do not expose this build to untrusted networks. It has no user authentication, authorization, tenant isolation, encrypted database, or hardened remote-deployment boundary. Run it on a trusted machine bound to `127.0.0.1`.
@@ -53,4 +61,22 @@ Ollama and cloud credentials are not required.
 
 ## How do I reset local data?
 
-Back up `data/aiwra.db` if needed. In the sidebar, read the warning, select the deletion confirmation, and select **Reset demo database**. This deletes saved local reports and recreates synthetic seed data. You may instead stop Streamlit, delete only `data/aiwra.db`, and restart the app.
+Back up `data/aiwra.db` if needed. In the sidebar, read the warning and details, select the deletion confirmation, and select **Reset demo database**. This deletes saved projects, workflows, assessments, findings, simulations, reports, and audit events from that database, then recreates synthetic seed data. It does not delete code, docs, screenshots, tests, examples, knowledge-base JSON, or exports outside the database.
+
+Use the narrower action when appropriate: **Clear input only** preserves the current analysis and saved history; **Clear current session** preserves saved history; **Delete active project** removes only the selected non-demo project and its related records. The bundled synthetic demo project cannot be deleted.
+
+## Can I launch AIWRA from the desktop?
+
+Yes. Linux has a user-local `.desktop` installer, and Windows/macOS helper scripts are provided. The launcher still runs the project’s `.venv`, binds only to `127.0.0.1:8501`, and requires no administrator privileges. See [Desktop Launcher](DESKTOP_LAUNCHER.md).
+
+## Where are launcher logs stored?
+
+Linux writes to `${XDG_STATE_HOME:-$HOME/.local/state}/aiwra/aiwra-launch.log`. macOS writes to `~/Library/Logs/AIWRA/aiwra-launch.log`. The Windows helper keeps a PowerShell window open so startup output remains visible. The Linux helper does not intentionally log the project path or workflow content, but Streamlit and dependency diagnostics may expose local environment details. Treat logs as private runtime artifacts, review them before sharing, and remove them when no longer needed.
+
+## Does Dark mode change risk results?
+
+No. Theme selection changes CSS tokens and presentation only. Risk factors, weights, thresholds, evidence semantics, and residual-risk calculations are unchanged.
+
+## Why does motion stop on some systems?
+
+The UI respects `prefers-reduced-motion`. Status pulses and transitions are disabled when the operating system or browser requests reduced motion.

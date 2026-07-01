@@ -84,3 +84,74 @@ def test_v1_risk_score_remains_repeatable_with_new_fields():
     second = analyze_workflow(get_example_text("customer_support"))
     assert first["risk"] == second["risk"]
     assert first["risk_matrix"] == second["risk_matrix"]
+
+
+def test_selected_control_reduces_only_mapped_factors():
+    matrix = calculate_risk_matrix(
+        [],
+        ["personal_data", "automatic_financial_decision", "missing_audit_trail"],
+    )
+    control = {
+        "id": "test_masking",
+        "name": "Test masking",
+        "category": "privacy",
+        "implementation_guidance": "Mask personal identifiers before analysis.",
+        "reduced_risk_factors": {"personal_data": 2},
+    }
+    simulation = simulate_residual_risk(matrix, ["test_masking"], [control])
+    remaining = {item["factor"]: item["remaining_score"] for item in simulation["remaining_risks"]}
+    assert "personal_data" not in remaining
+    assert remaining["automatic_financial_decision"] == 5
+    assert remaining["missing_audit_trail"] == 2
+
+
+def test_residual_score_never_below_zero():
+    matrix = calculate_risk_matrix([], ["personal_data"])
+    control = {
+        "id": "oversized",
+        "name": "Oversized reduction",
+        "category": "test",
+        "implementation_guidance": "Synthetic test control.",
+        "reduced_risk_factors": {"personal_data": 999},
+    }
+    simulation = simulate_residual_risk(matrix, ["oversized"], [control])
+    assert simulation["residual_risk"]["score"] == 0
+    assert simulation["score_reduction"] == matrix["raw_risk_score"]
+
+
+def test_simulation_includes_assumptions_evidence_and_limitations():
+    analysis = analyze_workflow(get_example_text("customer_support"))
+    selected = default_control_selection(analysis["recommended_controls"], limit=1)
+    simulation = simulate_residual_risk(analysis["risk_matrix"], selected, analysis["recommended_controls"])
+    control = simulation["selected_controls"][0]
+    for key in [
+        "mapped_factors",
+        "estimated_reduction",
+        "assumption",
+        "evidence_required",
+        "implementation_check",
+        "limitation",
+        "not_proof_warning",
+    ]:
+        assert key in control
+    assert "hypothetical" in control["assumption"].casefold()
+    assert simulation["not_proof_warning"]
+    assert simulation["limitations"]
+
+
+def test_high_or_critical_residual_requires_human_review():
+    matrix = calculate_risk_matrix([], ["automatic_financial_decision", "decision_affecting_person", "financial_data"])
+    simulation = simulate_residual_risk(matrix, [], [])
+    assert simulation["residual_risk"]["severity"] in {"high", "critical"}
+    assert simulation["human_review_required"] is True
+
+
+def test_simulation_output_is_stable_and_serializable():
+    import json
+
+    analysis = analyze_workflow(get_example_text("soc_alert_triage"))
+    selected = default_control_selection(analysis["recommended_controls"], limit=2)
+    first = simulate_residual_risk(analysis["risk_matrix"], selected, analysis["recommended_controls"])
+    second = simulate_residual_risk(analysis["risk_matrix"], selected, analysis["recommended_controls"])
+    assert first == second
+    assert json.loads(json.dumps(first)) == first

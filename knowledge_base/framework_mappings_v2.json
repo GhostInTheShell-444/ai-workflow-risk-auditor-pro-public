@@ -1,0 +1,64 @@
+[
+  {
+    "category": "governance",
+    "local_topics": [
+      "human approval",
+      "reviewer identity",
+      "change management",
+      "incident handling"
+    ],
+    "mapping_type": "framework-inspired",
+    "claim_boundary": "Organizational governance theme only; not a certification or conformity assessment.",
+    "runtime_status": "reference_only"
+  },
+  {
+    "category": "mapping_context",
+    "local_topics": [
+      "workflow purpose",
+      "data sensitivity",
+      "impact area",
+      "external destination"
+    ],
+    "mapping_type": "framework-inspired",
+    "claim_boundary": "Context mapping aid only; domain and legal scope require qualified human review.",
+    "runtime_status": "reference_only"
+  },
+  {
+    "category": "measurement_evaluation",
+    "local_topics": [
+      "deterministic evidence",
+      "confidence heuristic",
+      "monitoring",
+      "failure logging"
+    ],
+    "mapping_type": "framework-inspired",
+    "claim_boundary": "The score is not statistically calibrated and does not establish effectiveness.",
+    "runtime_status": "reference_only"
+  },
+  {
+    "category": "management_mitigation",
+    "local_topics": [
+      "mapped controls",
+      "fallback",
+      "appeal",
+      "residual simulation"
+    ],
+    "mapping_type": "framework-inspired",
+    "claim_boundary": "Simulation is hypothetical and cannot prove mitigation was implemented.",
+    "runtime_status": "reference_only"
+  },
+  {
+    "category": "cross_cutting_review_themes",
+    "local_topics": [
+      "audit trail",
+      "review questions",
+      "retention",
+      "masking",
+      "least privilege",
+      "human approval"
+    ],
+    "mapping_type": "framework-inspired",
+    "claim_boundary": "These are review themes, not legal conclusions or production approval.",
+    "runtime_status": "reference_only"
+  }
+]

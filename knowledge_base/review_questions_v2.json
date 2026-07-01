@@ -1,0 +1,38 @@
+[
+  {
+    "id": "rq_financial_decision",
+    "factor": "automatic_financial_decision",
+    "question": "Who can approve, reverse, or challenge the refund or payment decision before customer impact?",
+    "runtime_status": "reference_only"
+  },
+  {
+    "id": "rq_account_access",
+    "factor": "automatic_account_access_decision",
+    "question": "Who reviews account or access changes before they affect a person or security boundary?",
+    "runtime_status": "reference_only"
+  },
+  {
+    "id": "rq_retention",
+    "factor": "missing_retention_policy",
+    "question": "What is saved locally, why is it saved, and when is it deleted?",
+    "runtime_status": "reference_only"
+  },
+  {
+    "id": "rq_appeal",
+    "factor": "missing_appeal_process",
+    "question": "How can an affected customer, employee, or candidate request correction or manual review?",
+    "runtime_status": "reference_only"
+  },
+  {
+    "id": "rq_fallback",
+    "factor": "missing_fallback_plan",
+    "question": "What safe-stop, manual queue, rollback, retry, escalation, and failure logging exist?",
+    "runtime_status": "reference_only"
+  },
+  {
+    "id": "rq_local_model",
+    "factor": "unknown_model_provenance",
+    "question": "Which local model, version, source, and approved configuration are being used?",
+    "runtime_status": "reference_only"
+  }
+]

@@ -1,0 +1,52 @@
+[
+  {
+    "control_id": "ctrl_human_approval_external",
+    "mapped_factors": [
+      "automatic_external_action",
+      "automatic_customer_communication",
+      "missing_human_validation"
+    ],
+    "assumption": "A named reviewer approves the exact output before release.",
+    "evidence_required": "Approval record, reviewer identity, timestamp, and final released output.",
+    "limitation": "Approval does not remove unrelated privacy, grounding, security, or retention risk.",
+    "runtime_status": "reference_only"
+  },
+  {
+    "control_id": "ctrl_finance_approver",
+    "mapped_factors": [
+      "automatic_financial_decision",
+      "refund_payment_data",
+      "missing_human_validation"
+    ],
+    "assumption": "An authorized finance reviewer can approve, reject, and reverse the decision.",
+    "evidence_required": "Authorization matrix, approval record, exception path, and reversal procedure.",
+    "limitation": "The control does not validate source data, legal obligations, or customer appeal rights.",
+    "runtime_status": "reference_only"
+  },
+  {
+    "control_id": "ctrl_redaction_before_analysis",
+    "mapped_factors": [
+      "personal_data",
+      "customer_data",
+      "employee_data",
+      "hr_candidate_data",
+      "missing_data_masking"
+    ],
+    "assumption": "Identifiers are removed before the workflow text enters analysis or saved reports.",
+    "evidence_required": "Redaction procedure, sample review, and confirmation that exports do not reintroduce identifiers.",
+    "limitation": "Redaction can fail and does not prove that data is anonymous.",
+    "runtime_status": "reference_only"
+  },
+  {
+    "control_id": "ctrl_safe_failure_mode",
+    "mapped_factors": [
+      "missing_fallback_plan",
+      "broad_ai_agent_permissions",
+      "irreversible_action"
+    ],
+    "assumption": "Failure blocks action and routes work to a manual queue or named escalation path.",
+    "evidence_required": "Failure test, manual queue ownership, failure logs, rollback procedure, and retry limits.",
+    "limitation": "A documented fallback may still fail under real operating conditions.",
+    "runtime_status": "reference_only"
+  }
+]

@@ -12,19 +12,24 @@ AI Workflow Risk Auditor Pro is designed for local review of synthetic or anonym
 - The explicit **Save analysis and report locally** action writes the workflow, assessment, findings, controls, report, and related audit events to `data/aiwra.db`.
 - A simulation is saved only through an explicit save action and only after the associated assessment exists.
 - The SQLite path is project-local and contains no user-specific absolute path.
-- Resetting the demo database requires confirmation and deletes saved local reports before recreating synthetic seed content.
+- Clearing only the input does not delete the current analysis or saved SQLite history.
+- Clearing the current session requires confirmation and removes current input, analysis, simulation, report state, and Local AI response without deleting saved SQLite history.
+- Deleting the active project is targeted to one selected non-demo project and its related saved records; the bundled synthetic demo project is protected.
+- Resetting the demo database requires confirmation and deletes saved projects, workflows, assessments, findings, simulations, reports, and audit events before recreating synthetic seed content.
 
 ## Network boundary
 
 The deterministic application requires no cloud API, cloud SDK, vendor key, telemetry service, or external database. No hidden analytics or telemetry code is implemented. The application has no production-system integration and does not automatically transmit workflow text.
 
-The only optional model integration is Ollama through a loopback URL. `ollama_client.py` accepts `localhost`, `127.0.0.1`, or `::1`; non-loopback endpoints are rejected. Ollama requests disable HTTP redirects and environment proxy routing. Models identified by cloud-like names or remote model metadata are blocked. There is no cloud fallback.
+The AI Provider Gateway is disabled by default. The only implemented provider is Ollama through an explicitly invoked loopback URL. `ollama_client.py` accepts `localhost`, `127.0.0.1`, or `::1`; non-loopback endpoints are rejected. Ollama requests reject HTTP redirects and disable environment proxy routing. Models identified by cloud-like names or remote model metadata are blocked. There is no cloud fallback, cloud provider enabled by default, or API key storage.
+
+A generic OpenAI-compatible provider is a future opt-in design, not a current runtime capability. If implemented, its safe local mode may support explicitly configured LM Studio, LocalAI, or vLLM endpoints. LiteLLM remains a possible future gateway. Remote or cloud endpoints require separate explicit design and security approval.
 
 Important boundary: a locally installed third-party service or model remains part of the user's environment. Users are responsible for verifying their Ollama installation and model provenance. The app's endpoint and model guards reduce accidental remote use but cannot attest to all behavior of external local software.
 
 ## Score and narrative separation
 
-Deterministic Python rules are authoritative for findings, scores, controls, and residual-risk simulation. Optional Ollama output can only add narrative wording. It does not modify the deterministic analysis object or scoring model.
+Deterministic Python rules are authoritative for findings, scores, controls, and residual-risk simulation. Optional Ollama output can add narrative wording, evidence summaries, missing-context prompts, and reviewer questions. It does not modify the deterministic analysis object or scoring model.
 
 ## Repository protections
 

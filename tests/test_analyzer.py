@@ -111,3 +111,84 @@ def test_deterministic_score_repeatability():
     first = analyze_workflow(text)
     second = analyze_workflow(text)
     assert first["risk"] == second["risk"]
+
+
+def test_automatic_refund_without_review_is_higher_than_reviewed_drafting():
+    automatic = analyze_workflow(
+        "AI automatically approves and issues customer refunds from billing data without human review, "
+        "appeal, audit logs, masking, or fallback."
+    )
+    reviewed = analyze_workflow(
+        "AI drafts a customer support reply from anonymized ticket notes. A named human reviewer approves "
+        "before sending. Audit log, retention policy, data minimization, redaction, monitoring, and manual "
+        "fallback are documented."
+    )
+    assert automatic["risk"]["score"] > reviewed["risk"]["score"]
+    assert automatic["risk"]["level"] == "critical"
+    assert "automatic_financial_decision" in automatic["risk"]["factors"]
+    assert "missing_human_validation" in automatic["risk"]["factors"]
+    assert "ai_draft_only" in reviewed["risk"]["factors"]
+    assert "missing_human_validation" not in reviewed["risk"]["factors"]
+
+
+def test_sensitive_customer_data_without_masking_or_retention_creates_gaps():
+    result = analyze_workflow("AI summarizes customer data and email addresses for support.")
+    assert "missing_data_masking" in result["risk"]["factors"]
+    assert "missing_retention_policy" in result["risk"]["factors"]
+    assert any(finding["matched_rule_id"] == "gap_missing_data_masking" for finding in result["findings"])
+    assert any(finding["matched_rule_id"] == "gap_missing_retention_policy" for finding in result["findings"])
+
+
+def test_decision_workflow_without_appeal_creates_recourse_gap():
+    result = analyze_workflow("AI ranks candidates and rejects low-scoring applicants after automatic screening.")
+    assert "missing_appeal_process" in result["risk"]["factors"]
+    assert any(finding["matched_rule_id"] == "gap_missing_appeal_process" for finding in result["findings"])
+
+
+def test_logs_and_fallback_are_contextual_controls_not_proof_of_safety():
+    result = analyze_workflow(
+        "AI proposes an account access change. A human approves it. The workflow keeps an audit log and "
+        "uses a manual fallback queue with failure logging."
+    )
+    assert "audit_trail_present" in {
+        factor for finding in result["findings"] for factor in finding["risk_factor_mapping"]
+    }
+    assert "fallback_present" in result["risk"]["factors"]
+    assert "missing_audit_trail" not in result["risk"]["factors"]
+    assert "missing_fallback_plan" not in result["risk"]["factors"]
+
+
+def test_local_only_ollama_wording_does_not_create_cloud_dependency():
+    result = analyze_workflow(
+        "Ollama runs as local-only AI on localhost with no cloud fallback. It drafts an internal summary "
+        "for human review."
+    )
+    assert "local_ai_only_present" in result["risk"]["factors"]
+    assert "cloud_proxy_dependency" not in result["risk"]["factors"]
+    assert "third_party_integration" not in result["risk"]["factors"]
+
+
+def test_explicit_controls_reduce_gap_score_but_not_human_responsibility():
+    uncontrolled = analyze_workflow(
+        "AI automatically sends customer refund decisions from customer billing data without human review."
+    )
+    controlled = analyze_workflow(
+        "AI drafts a refund recommendation from redacted minimum-necessary customer billing data. "
+        "A named finance reviewer approves it, records an audit log, applies a retention policy, offers appeal, "
+        "monitors outcomes, and routes failures to a manual fallback queue."
+    )
+    assert controlled["risk"]["score"] < uncontrolled["risk"]["score"]
+    assert controlled["human_validation_plan"]
+
+
+def test_evidence_chain_preserves_source_vs_hypothesis_provenance():
+    result = analyze_workflow("AI automatically approves customer refunds from billing data.")
+    inferred = [item for item in result["evidence_chain"] if item["is_hypothesis"]]
+    sourced = [item for item in result["evidence_chain"] if not item["is_hypothesis"]]
+    assert inferred
+    assert all(item["evidence_type"] == "inferred_gap" for item in inferred)
+    assert all(item["source_excerpt"] is None for item in inferred)
+    assert all(item["inference_basis"] for item in inferred)
+    assert sourced
+    assert all(item["evidence_type"] == "source_excerpt" for item in sourced)
+    assert all(item["source_excerpt"] for item in sourced)

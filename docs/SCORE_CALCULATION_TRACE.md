@@ -12,7 +12,7 @@ This document traces the implemented calculation path. It does not define a sepa
 | Sensitive data categories | `analyzer.detect_sensitive_data` | Local keyword map in `analyzer.py` | Category keys such as `customer_data` |
 | Compatibility factors | `analyzer.detect_risk_factors` | Text signals, categories, review/audit keywords | Original deterministic factor list |
 | Compatibility score | `risk_rules.calculate_risk` | Compatibility factors | `risk.score`, `risk.level`, factor breakdown |
-| Evidence findings | `evidence_engine.run_evidence_engine` | Parsed steps, `knowledge_base/risk_patterns.json` | Findings with evidence, rule id, severity, confidence, controls, mapped factors |
+| Evidence findings | `evidence_engine.run_evidence_engine` | Parsed steps, `knowledge_base/risk_patterns.json`, deterministic control-gap checks | Findings with evidence, rule id, severity, confidence, score impact, controls, review question, assumption, limitation |
 | Raw risk matrix | `risk_matrix.calculate_risk_matrix` | Findings and compatibility factors | `raw_risk_score`, severity, likelihood, impact, confidence, entries |
 | Recommended controls | `controls_engine.recommend_controls` | Finding `recommended_controls` ids | Control list from `knowledge_base/control_library.json` |
 | Residual risk | `residual_risk.simulate_residual_risk` | Raw matrix entries and selected controls | Simulated residual score, reduction, remaining risks |
@@ -33,10 +33,14 @@ Important weights:
 | `customer_data` | 2 |
 | `hr_candidate_data` | 3 |
 | `financial_data` | 3 |
+| `refund_payment_data` | 3 |
 | `medical_health_data` | 4 |
 | `legal_compliance_data` | 3 |
 | `external_communication` | 2 |
 | `customer_facing_automated_output` | 3 |
+| `automatic_financial_decision` | 5 |
+| `automatic_account_access_decision` | 5 |
+| `fully_autonomous_workflow` | 5 |
 | `decision_affecting_person` | 4 |
 | `irreversible_action` | 4 |
 | `data_modification_deletion` | 4 |
@@ -48,6 +52,12 @@ Important weights:
 | `soc_security_workflow` | 3 |
 | `credentials_secrets` | 4 |
 | `prompt_injection_exposure` | 2 |
+| `tool_action_use` | 3 |
+| `model_decision_authority` | 4 |
+| `missing_retention_policy` | 1 |
+| `missing_appeal_process` | 3 |
+| `missing_fallback_plan` | 1 |
+| `missing_data_masking` | 1 |
 
 Severity thresholds are fixed in `risk_rules.get_risk_level`:
 
@@ -79,8 +89,10 @@ This score is a rule-based estimate, not a statistical probability.
 3. Applies `reduced_risk_factors` amounts only to factors present in the matrix.
 4. Floors each factor score at zero.
 5. Sums remaining factor scores.
+6. Returns per-control assumptions, evidence required, implementation checks, limitations, and a not-proof warning.
+7. Flags High/Critical residual states for human review.
 
-Residual risk is simulated. It does not execute actions and does not guarantee production risk reduction.
+Controls are hypothetical unless implementation evidence is reviewed. Residual risk is simulated. It does not execute actions, prove implementation, or guarantee production risk reduction.
 
 ## Customer Support Example
 
@@ -96,10 +108,10 @@ The process keeps an audit log.
 
 Observed output from the current code:
 
-- Compatibility score: 10, High.
-- Raw matrix score: 17, Critical.
-- Findings: 35.
-- Simulated residual score with default selected controls: 9.
+- Compatibility score: 20, Critical.
+- Raw matrix score: 34, Critical.
+- Findings: 16.
+- Simulated residual score with default selected controls: 26.
 - Simulated reduction: 8.
 
 Plain reading:

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">AI Workflow Risk Auditor Pro</title>
+  <desc id="desc">A shield containing connected workflow nodes and a local-first status dot.</desc>
+  <defs>
+    <linearGradient id="background" x1="64" y1="48" x2="448" y2="464" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#10213F"/>
+      <stop offset="0.55" stop-color="#3B4DCC"/>
+      <stop offset="1" stop-color="#8B3FC7"/>
+    </linearGradient>
+    <linearGradient id="shield" x1="160" y1="116" x2="348" y2="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8DC5FF"/>
+      <stop offset="1" stop-color="#D3B4FF"/>
+    </linearGradient>
+  </defs>
+  <rect x="28" y="28" width="456" height="456" rx="112" fill="url(#background)"/>
+  <path d="M256 86 394 138v105c0 91-54 156-138 190-84-34-138-99-138-190V138l138-52Z" fill="#0A1222" fill-opacity=".72" stroke="url(#shield)" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M188 221h136M188 221l68 80m68-80-68 80" fill="none" stroke="#C9DFFF" stroke-width="15" stroke-linecap="round"/>
+  <circle cx="188" cy="221" r="27" fill="#73A0FF" stroke="#F5F8FF" stroke-width="10"/>
+  <circle cx="324" cy="221" r="27" fill="#B69BFF" stroke="#F5F8FF" stroke-width="10"/>
+  <circle cx="256" cy="301" r="31" fill="#43D6A3" stroke="#F5F8FF" stroke-width="10"/>
+  <circle cx="393" cy="390" r="35" fill="#43D6A3" stroke="#0A1222" stroke-width="12"/>
+</svg>

@@ -5,6 +5,7 @@ User and evaluator documentation for AI Workflow Risk Auditor Pro:
 ## Start here
 
 - [Installation](INSTALLATION.md)
+- [Optional Desktop Launcher](DESKTOP_LAUNCHER.md)
 - [Usage](USAGE.md)
 - [Frequently Asked Questions](FAQ.md)
 - [Synthetic Workflow Examples](../examples/README.md)
@@ -19,6 +20,7 @@ User and evaluator documentation for AI Workflow Risk Auditor Pro:
 - [Security Audit](SECURITY_AUDIT.md)
 - [Score Explainability](SCORE_EXPLAINABILITY.md)
 - [Score Calculation Trace](SCORE_CALCULATION_TRACE.md)
+- [Risk Engine v2](RISK_ENGINE_V2.md)
 - [Source of Truth Map](SOURCE_OF_TRUTH_MAP.md)
 - [Quality and Validation](QUALITY_AND_VALIDATION.md)
 
@@ -34,6 +36,7 @@ User and evaluator documentation for AI Workflow Risk Auditor Pro:
 ## Examples and presentation
 
 - [Sample Report Explained](SAMPLE_REPORT_EXPLAINED.md)
+- [Golden Manual Workflows](GOLDEN_MANUAL_WORKFLOWS.md)
 - [Screenshot Guidelines](SCREENSHOT_GUIDELINES.md)
 - [Screenshot Capture Specification](SCREENSHOTS_TODO.md)
 - [GitHub Presentation Guide](GITHUB_PRESENTATION_GUIDE.md)

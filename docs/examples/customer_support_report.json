@@ -5,18 +5,18 @@
   "valid": true,
   "workflow_type": "customer_support",
   "risk": {
-    "compatibility_score": 10,
-    "compatibility_level": "high",
-    "raw_matrix_score": 17,
+    "compatibility_score": 20,
+    "compatibility_level": "critical",
+    "raw_matrix_score": 34,
     "raw_matrix_severity": "critical",
     "score_explanation_simple": "Critical risk estimated from local rules, mainly because customer-facing support, customer context, policy exceptions, and external communication were detected in the workflow text."
   },
-  "detected_evidence_count": 35,
+  "detected_evidence_count": 16,
   "simulation": {
-    "raw_score": 17,
-    "simulated_residual_score": 9,
+    "raw_score": 34,
+    "simulated_residual_score": 26,
     "simulated_reduction": 8,
-    "meaning": "Estimated remaining risk after selected protections. This is not a guarantee."
+    "meaning": "Estimated remaining risk after selected hypothetical protections. This is not proof of implementation or a guarantee."
   },
   "source_of_truth_labels": [
     "Detected = found in the text",

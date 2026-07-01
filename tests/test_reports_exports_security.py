@@ -2,6 +2,7 @@ from analyzer import analyze_workflow
 from examples import get_example_text
 from export_json import build_json_summary, render_json_summary
 from ollama_client import (
+    build_enrichment_prompt,
     check_ollama_status,
     generate_enrichment,
     generate_local_prompt_response,
@@ -49,6 +50,11 @@ def test_json_summary_export_contains_privacy_model():
     assert summary["privacy_model"]["local_first"] is True
     assert summary["privacy_model"]["cloud_api_required"] is False
     assert summary["privacy_model"]["auto_persist_user_input"] is False
+    assert summary["privacy_model"]["ai_provider_default"] == "disabled"
+    assert summary["privacy_model"]["ai_provider_runtime"] == "ollama_loopback_only"
+    assert summary["privacy_model"]["ai_provider_output_role"] == "advisory_only"
+    assert summary["privacy_model"]["cloud_fallback"] is False
+    assert summary["privacy_model"]["api_keys_stored"] is False
 
 
 def test_json_summary_renders_valid_json_text():
@@ -76,12 +82,53 @@ def test_french_and_hebrew_reports_localize_main_sections():
 
 
 def test_non_local_ollama_status_does_not_call_requests(monkeypatch):
-    def fail_get(*args, **kwargs):
+    def fail_request(*args, **kwargs):
         raise AssertionError("external request should not be attempted")
 
-    monkeypatch.setattr("ollama_client.requests.get", fail_get)
+    monkeypatch.setattr("ollama_client._direct_request", fail_request)
     status = check_ollama_status(base_url="https://example.com")
     assert status["available"] is False
+
+
+def test_ollama_status_accepts_only_explicit_loopback_hosts(monkeypatch):
+    observed_urls = []
+
+    class Response:
+        status_code = 200
+
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {"models": []}
+
+    def fake_request(method, url, **kwargs):
+        observed_urls.append(url)
+        return Response()
+
+    monkeypatch.setattr("ollama_client._direct_request", fake_request)
+    for base_url in [
+        "http://localhost:11434",
+        "http://127.0.0.1:11434",
+        "http://[::1]:11434",
+    ]:
+        assert check_ollama_status(base_url=base_url)["available"] is True
+
+    assert len(observed_urls) == 3
+
+
+def test_ollama_status_rejects_loopback_lookalikes_before_request(monkeypatch):
+    def fail_request(*args, **kwargs):
+        raise AssertionError("non-loopback endpoint should not be called")
+
+    monkeypatch.setattr("ollama_client._direct_request", fail_request)
+    for base_url in [
+        "http://localhost.example.com:11434",
+        "http://127.0.0.2:11434",
+        "http://0.0.0.0:11434",
+        "https://example.com",
+    ]:
+        assert check_ollama_status(base_url=base_url)["available"] is False
 
 
 def test_ollama_status_separates_local_and_cloud_models(monkeypatch):
@@ -97,7 +144,7 @@ def test_ollama_status_separates_local_and_cloud_models(monkeypatch):
                 ]
             }
 
-    monkeypatch.setattr("ollama_client.requests.get", lambda *args, **kwargs: Response())
+    monkeypatch.setattr("ollama_client._direct_request", lambda *args, **kwargs: Response())
     status = check_ollama_status()
     assert status["available"] is True
     assert status["models"] == ["qwen3:8b"]
@@ -114,14 +161,22 @@ def test_ollama_status_disables_redirects_and_environment_proxies(monkeypatch):
         def json(self):
             return {"models": []}
 
-    def fake_get(*args, **kwargs):
-        observed.update(kwargs)
-        return Response()
+    class Session:
+        trust_env = True
 
-    monkeypatch.setattr("ollama_client.requests.get", fake_get)
+        def request(self, method, url, **kwargs):
+            observed.update({"method": method, "url": url, "trust_env": self.trust_env, **kwargs})
+            return Response()
+
+        def close(self):
+            observed["closed"] = True
+
+    monkeypatch.setattr("ollama_client.requests.Session", Session)
     assert check_ollama_status()["available"] is True
+    assert observed["method"] == "GET"
+    assert observed["trust_env"] is False
     assert observed["allow_redirects"] is False
-    assert observed["proxies"] == {"http": None, "https": None, "all": None}
+    assert observed["closed"] is True
 
 
 def test_ollama_generation_disables_redirects_and_environment_proxies(monkeypatch):
@@ -139,14 +194,48 @@ def test_ollama_generation_disables_redirects_and_environment_proxies(monkeypatc
         lambda **kwargs: {"available": True, "models": ["llama3"]},
     )
 
-    def fake_post(*args, **kwargs):
-        observed.update(kwargs)
+    def fake_request(method, url, **kwargs):
+        observed.update({"method": method, "url": url, **kwargs})
         return Response()
 
-    monkeypatch.setattr("ollama_client.requests.post", fake_post)
+    monkeypatch.setattr("ollama_client._direct_request", fake_request)
     assert generate_local_prompt_response("Synthetic prompt.") == "Local synthetic response."
+    assert observed["method"] == "POST"
     assert observed["allow_redirects"] is False
-    assert observed["proxies"] == {"http": None, "https": None, "all": None}
+
+
+def test_ollama_status_rejects_redirect_response(monkeypatch):
+    class Response:
+        status_code = 302
+
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            raise AssertionError("redirect body should not be accepted")
+
+    monkeypatch.setattr("ollama_client._direct_request", lambda *args, **kwargs: Response())
+    status = check_ollama_status()
+    assert status["available"] is False
+    assert status["message"] == "Local model service redirect rejected."
+
+
+def test_ollama_generation_rejects_redirect_response(monkeypatch):
+    class Response:
+        status_code = 307
+
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            raise AssertionError("redirect body should not be accepted")
+
+    monkeypatch.setattr(
+        "ollama_client.check_ollama_status",
+        lambda **kwargs: {"available": True, "models": ["llama3"]},
+    )
+    monkeypatch.setattr("ollama_client._direct_request", lambda *args, **kwargs: Response())
+    assert generate_local_prompt_response("Synthetic prompt.") is None
 
 
 def test_cloud_ollama_model_names_are_rejected():
@@ -156,19 +245,19 @@ def test_cloud_ollama_model_names_are_rejected():
 
 
 def test_generate_enrichment_rejects_non_local_endpoint(monkeypatch):
-    def fail_post(*args, **kwargs):
+    def fail_request(*args, **kwargs):
         raise AssertionError("external request should not be attempted")
 
-    monkeypatch.setattr("ollama_client.requests.post", fail_post)
+    monkeypatch.setattr("ollama_client._direct_request", fail_request)
     analysis = analyze_workflow(get_example_text("customer_support"))
     assert generate_enrichment("workflow", analysis, "English", base_url="https://example.com") is None
 
 
 def test_generate_enrichment_rejects_cloud_model_without_post(monkeypatch):
-    def fail_post(*args, **kwargs):
+    def fail_request(*args, **kwargs):
         raise AssertionError("cloud/proxy model should not be posted to")
 
-    monkeypatch.setattr("ollama_client.requests.post", fail_post)
+    monkeypatch.setattr("ollama_client._direct_request", fail_request)
     analysis = analyze_workflow(get_example_text("customer_support"))
     assert generate_enrichment("workflow", analysis, "English", model="gemma3:cloud") is None
 
@@ -181,11 +270,7 @@ def test_generate_enrichment_rejects_model_not_listed_locally(monkeypatch):
         def json(self):
             return {"models": [{"name": "qwen3:8b", "details": {"format": "gguf"}}]}
 
-    def fail_post(*args, **kwargs):
-        raise AssertionError("missing model should not be posted to")
-
-    monkeypatch.setattr("ollama_client.requests.get", lambda *args, **kwargs: Response())
-    monkeypatch.setattr("ollama_client.requests.post", fail_post)
+    monkeypatch.setattr("ollama_client._direct_request", lambda *args, **kwargs: Response())
     analysis = analyze_workflow(get_example_text("customer_support"))
     assert generate_enrichment("workflow", analysis, "English", model="llama3") is None
 
@@ -248,3 +333,49 @@ def test_explainability_json_contains_explainability_fields():
     assert "rule-based estimate" in summary["score_disclaimer"]
     assert summary["privacy_model"]["workflow_text_never_sent_to_cloud_by_app"] is True
     assert summary["simulated_fields"]
+
+
+def test_local_ai_prompt_is_bounded_reviewer_assistance():
+    analysis = analyze_workflow(get_example_text("customer_support"))
+    prompt = build_enrichment_prompt("Synthetic workflow text.", analysis, "English")
+    lowered = prompt.casefold()
+    assert "bounded local ai reviewer assistant" in lowered
+    assert "deterministic engine is the source of truth" in lowered
+    assert "do not change the score" in lowered
+    assert "reviewer questions" in lowered
+    assert "missing-context questions" in lowered
+
+
+def test_local_ai_generation_cannot_mutate_deterministic_analysis(monkeypatch):
+    import copy
+
+    analysis = analyze_workflow(get_example_text("customer_support"))
+    before = copy.deepcopy(analysis)
+
+    monkeypatch.setattr(
+        "ollama_client.check_ollama_status",
+        lambda **kwargs: {"available": True, "models": ["llama3"]},
+    )
+
+    class Response:
+        def raise_for_status(self):
+            return None
+
+        def json(self):
+            return {"response": "Reviewer wording only; score should be 0."}
+
+    monkeypatch.setattr("ollama_client._direct_request", lambda *args, **kwargs: Response())
+    output = generate_enrichment("Synthetic workflow.", analysis, "English")
+    assert output == "Reviewer wording only; score should be 0."
+    assert analysis == before
+    assert output not in analysis
+
+
+def test_user_and_local_ai_html_is_escaped_in_report_preview():
+    analysis = analyze_workflow("AI drafts a customer reply containing <script>alert('x')</script> for human review.")
+    markdown = render_markdown_report(analysis, enrichment="<img src=x onerror=alert(1)>")
+    html = markdown_to_html(markdown)
+    assert "<script>" not in html
+    assert "<img src=x" not in html
+    assert "&lt;script&gt;" in html
+    assert "&lt;img src=x onerror=alert(1)&gt;" in html

@@ -3,55 +3,55 @@
     "id": "risk_score",
     "topic": "risk",
     "title": "Risk score",
-    "short_explanation": "A deterministic number summarizing weighted factors detected in the workflow.",
-    "why_it_matters": "It helps compare raw and residual risk without relying on a model.",
+    "short_explanation": "A deterministic number summarizing weighted factors detected with a specific local KB version.",
+    "why_it_matters": "It supports repeatable comparison but is not a calibrated probability or compliance result.",
     "related_ui_area": "audit"
   },
   {
     "id": "evidence",
     "topic": "evidence",
     "title": "Evidence",
-    "short_explanation": "The exact text fragment or pattern that triggered a finding.",
-    "why_it_matters": "Evidence makes the audit explainable and reviewable.",
+    "short_explanation": "A source excerpt, explicit inference basis, or derived signal associated with a finding.",
+    "why_it_matters": "Typed provenance keeps source text separate from deterministic hypotheses.",
     "related_ui_area": "audit"
   },
   {
     "id": "control",
     "topic": "control",
     "title": "Control",
-    "short_explanation": "A defensive safeguard that can reduce or govern a risk factor.",
-    "why_it_matters": "Controls turn findings into practical implementation boundaries.",
+    "short_explanation": "A recommended safeguard that may govern a risk factor if implemented and evidenced.",
+    "why_it_matters": "A recommendation is not proof that the control exists or is effective.",
     "related_ui_area": "audit"
   },
   {
     "id": "residual_risk",
     "topic": "residual",
     "title": "Residual risk",
-    "short_explanation": "The estimated risk after selected controls are applied in a local simulation.",
-    "why_it_matters": "It shows what may remain even after safeguards.",
+    "short_explanation": "The estimated risk after selected controls are modeled in a local hypothetical simulation.",
+    "why_it_matters": "It supports planning but does not prove implementation or real-world reduction.",
     "related_ui_area": "audit"
   },
   {
     "id": "human_in_loop",
     "topic": "human",
     "title": "Human-in-the-loop",
-    "short_explanation": "A named human role validates high-impact recommendations before action.",
-    "why_it_matters": "Human validation prevents unsafe autonomous decisions.",
+    "short_explanation": "A named human role reviews high-impact recommendations before action.",
+    "why_it_matters": "Human review adds accountability but does not guarantee prevention of unsafe decisions.",
     "related_ui_area": "audit"
   },
   {
     "id": "local_first",
     "topic": "local",
     "title": "Local-first privacy",
-    "short_explanation": "Analysis, storage, and reports stay on the local machine.",
-    "why_it_matters": "Local operation reduces exposure and avoids cloud dependencies.",
+    "short_explanation": "The intended product boundary keeps analysis, storage, and reports on the local machine.",
+    "why_it_matters": "Local operation can reduce exposure; deployment evidence must confirm the boundary.",
     "related_ui_area": "audit"
   },
   {
     "id": "deterministic",
     "topic": "deterministic",
     "title": "Deterministic scoring",
-    "short_explanation": "The same workflow text produces the same findings and scores.",
+    "short_explanation": "The same workflow text and KB version produce the same findings and scores.",
     "why_it_matters": "Repeatability is essential for tests and audit explanations.",
     "related_ui_area": "audit"
   },
@@ -67,8 +67,8 @@
     "id": "raw_vs_residual",
     "topic": "raw",
     "title": "Raw risk vs residual risk",
-    "short_explanation": "Raw risk is before controls; residual risk is after simulated controls.",
-    "why_it_matters": "This separation keeps planning clear.",
+    "short_explanation": "Raw risk is before controls; residual risk models selected controls hypothetically.",
+    "why_it_matters": "This separation supports planning without claiming controls are implemented.",
     "related_ui_area": "audit"
   },
   {
@@ -80,123 +80,123 @@
     "related_ui_area": "audit"
   },
   {
-    "id": "privacy_11",
+    "id": "privacy_boundaries",
     "topic": "privacy",
-    "title": "Privacy concept 11",
-    "short_explanation": "Short explanation for privacy in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "title": "Privacy boundaries",
+    "short_explanation": "Data categories identify handling concerns without proving the legal status of submitted data.",
+    "why_it_matters": "Privacy conclusions require context, evidence, and qualified human review.",
     "related_ui_area": "knowledge_base"
   },
   {
-    "id": "auditability_12",
+    "id": "auditability_trace",
     "topic": "auditability",
-    "title": "Auditability concept 12",
-    "short_explanation": "Short explanation for auditability in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "title": "Auditability trace",
+    "short_explanation": "Findings should retain the local rule, source excerpt or inference basis, and mapped factors.",
+    "why_it_matters": "A trace allows reviewers to reproduce and challenge a deterministic result.",
     "related_ui_area": "knowledge_base"
   },
   {
-    "id": "dashboard_13",
-    "topic": "dashboard",
-    "title": "Dashboard concept 13",
-    "short_explanation": "Short explanation for dashboard in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "id": "evidence_provenance",
+    "topic": "evidence",
+    "title": "Evidence provenance",
+    "short_explanation": "Source excerpts, inferred gaps, and derived control signals are different evidence types.",
+    "why_it_matters": "Separating them prevents an inferred absence from being presented as quoted source text.",
     "related_ui_area": "knowledge_base"
   },
   {
-    "id": "reports_14",
-    "topic": "reports",
-    "title": "Reports concept 14",
-    "short_explanation": "Short explanation for reports in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "id": "recommended_not_applied",
+    "topic": "control",
+    "title": "Recommended is not applied",
+    "short_explanation": "A mapped control is a recommendation until implementation evidence is reviewed.",
+    "why_it_matters": "The knowledge base must not create false assurance about production safeguards.",
     "related_ui_area": "knowledge_base"
   },
   {
-    "id": "knowledge_base_15",
-    "topic": "knowledge",
-    "title": "Knowledge Base concept 15",
-    "short_explanation": "Short explanation for knowledge base in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "id": "control_effect_assumption",
+    "topic": "control",
+    "title": "Control effect assumption",
+    "short_explanation": "Control effects are local planning assumptions, not measured real-world efficacy.",
+    "why_it_matters": "Residual-risk simulation cannot guarantee that a safeguard will work.",
     "related_ui_area": "knowledge_base"
   },
   {
-    "id": "french_detection_16",
-    "topic": "french",
-    "title": "French Detection concept 16",
-    "short_explanation": "Short explanation for french detection in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "id": "review_question",
+    "topic": "review",
+    "title": "Review question",
+    "short_explanation": "A review question identifies information a responsible reviewer should request.",
+    "why_it_matters": "A question is neither evidence nor a conclusion about the workflow.",
     "related_ui_area": "knowledge_base"
   },
   {
-    "id": "hebrew_rtl_17",
-    "topic": "hebrew",
-    "title": "Hebrew Rtl concept 17",
-    "short_explanation": "Short explanation for hebrew rtl in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "id": "framework_mapping_boundary",
+    "topic": "framework",
+    "title": "Framework-inspired mapping",
+    "short_explanation": "Mappings organize local review themes without claiming exhaustive framework coverage.",
+    "why_it_matters": "They are not certification, conformity assessment, or legal advice.",
     "related_ui_area": "knowledge_base"
   },
   {
-    "id": "demo_mode_18",
-    "topic": "demo",
-    "title": "Demo Mode concept 18",
-    "short_explanation": "Short explanation for demo mode in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
-    "related_ui_area": "knowledge_base"
-  },
-  {
-    "id": "privacy_19",
+    "id": "data_minimization",
     "topic": "privacy",
-    "title": "Privacy concept 19",
-    "short_explanation": "Short explanation for privacy in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "title": "Data minimization",
+    "short_explanation": "Use only the fields needed for the stated workflow purpose.",
+    "why_it_matters": "Reducing unnecessary input limits exposure but does not prove compliance.",
     "related_ui_area": "knowledge_base"
   },
   {
-    "id": "auditability_20",
-    "topic": "auditability",
-    "title": "Auditability concept 20",
-    "short_explanation": "Short explanation for auditability in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "id": "retention_boundary",
+    "topic": "retention",
+    "title": "Retention boundary",
+    "short_explanation": "A workflow should state what is stored locally, why, and for how long.",
+    "why_it_matters": "Missing wording creates a review hypothesis, not proof that no retention policy exists.",
     "related_ui_area": "knowledge_base"
   },
   {
-    "id": "dashboard_21",
-    "topic": "dashboard",
-    "title": "Dashboard concept 21",
-    "short_explanation": "Short explanation for dashboard in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "id": "appeal_path",
+    "topic": "governance",
+    "title": "Appeal and correction path",
+    "short_explanation": "Affected people may need a way to request correction or manual review.",
+    "why_it_matters": "The presence and adequacy of an appeal path require implementation evidence.",
     "related_ui_area": "knowledge_base"
   },
   {
-    "id": "reports_22",
-    "topic": "reports",
-    "title": "Reports concept 22",
-    "short_explanation": "Short explanation for reports in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "id": "safe_failure",
+    "topic": "resilience",
+    "title": "Safe failure",
+    "short_explanation": "A failure plan should stop unsafe action and route work to an owned manual path.",
+    "why_it_matters": "Documented fallback wording does not prove the fallback works in production.",
     "related_ui_area": "knowledge_base"
   },
   {
-    "id": "knowledge_base_23",
+    "id": "model_provenance",
+    "topic": "model",
+    "title": "Model provenance",
+    "short_explanation": "Local model name, version, source, and configuration should remain reviewable.",
+    "why_it_matters": "Local-only wording does not independently prove model provenance.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "tool_action_boundary",
+    "topic": "execution",
+    "title": "Tool and action boundary",
+    "short_explanation": "Calling tools or changing records expands a workflow beyond advisory output.",
+    "why_it_matters": "Permissions, approval, reversibility, and logging require explicit review.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "confidence_boundary",
+    "topic": "confidence",
+    "title": "Confidence boundary",
+    "short_explanation": "A confidence heuristic may prioritize review but must not become decision authority.",
+    "why_it_matters": "The knowledge base does not establish statistical calibration or model accuracy.",
+    "related_ui_area": "knowledge_base"
+  },
+  {
+    "id": "kb_versioning",
     "topic": "knowledge",
-    "title": "Knowledge Base concept 23",
-    "short_explanation": "Short explanation for knowledge base in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
-    "related_ui_area": "knowledge_base"
-  },
-  {
-    "id": "french_detection_24",
-    "topic": "french",
-    "title": "French Detection concept 24",
-    "short_explanation": "Short explanation for french detection in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
-    "related_ui_area": "knowledge_base"
-  },
-  {
-    "id": "hebrew_rtl_25",
-    "topic": "hebrew",
-    "title": "Hebrew Rtl concept 25",
-    "short_explanation": "Short explanation for hebrew rtl in local AI workflow audits.",
-    "why_it_matters": "It keeps the project explainable, defensive, and suitable for review.",
+    "title": "Knowledge base versioning",
+    "short_explanation": "Stable IDs and validated references keep local mappings reproducible across revisions.",
+    "why_it_matters": "A KB change can alter findings even when the workflow text is unchanged.",
     "related_ui_area": "knowledge_base"
   }
 ]

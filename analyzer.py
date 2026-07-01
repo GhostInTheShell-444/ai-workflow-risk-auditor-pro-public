@@ -11,6 +11,24 @@ from risk_matrix import calculate_risk_matrix
 
 
 DATA_KEYWORDS: dict[str, tuple[str, ...]] = {
+    "synthetic_anonymized_data": (
+        "synthetic",
+        "anonymized",
+        "anonymised",
+        "anonymous",
+        "masked",
+        "redacted",
+        "demo data",
+        "sample data",
+        "données anonymisées",
+        "données synthétiques",
+        "anonymisé",
+        "masqué",
+        "expurgé",
+        "סינתטי",
+        "אנונימי",
+        "מוסתר",
+    ),
     "personal_data": (
         "personal data",
         "personally identifiable",
@@ -62,6 +80,20 @@ DATA_KEYWORDS: dict[str, tuple[str, ...]] = {
         "recruteur",
         "מועמד",
     ),
+    "employee_data": (
+        "employee data",
+        "employee record",
+        "performance review",
+        "payroll",
+        "disciplinary",
+        "staff",
+        "worker",
+        "données employé",
+        "données salarié",
+        "employé",
+        "salarié",
+        "עובד",
+    ),
     "financial_data": (
         "invoice",
         "payment",
@@ -74,6 +106,20 @@ DATA_KEYWORDS: dict[str, tuple[str, ...]] = {
         "facture",
         "paiement",
         "remboursement",
+    ),
+    "refund_payment_data": (
+        "refund",
+        "refunds",
+        "refund approval",
+        "reimbursement",
+        "chargeback",
+        "payment dispute",
+        "billing adjustment",
+        "credit memo",
+        "remboursement",
+        "avoir",
+        "חיוב",
+        "החזר",
     ),
     "medical_health_data": (
         "medical",
@@ -149,6 +195,21 @@ DATA_KEYWORDS: dict[str, tuple[str, ...]] = {
         "trade secret",
         "supplier",
     ),
+    "source_code_private_documents": (
+        "source code",
+        "repository",
+        "private document",
+        "internal document",
+        "contract draft",
+        "specification",
+        "design doc",
+        "codebase",
+        "pull request",
+        "repo",
+        "document privé",
+        "code source",
+        "מסמך פנימי",
+    ),
 }
 
 
@@ -159,6 +220,8 @@ WORKFLOW_KEYWORDS: dict[str, tuple[str, ...]] = {
     "logistics": ("delivery", "route", "dispatch", "shipment", "transport", "driver", "livraison", "tournée", "dispatcher"),
     "finance": ("invoice", "payment", "billing", "expense", "financial", "facture", "paiement"),
     "legal": ("legal", "contract", "compliance", "regulation", "juridique", "contrat", "conformité"),
+    "account_access": ("account", "access", "login", "disable user", "entitlement", "permissions", "compte", "accès"),
+    "healthcare": ("medical", "health", "patient", "clinical", "santé", "patient"),
 }
 
 
@@ -215,10 +278,46 @@ AUTOMATION_KEYWORDS = (
     "résume",
 )
 
+AI_DRAFT_KEYWORDS = (
+    "draft",
+    "drafts",
+    "suggest",
+    "suggests",
+    "summarize",
+    "summarizes",
+    "propose",
+    "proposes",
+    "recommendation only",
+    "advisory",
+    "rédige",
+    "propose",
+    "résume",
+)
+
+AUTOMATIC_ACTION_KEYWORDS = (
+    "automatically",
+    "automatic",
+    "auto",
+    "without review",
+    "without approval",
+    "no review",
+    "no human",
+    "autonomously",
+    "fully autonomous",
+    "auto approve",
+    "auto send",
+    "auto execute",
+    "automatiquement",
+    "sans validation",
+    "sans approbation",
+)
+
 DECISION_KEYWORDS = (
     "approve",
     "reject",
+    "rejects",
     "rank",
+    "ranks",
     "ranking",
     "score candidate",
     "eligibility",
@@ -228,6 +327,37 @@ DECISION_KEYWORDS = (
     "décision affectant une personne",
     "présélection",
     "candidat",
+)
+
+FINANCIAL_DECISION_KEYWORDS = (
+    "approve refund",
+    "approve refunds",
+    "refund approval",
+    "auto refund",
+    "issue refund",
+    "refund decision",
+    "payment approval",
+    "billing decision",
+    "credit customer",
+    "chargeback",
+    "remboursement automatique",
+    "approuve le remboursement",
+)
+
+ACCOUNT_ACCESS_KEYWORDS = (
+    "close account",
+    "disable account",
+    "disable user",
+    "suspend account",
+    "grant access",
+    "revoke access",
+    "reset password",
+    "access decision",
+    "account decision",
+    "entitlement",
+    "permissions",
+    "bloquer le compte",
+    "désactiver",
 )
 
 IRREVERSIBLE_KEYWORDS = (
@@ -293,6 +423,168 @@ BROAD_PERMISSION_KEYWORDS = (
     "auto execute",
 )
 
+UNTRUSTED_INPUT_KEYWORDS = (
+    "customer email",
+    "support ticket",
+    "incoming message",
+    "submitted",
+    "uploaded",
+    "form input",
+    "vendor document",
+    "external document",
+    "intake",
+    "demande client",
+    "e-mail client",
+)
+
+TOOL_ACTION_KEYWORDS = (
+    "tool",
+    "tools",
+    "api call",
+    "call api",
+    "webhook",
+    "function call",
+    "execute action",
+    "agent action",
+    "write to",
+    "update crm",
+    "update ticket",
+)
+
+GROUNDING_KEYWORDS = (
+    "grounded",
+    "citation",
+    "source record",
+    "retrieved evidence",
+    "verified record",
+    "knowledge base",
+    "policy source",
+    "reference document",
+)
+
+CONFIDENCE_MISUSE_KEYWORDS = (
+    "confidence score",
+    "if confidence",
+    "above 80%",
+    "above 90%",
+    "threshold",
+    "probability",
+)
+
+LOCAL_AI_KEYWORDS = (
+    "ollama",
+    "local ai",
+    "local-only",
+    "localhost",
+    "no cloud",
+    "no cloud fallback",
+    "offline model",
+)
+
+MODEL_PROVENANCE_KEYWORDS = (
+    "model version",
+    "model provenance",
+    "model source",
+    "approved local model",
+    "pinned model",
+)
+
+REVIEWER_IDENTITY_KEYWORDS = (
+    "named reviewer",
+    "named human reviewer",
+    "reviewer identity",
+    "assigned reviewer",
+    "responsible reviewer",
+    "process owner",
+    "approver id",
+)
+
+RETENTION_KEYWORDS = (
+    "retention",
+    "delete after",
+    "data deletion",
+    "archive policy",
+    "purge",
+    "ttl",
+    "conservation",
+)
+
+APPEAL_KEYWORDS = (
+    "appeal",
+    "recourse",
+    "contest",
+    "challenge decision",
+    "manual exception",
+    "customer appeal",
+    "candidate appeal",
+    "recours",
+)
+
+MONITORING_KEYWORDS = (
+    "monitor",
+    "monitoring",
+    "quality review",
+    "sample review",
+    "drift",
+    "alert on failure",
+)
+
+FALLBACK_KEYWORDS = (
+    "fallback",
+    "manual queue",
+    "rollback",
+    "safe stop",
+    "safe-stop",
+    "escalation path",
+    "retry",
+    "failure logging",
+    "fail closed",
+    "manual fallback",
+)
+
+ACCESS_CONTROL_KEYWORDS = (
+    "least privilege",
+    "access control",
+    "role-based access",
+    "rbac",
+    "permission boundary",
+)
+
+DATA_MINIMIZATION_KEYWORDS = (
+    "minimize",
+    "data minimization",
+    "minimum necessary",
+    "only required",
+    "least data",
+)
+
+MASKING_KEYWORDS = (
+    "mask",
+    "masked",
+    "redact",
+    "redacted",
+    "anonymize",
+    "anonymized",
+    "pseudonymize",
+    "pseudonymized",
+)
+
+CHANGE_MANAGEMENT_KEYWORDS = (
+    "change management",
+    "change review",
+    "release approval",
+    "version review",
+    "rollback plan",
+)
+
+INCIDENT_HANDLING_KEYWORDS = (
+    "incident handling",
+    "incident response",
+    "postmortem",
+    "escalate incident",
+    "breach",
+)
+
 
 def clean_input(text: str | None) -> str:
     if text is None:
@@ -312,6 +604,19 @@ def _keyword_pattern(keyword: str) -> str:
 
 def _has_any(text: str, keywords: Iterable[str]) -> bool:
     return any(re.search(_keyword_pattern(keyword), text) for keyword in keywords)
+
+
+def _has_non_negated(text: str, keywords: Iterable[str]) -> bool:
+    for segment in re.split(r"[.!?;\n]+", text):
+        for keyword in keywords:
+            match = re.search(_keyword_pattern(keyword), segment)
+            if not match:
+                continue
+            prefix = segment[: match.start()]
+            if re.search(r"\b(?:no|without|missing|absent|sans|aucun)\b", prefix):
+                continue
+            return True
+    return False
 
 
 def _count_hits(text: str, keywords: Iterable[str]) -> int:
@@ -364,44 +669,123 @@ def detect_risk_factors(text: str, categories: list[str]) -> list[str]:
     factors: list[str] = []
 
     category_to_factor = {
+        "synthetic_anonymized_data": "synthetic_anonymized_data",
         "personal_data": "personal_data",
         "customer_data": "customer_data",
         "hr_candidate_data": "hr_candidate_data",
+        "employee_data": "employee_data",
         "financial_data": "financial_data",
+        "refund_payment_data": "refund_payment_data",
         "medical_health_data": "medical_health_data",
         "legal_compliance_data": "legal_compliance_data",
         "security_event_data": "soc_security_workflow",
+        "business_confidential_data": "business_confidential_data",
+        "source_code_private_documents": "source_code_private_documents",
     }
     factors.extend(category_to_factor[category] for category in categories if category in category_to_factor)
 
     has_external = _has_any(lower_text, EXTERNAL_COMMUNICATION_KEYWORDS)
     has_automation = _has_any(lower_text, AUTOMATION_KEYWORDS)
+    has_ai_draft = _has_any(lower_text, AI_DRAFT_KEYWORDS)
+    has_automatic_action = _has_any(lower_text, AUTOMATIC_ACTION_KEYWORDS)
     has_decision = _has_any(lower_text, DECISION_KEYWORDS)
+    has_financial_decision = _has_any(lower_text, FINANCIAL_DECISION_KEYWORDS) or (
+        "refund_payment_data" in categories
+        and _has_any(lower_text, AUTOMATIC_ACTION_KEYWORDS)
+        and _has_any(lower_text, ("approve", "approves", "issue", "issues", "deny", "reject", "decide", "credit"))
+    )
+    has_account_access_decision = _has_any(lower_text, ACCOUNT_ACCESS_KEYWORDS)
     has_irreversible = _has_any(lower_text, IRREVERSIBLE_KEYWORDS)
     has_modification = _has_any(lower_text, MODIFICATION_KEYWORDS)
-    has_third_party = _has_any(lower_text, THIRD_PARTY_KEYWORDS)
+    has_local_ai = _has_any(lower_text, LOCAL_AI_KEYWORDS)
+    local_only_context = has_local_ai and _has_any(lower_text, ("no cloud", "local-only", "localhost", "ollama", "offline"))
+    has_third_party = _has_any(lower_text, THIRD_PARTY_KEYWORDS) and not local_only_context
     has_sensitive_access = _has_any(lower_text, SENSITIVE_ACCESS_KEYWORDS) or "credentials_secrets" in categories
     has_broad_permissions = _has_any(lower_text, BROAD_PERMISSION_KEYWORDS)
     negated_review = re.search(r"\b(?:no|without)\s+(?:human\s+)?(?:review|approval)\b", lower_text)
     has_human_review = _has_any(lower_text, HUMAN_REVIEW_KEYWORDS) and not negated_review
     has_audit = _has_any(lower_text, AUDIT_KEYWORDS)
+    has_fallback = _has_non_negated(lower_text, FALLBACK_KEYWORDS)
+    has_monitoring = _has_any(lower_text, MONITORING_KEYWORDS)
+    has_sensitive_data = any(
+        category in categories
+        for category in (
+            "personal_data",
+            "customer_data",
+            "employee_data",
+            "hr_candidate_data",
+            "financial_data",
+            "refund_payment_data",
+            "medical_health_data",
+            "legal_compliance_data",
+            "business_confidential_data",
+            "source_code_private_documents",
+            "credentials_secrets",
+        )
+    )
 
     if has_external:
         factors.append("external_communication")
+    if has_ai_draft and not has_automatic_action:
+        factors.append("ai_draft_only")
+    if has_automation and _has_any(
+        lower_text,
+        ("human-on-the-loop", "human on the loop", "human monitors the automation", "monitoring only"),
+    ):
+        factors.append("human_on_loop_monitoring")
+    if has_automation and has_automatic_action:
+        factors.append("automatic_external_action" if has_external else "fully_autonomous_workflow")
+    if has_external and has_automatic_action:
+        factors.append("automatic_customer_communication")
     if has_external and ("customer_data" in categories or "customer" in lower_text) and has_automation:
         factors.append("customer_facing_automated_output")
+    if has_financial_decision and (has_automation or has_automatic_action):
+        factors.append("automatic_financial_decision")
+    if has_account_access_decision:
+        factors.append("account_access_security")
+        if has_automation or has_automatic_action:
+            factors.append("automatic_account_access_decision")
     if has_decision or "hr_candidate_data" in categories:
         factors.append("decision_affecting_person")
+    if has_decision and has_automation and not has_human_review:
+        factors.append("model_decision_authority")
     if has_irreversible:
         factors.append("irreversible_action")
     if has_modification:
         factors.append("data_modification_deletion")
     if has_third_party:
         factors.append("third_party_integration")
+    if _has_any(lower_text, ("cloud", "hosted model", "remote model", "proxy model", "vendor model", "external api")) and not local_only_context:
+        factors.append("vendor_cloud_exposure")
+        factors.append("cloud_proxy_dependency")
+    if has_third_party or (has_external and has_automatic_action):
+        factors.append("external_destination")
     if has_sensitive_access:
         factors.append("sensitive_system_access")
     if has_broad_permissions:
         factors.append("broad_ai_agent_permissions")
+    if has_local_ai:
+        factors.append("local_ai_only_present")
+    if _has_any(lower_text, UNTRUSTED_INPUT_KEYWORDS):
+        factors.append("untrusted_input")
+        factors.append("prompt_injection_exposure")
+    if _has_any(lower_text, TOOL_ACTION_KEYWORDS) or has_broad_permissions:
+        factors.append("tool_action_use")
+    if (
+        has_external
+        or has_financial_decision
+        or has_account_access_decision
+        or any(category in categories for category in ("medical_health_data", "legal_compliance_data", "financial_data", "refund_payment_data"))
+    ):
+        factors.append("hallucination_sensitive_output")
+    if has_automation and not _has_any(lower_text, GROUNDING_KEYWORDS):
+        factors.append("missing_grounding")
+    if _has_any(lower_text, CONFIDENCE_MISUSE_KEYWORDS) and (has_automation or has_decision):
+        factors.append("confidence_score_misuse")
+    if has_local_ai and not _has_any(lower_text, MODEL_PROVENANCE_KEYWORDS):
+        factors.append("unknown_model_provenance")
+    if has_automation and has_decision and not _has_any(lower_text, ("because", "reason", "explain", "evidence", "justification")):
+        factors.append("opaque_decision_logic")
 
     high_impact = any(
         factor in factors
@@ -414,12 +798,60 @@ def detect_risk_factors(text: str, categories: list[str]) -> list[str]:
             "sensitive_system_access",
             "broad_ai_agent_permissions",
             "soc_security_workflow",
+            "automatic_external_action",
+            "automatic_customer_communication",
+            "automatic_financial_decision",
+            "automatic_account_access_decision",
+            "fully_autonomous_workflow",
+            "model_decision_authority",
+            "account_access_security",
+        )
+    )
+    operational_high_impact = any(
+        factor in factors
+        for factor in (
+            "automatic_external_action",
+            "automatic_customer_communication",
+            "automatic_financial_decision",
+            "automatic_account_access_decision",
+            "fully_autonomous_workflow",
+            "model_decision_authority",
+            "irreversible_action",
+            "data_modification_deletion",
+            "sensitive_system_access",
+            "broad_ai_agent_permissions",
+            "soc_security_workflow",
+            "tool_action_use",
         )
     )
     if high_impact and not has_human_review:
         factors.append("missing_human_validation")
     if high_impact and not has_audit:
         factors.append("missing_audit_trail")
+    if operational_high_impact and not _has_any(lower_text, REVIEWER_IDENTITY_KEYWORDS):
+        factors.append("missing_reviewer_identity")
+    if has_sensitive_data and not _has_any(lower_text, RETENTION_KEYWORDS):
+        factors.append("missing_retention_policy")
+    if (has_decision or has_financial_decision or has_account_access_decision) and not _has_any(lower_text, APPEAL_KEYWORDS):
+        factors.append("missing_appeal_process")
+    if operational_high_impact and not has_monitoring:
+        factors.append("missing_monitoring")
+    if operational_high_impact and not has_fallback:
+        factors.append("missing_fallback_plan")
+    if (has_sensitive_access or has_broad_permissions or has_account_access_decision) and not _has_any(lower_text, ACCESS_CONTROL_KEYWORDS):
+        factors.append("missing_access_control")
+    if has_sensitive_data and not _has_any(lower_text, DATA_MINIMIZATION_KEYWORDS):
+        factors.append("missing_data_minimization")
+    if has_sensitive_data and not _has_any(lower_text, MASKING_KEYWORDS):
+        factors.append("missing_data_masking")
+    if operational_high_impact and not _has_any(lower_text, CHANGE_MANAGEMENT_KEYWORDS):
+        factors.append("missing_change_management")
+    if operational_high_impact and not _has_any(lower_text, INCIDENT_HANDLING_KEYWORDS):
+        factors.append("missing_incident_handling")
+    if has_fallback:
+        factors.append("fallback_present")
+    if has_fallback or _has_any(lower_text, ("emergency", "failover")):
+        factors.append("emergency_fallback_behavior")
 
     return list(dict.fromkeys(factors))
 
@@ -438,10 +870,18 @@ def detect_cybersecurity_risks(text: str, categories: list[str], factors: list[s
         risks.append("excessive_automation_permissions")
     if "third_party_integration" in factors:
         risks.append("third_party_integration_risk")
+    if "vendor_cloud_exposure" in factors or "cloud_proxy_dependency" in factors:
+        risks.append("cloud_or_proxy_boundary_risk")
     if _has_any(lower_text, ("email", "intake", "submitted", "message", "ticket", "prompt")):
         risks.append("prompt_injection_risk")
+    if "untrusted_input" in factors:
+        risks.append("untrusted_input_risk")
+    if "tool_action_use" in factors:
+        risks.append("tool_action_execution_risk")
     if "data_modification_deletion" in factors:
         risks.append("unauthorized_data_modification")
+    if "automatic_account_access_decision" in factors:
+        risks.append("automated_account_access_risk")
     if "soc_security_workflow" in factors:
         risks.append("incorrect_security_alert_prioritization")
         risks.append("over_automation_of_incident_response")
@@ -459,22 +899,32 @@ def detect_privacy_risks(text: str, categories: list[str], factors: list[str]) -
         risks.append("personal_data_in_workflow")
     if "hr_candidate_data" in categories:
         risks.append("candidate_employee_data")
+    if "employee_data" in categories:
+        risks.append("employee_data_in_workflow")
     if "customer_data" in categories:
         risks.append("customer_data_in_workflow")
     if "financial_data" in categories:
         risks.append("financial_data_in_workflow")
+    if "refund_payment_data" in categories:
+        risks.append("refund_payment_data_in_workflow")
     if "medical_health_data" in categories:
         risks.append("medical_data_in_workflow")
+    if "business_confidential_data" in categories or "source_code_private_documents" in categories:
+        risks.append("confidential_internal_data_in_workflow")
     if "external_communication" in factors:
         risks.append("external_sharing_or_messaging")
-    if not _has_any(lower_text, ("minimize", "data minimization", "only required", "redact")):
+    if "missing_data_minimization" in factors or not _has_any(lower_text, DATA_MINIMIZATION_KEYWORDS):
         risks.append("data_minimization_gap")
-    if not _has_any(lower_text, ("retention", "delete after", "archive policy")):
+    if "missing_data_masking" in factors:
+        risks.append("masking_redaction_gap")
+    if "missing_retention_policy" in factors or not _has_any(lower_text, RETENTION_KEYWORDS):
         risks.append("retention_policy_gap")
     if not _has_any(lower_text, ("consent", "notice", "transparency")) and categories:
         risks.append("transparency_gap")
     if "decision_affecting_person" in factors:
         risks.append("automated_decision_impact")
+    if "missing_appeal_process" in factors:
+        risks.append("appeal_recourse_gap")
     if "third_party_integration" in factors:
         risks.append("third_party_processing_risk")
 
@@ -488,8 +938,10 @@ def detect_human_checkpoints(categories: list[str], factors: list[str]) -> list[
         checkpoints.append("approve_external_messages")
     if "hr_candidate_data" in categories or "decision_affecting_person" in factors:
         checkpoints.append("review_people_affecting_decisions")
-    if "financial_data" in categories:
+    if "financial_data" in categories or "refund_payment_data" in categories or "automatic_financial_decision" in factors:
         checkpoints.append("review_financial_decisions")
+    if "account_access_security" in factors or "automatic_account_access_decision" in factors:
+        checkpoints.append("review_account_access_decisions")
     if "legal_compliance_data" in categories:
         checkpoints.append("review_legal_compliance")
     if "medical_health_data" in categories:
@@ -504,6 +956,10 @@ def detect_human_checkpoints(categories: list[str], factors: list[str]) -> list[
         checkpoints.append("validate_sensitive_data_use")
     if "broad_ai_agent_permissions" in factors:
         checkpoints.append("approve_agent_permissions")
+    if "missing_appeal_process" in factors:
+        checkpoints.append("confirm_appeal_or_recourse")
+    if "missing_fallback_plan" in factors:
+        checkpoints.append("confirm_fallback_or_manual_queue")
 
     return list(dict.fromkeys(checkpoints))
 
@@ -531,11 +987,19 @@ def build_automation_opportunities(workflow_type: str, categories: list[str], fa
         approval.append("record_changes")
     if "soc_security_workflow" in factors:
         approval.append("security_escalation")
-    if "financial_data" in categories:
+    if "financial_data" in categories or "refund_payment_data" in categories or "automatic_financial_decision" in factors:
         approval.append("financial_actions")
+    if "automatic_account_access_decision" in factors or "account_access_security" in factors:
+        approval.append("account_access_actions")
 
     if "irreversible_action" in factors:
         poor.append("irreversible_actions")
+    if "automatic_financial_decision" in factors:
+        poor.append("autonomous_financial_decisions")
+    if "automatic_account_access_decision" in factors:
+        poor.append("autonomous_account_access_decisions")
+    if "fully_autonomous_workflow" in factors:
+        poor.append("fully_autonomous_workflow")
     if "soc_security_workflow" in factors:
         poor.append("autonomous_incident_containment")
     if "medical_health_data" in categories:
@@ -628,12 +1092,18 @@ def analyze_workflow(text: str | None) -> dict[str, object]:
     ]
     if "third_party_integration" in factors:
         implementation_notes.append("review_integration_boundaries")
+    if "missing_fallback_plan" in factors:
+        implementation_notes.append("document_failure_handling")
+    if "missing_appeal_process" in factors:
+        implementation_notes.append("document_appeal_or_recourse")
 
     limitations = [
         "keyword_based_detection",
         "not_compliance_certification",
         "requires_domain_review",
         "not_connected_to_production_systems",
+        "residual_simulation_hypothetical",
+        "controls_not_proof_of_implementation",
     ]
 
     return {
@@ -659,6 +1129,10 @@ def analyze_workflow(text: str | None) -> dict[str, object]:
             {
                 "workflow_step": finding.get("workflow_step_reference"),
                 "matched_evidence": finding.get("matched_text_evidence"),
+                "evidence_type": finding.get("evidence_type", "source_excerpt"),
+                "source_excerpt": finding.get("source_excerpt"),
+                "inference_basis": finding.get("inference_basis"),
+                "is_hypothesis": bool(finding.get("is_hypothesis", False)),
                 "finding": finding.get("finding_id"),
                 "risk_factors": finding.get("risk_factor_mapping", []),
                 "score_impact": [

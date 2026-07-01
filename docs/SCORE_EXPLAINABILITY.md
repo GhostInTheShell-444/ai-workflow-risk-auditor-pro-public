@@ -40,9 +40,22 @@ Each important finding should show:
 - the local rule id;
 - severity;
 - confidence;
+- deterministic score impact;
 - mapped risk factors;
 - recommended controls;
+- why the finding matters;
+- a human review question;
+- the residual-simulation assumption;
+- the finding limitation;
 - whether the statement is detected, calculated, simulated, recommended, or uncertain.
+
+Gap findings use explicit wording such as “No retention policy was found.” This means the submitted workflow text did not provide evidence. It does not prove the control is absent in the real system.
+
+## Risk Engine v2 taxonomy
+
+The score can include data sensitivity, autonomy, impact, governance gaps, AI-specific risks, and failure-handling factors. Strong weights are reserved for automatic financial or account/access decisions, full autonomy, irreversible actions, and model decision authority. Lower-weight governance gaps make missing assumptions visible without presenting them as equal to direct harmful action.
+
+See [Risk Engine v2](RISK_ENGINE_V2.md).
 
 ## What The Numbers Do Not Mean
 
@@ -57,3 +70,5 @@ This score is a rule-based estimate, not a statistical probability. Score calcul
 ## Why Human Review Remains Required
 
 The app can detect clues, but it cannot know all business context, legal duties, customer commitments, or production constraints. A responsible human must decide whether the evidence is relevant and whether a workflow should be automated.
+
+Residual-risk simulation also requires human review. Selecting a control creates a hypothetical scenario; it does not prove implementation.

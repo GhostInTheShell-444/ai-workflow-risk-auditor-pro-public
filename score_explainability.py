@@ -294,9 +294,18 @@ def simulation_explanation(simulation: dict[str, Any] | None, language: str = "e
         "summary": t(
             "simulation_run_summary",
             language,
-            "Raw risk {raw_score} becomes simulated residual risk {residual_score} after selected protections, for a simulated reduction of {reduction}. This is not a guarantee.",
+            "Raw risk {raw_score} becomes simulated residual risk {residual_score} after selected hypothetical protections, for a simulated reduction of {reduction}. This is not proof of implementation or a guarantee.",
         ).format(raw_score=raw.get("score", 0), residual_score=residual.get("score", 0), reduction=reduction),
-        "simulated_fields": ["residual_risk.score", "residual_risk.severity", "score_reduction", "remaining_risks"],
+        "simulated_fields": [
+            "selected_controls.assumption",
+            "selected_controls.evidence_required",
+            "selected_controls.implementation_check",
+            "residual_risk.score",
+            "residual_risk.severity",
+            "score_reduction",
+            "remaining_risks",
+            "human_review_required",
+        ],
     }
 
 

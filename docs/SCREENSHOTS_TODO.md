@@ -2,6 +2,23 @@
 
 The current ten screenshots are published in the README gallery and must remain synthetic and privacy-reviewed. Follow [Screenshot Guidelines](SCREENSHOT_GUIDELINES.md) for privacy, naming, gallery structure, string scans, and public-polish rules before replacing them.
 
+## Visual command-center refresh status
+
+The visual command-center upgrade materially changes the hero, risk cockpit, engine-aware findings, simulation comparison, Local AI reviewer module, dark mode, sidebar, controls, buttons, and reset panel. Automated browser capture was not assumed during implementation. The existing ten screenshots remain present but are stale and should be recaptured manually only after owner visual review.
+
+`SCREENSHOTS UPDATED: NO`
+
+Human recapture requirements:
+
+- run Streamlit on `127.0.0.1`;
+- use only the golden synthetic workflows;
+- capture page content only, without browser chrome, terminal, desktop, local path, email, GitHub UI, or private prompts;
+- preserve English for 01–08, French for 09, and Hebrew RTL for 10;
+- verify the heatmap contains no visible raw HTML;
+- capture at least one reviewed Dark-mode view and confirm sidebar, tabs, expanders, inputs, buttons, disabled controls, tables, and alerts remain readable;
+- verify reduced-motion mode does not hide status meaning;
+- run the PNG strings scan and complete a human privacy review.
+
 | Filename | Purpose | What must be visible | What must not be visible | Privacy checks | README placement |
 |---|---|---|---|---|---|
 | `01_home_audit.png` | Establish the main workflow review experience. | Product title, local-first message, synthetic scenario selector, anonymized input, run button. | Browser profile, local path, real workflow, terminal, notifications. | Confirm the selected scenario is marked synthetic and contains no identifiers. | After “In one minute.” |

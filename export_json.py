@@ -43,6 +43,11 @@ def build_json_summary(
             "auto_persist_user_input": False,
             "explicit_save_required": True,
             "workflow_text_never_sent_to_cloud_by_app": True,
+            "ai_provider_default": "disabled",
+            "ai_provider_runtime": "ollama_loopback_only",
+            "ai_provider_output_role": "advisory_only",
+            "cloud_fallback": False,
+            "api_keys_stored": False,
             "ollama_optional_localhost_only": True,
         },
     }

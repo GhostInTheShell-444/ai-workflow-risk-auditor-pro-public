@@ -1,0 +1,78 @@
+[
+  {
+    "id": "data_sensitivity",
+    "title": "Data sensitivity",
+    "factors": [
+      "synthetic_anonymized_data",
+      "personal_data",
+      "customer_data",
+      "employee_data",
+      "hr_candidate_data",
+      "financial_data",
+      "refund_payment_data",
+      "medical_health_data",
+      "legal_compliance_data",
+      "business_confidential_data",
+      "credentials_secrets",
+      "source_code_private_documents"
+    ],
+    "review_note": "Synthetic or anonymized wording is contextual evidence, not proof that data was correctly de-identified.",
+    "runtime_status": "reference_only"
+  },
+  {
+    "id": "automation_autonomy",
+    "title": "Automation autonomy",
+    "factors": [
+      "ai_draft_only",
+      "human_validation_present",
+      "human_on_loop_monitoring",
+      "automatic_external_action",
+      "automatic_customer_communication",
+      "automatic_financial_decision",
+      "automatic_account_access_decision",
+      "fully_autonomous_workflow",
+      "emergency_fallback_behavior"
+    ],
+    "review_note": "Drafting with explicit approval is scored differently from automatic external, financial, access, or irreversible action.",
+    "runtime_status": "reference_only"
+  },
+  {
+    "id": "governance_controls",
+    "title": "Governance control gaps",
+    "factors": [
+      "missing_human_validation",
+      "missing_audit_trail",
+      "missing_reviewer_identity",
+      "missing_retention_policy",
+      "missing_appeal_process",
+      "missing_monitoring",
+      "missing_fallback_plan",
+      "missing_access_control",
+      "missing_data_minimization",
+      "missing_data_masking",
+      "missing_change_management",
+      "missing_incident_handling"
+    ],
+    "review_note": "A missing-control finding means the submitted text did not provide evidence; it does not prove the control is absent in reality.",
+    "runtime_status": "reference_only"
+  },
+  {
+    "id": "ai_specific_risks",
+    "title": "AI-specific risks",
+    "factors": [
+      "prompt_injection_exposure",
+      "untrusted_input",
+      "tool_action_use",
+      "hallucination_sensitive_output",
+      "missing_grounding",
+      "confidence_score_misuse",
+      "cloud_proxy_dependency",
+      "unknown_model_provenance",
+      "model_decision_authority",
+      "external_destination",
+      "opaque_decision_logic"
+    ],
+    "review_note": "These deterministic indicators identify review questions; they do not measure model accuracy or real-world probability.",
+    "runtime_status": "reference_only"
+  }
+]

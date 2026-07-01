@@ -40,6 +40,14 @@ def _append_findings(lines: list[str], findings: list[dict[str, Any]], language:
         )
         if controls:
             lines.append(f"  {t('recommended_controls_inline_label', language, 'Recommended controls')}: {controls}")
+        if finding.get("why_it_matters"):
+            lines.append(f"  {t('why_it_matters_label', language, 'Why it matters')}: {finding.get('why_it_matters')}")
+        if finding.get("human_review_question"):
+            lines.append(f"  {t('human_review_question_label', language, 'Human review question')}: {finding.get('human_review_question')}")
+        if finding.get("residual_simulation_assumption"):
+            lines.append(f"  {t('simulation_assumption_label', language, 'Residual simulation assumption')}: {finding.get('residual_simulation_assumption')}")
+        if finding.get("limitation"):
+            lines.append(f"  {t('limit_label', language, 'Limit')}: {finding.get('limitation')}")
 
 
 def _append_risk_matrix(lines: list[str], matrix: dict[str, Any], language: str) -> None:
@@ -329,6 +337,11 @@ def render_markdown_report(
             lines.append(f"- [{t('badge_recommended', language, 'Recommended')}] {t('selected_controls_label', language, 'Selected controls')}:")
             for control in selected_controls:
                 lines.append(f"  - {control.get('name', control.get('id'))}")
+                lines.append(f"    {t('simulation_assumption_label', language, 'Assumption')}: {control.get('assumption', '')}")
+                lines.append(f"    {t('evidence_required_label', language, 'Evidence required')}: {control.get('evidence_required', '')}")
+                lines.append(f"    {t('implementation_check_label', language, 'Implementation check')}: {control.get('implementation_check', '')}")
+                lines.append(f"    {t('limit_label', language, 'Limit')}: {control.get('limitation', '')}")
+                lines.append(f"    {t('not_proof_warning_label', language, 'Not proof of implementation')}: {control.get('not_proof_warning', '')}")
         lines.append(
             f"- [{t('badge_simulated', language, 'Simulated')}] "
             f"{t('residual_risk_metric', language, 'Residual risk')}: {translate_severity(residual.get('severity', 'low'), language)} / {residual.get('score', 0)}. "
@@ -340,6 +353,8 @@ def render_markdown_report(
             f"{t('reduction_metric_help', language, 'This is calculated from mapped control effects only.')}"
         )
         lines.append(f"- {t('explanation_label', language, 'Explanation')}: {t('simulation_local_explanation_report', language, 'Residual risk is a local simulation based on mapped control effects. It does not execute actions or guarantee production risk reduction.')}")
+        lines.append(f"- {t('human_review_required_label', language, 'Human review required')}: {simulation.get('human_review_required', True)}")
+        lines.append(f"- {t('not_proof_warning_label', language, 'Not proof of implementation')}: {simulation.get('not_proof_warning', 'This simulation is not proof of implementation or assurance.')}")
     else:
         lines.append(f"- {t('no_residual_simulation_report', language, 'No residual simulation has been saved for this report. Simulation is local planning only.')}")
     lines.append("")

@@ -2,6 +2,8 @@
 
 Use this checklist for public-repository verification and future republishes. Privacy, secret, identity, licensing, history, and test failures are blockers; presentation improvements may remain tracked as non-blocking work.
 
+This checklist is a future human gate, not a publication authorization. The current local working tree remains non-committable, non-pushable, and non-publishable until a separate final QA/publication-readiness review is completed.
+
 ## P0 — blockers
 
 - [ ] Complete a final human privacy review of every screenshot.
@@ -53,6 +55,20 @@ Use this checklist for public-repository verification and future republishes. Pr
 - Repository identity verified by:
 
 Maintainers may complete this record for a specific publication review without committing private operational details.
+
+## Verified state on 2026-06-23 before local upgrade commit
+
+- Public repository visibility: public.
+- Legacy repository visibility: private.
+- Contributor API result: only `GhostInTheShell-444`.
+- Pull requests, releases, and tags: empty.
+- Remote refs: `HEAD` and `refs/heads/main` only.
+- Latest visible CI runs: passing.
+- Ruleset: `Protect main`, active, branch target.
+- Dependabot remains intentionally disabled for the clean launch.
+- No release, tag, or package exists.
+
+These facts were checked read-only before the local uncommitted upgrade. Re-run them after the owner publishes.
 
 ## Licensing and project ownership gate
 

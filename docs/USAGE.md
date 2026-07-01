@@ -46,6 +46,9 @@ Findings are ordered by severity and include:
 - category and severity;
 - a deterministic confidence heuristic;
 - recommended controls or review actions.
+- score impact and why the finding matters;
+- a human review question;
+- a residual-simulation assumption and limitation.
 
 Open a finding and confirm that the evidence matters in the intended business context. Confidence is not statistical confidence and does not remove the need for human review.
 
@@ -59,8 +62,9 @@ Review the **Top 3 actions** and the complete finding list. Recommendations are 
 2. Select proposed controls.
 3. Select **Simulate residual risk**.
 4. Compare original and residual scores and inspect remaining factors.
+5. Review each selected control's assumption, mapped factors, evidence required, implementation check, and limitation.
 
-Simulation uses fixed control-effect mappings. A lower residual score does not prove a control exists, works, or is sufficient. Saving a simulation to history requires a saved assessment.
+Simulation uses fixed control-effect mappings. Selected controls are hypothetical unless implementation evidence proves otherwise. Unrelated factors are not reduced. A lower residual score does not prove a control exists, works, or is sufficient. Saving a simulation to history requires a saved assessment.
 
 ## Explore the dashboard
 
@@ -82,9 +86,9 @@ Open **Knowledge Base** to search and browse read-only local risk patterns, cont
 
 ## Use Local AI / Ollama
 
-Ollama is optional. The **Local AI / Ollama** tab shows availability, loopback endpoint restrictions, installed local models, blocked cloud/proxy-like models, the exact synthetic prompt, and any response.
+Ollama is optional. The **Local AI / Ollama** tab shows availability, loopback endpoint restrictions, installed local models, blocked cloud/proxy-like models, the exact prompt, and any response.
 
-When a local model is available, you may run the bundled synthetic test or explicitly generate narrative wording for the current report. Local-model output cannot alter findings, scores, controls, or residual-risk simulation and may be inaccurate. See [Ollama Local Diagnostics](OLLAMA_LOCAL_DIAGNOSTICS.md).
+When a local model is available, you may run the bundled synthetic test or explicitly generate reviewer wording, missing-context prompts, evidence summaries, and challenge questions. Local-model output cannot alter findings, scores, controls, or residual-risk simulation and may be inaccurate. See [Ollama Local Diagnostics](OLLAMA_LOCAL_DIAGNOSTICS.md).
 
 ## Change language and direction
 
@@ -104,6 +108,13 @@ After an audit, use the Markdown and JSON download buttons in **Audit**. Downloa
 
 Select **Save analysis and report locally** only when you want local history in `data/aiwra.db`. This SQLite database is not encrypted by the app.
 
+The local data actions have different scopes:
+
+- **Clear input only** removes the current text field without deleting the current analysis or saved SQLite history.
+- **Clear current session** requires confirmation and removes current input, analysis, simulation, report state, and Local AI response without deleting saved SQLite history.
+- **Delete active project** removes only the selected non-demo project and its related saved records. The bundled synthetic demo project is protected.
+- **Reset demo database** is the global destructive action described below.
+
 To reset:
 
 1. Back up `data/aiwra.db` if needed.
@@ -111,7 +122,7 @@ To reset:
 3. Select the deletion confirmation.
 4. Select **Reset demo database**.
 
-The reset deletes saved local reports and recreates synthetic seed data. Alternatively, stop Streamlit and delete only `data/aiwra.db`; it is recreated on the next launch.
+The reset deletes saved local projects, workflows, assessments, findings, simulations, reports, and audit events from `data/aiwra.db`, then recreates synthetic seed data. It does not delete code, docs, screenshots, tests, examples, knowledge-base JSON, or exports outside the database. Alternatively, stop Streamlit and delete only `data/aiwra.db`; it is recreated on the next launch.
 
 ## Safe-use boundaries and limitations
 
@@ -124,3 +135,19 @@ The reset deletes saved local reports and recreates synthetic seed data. Alterna
 - Optional local-model output requires review.
 - The app does not connect to production systems or perform remediation.
 - A qualified human must assess real legal, compliance, privacy, security, and operational obligations.
+
+## Reading the visual command center
+
+The audit cockpit is a compact view of engine output, not a second scoring system. It displays the raw deterministic score, severity label, finding count, human-review state, localhost-only state, explicit-save state, and whether a hypothetical simulation exists.
+
+Finding cards expose evidence, rule ID, confidence heuristic, score impact, why the signal matters, a reviewer question, recommended action, residual assumption, and limitation. High and Critical styling increases visual priority but does not change the underlying engine result.
+
+The Simulation tab compares raw and residual scores. Its warning is operationally important: selected controls are assumptions, not proof. Review the evidence-required and implementation-check fields before using a simulated reduction in planning.
+
+The Local AI tab is a controlled reviewer module. The deterministic engine remains authoritative, remote endpoints and cloud/proxy models remain blocked, and exact prompts and responses remain visibly separated from the score.
+
+Light, Dark, and System themes share the same content and semantics. System mode follows the browser/operating-system color preference through local CSS. Reduced-motion preferences disable non-essential transitions and the local-only status pulse.
+
+## Desktop launch
+
+The optional launcher opens the same local app at `http://127.0.0.1:8501`. It does not create a hosted service or cloud dependency. See [Desktop Launcher](DESKTOP_LAUNCHER.md).

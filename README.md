@@ -1,23 +1,149 @@
 # AI Workflow Risk Auditor Pro
 
-> **Official repository.** AI Workflow Risk Auditor Pro is maintained by **GhostInTheShell-444**.
-> This repository is publicly visible for review and transparency, but it is released under a **source-available non-commercial license**. Commercial use, hosted clones, redistribution, rebranding, and competing derivative products are not permitted without prior written permission.
+<p align="center">
+  <img src="assets/aiwra_icon.svg" width="112" alt="AI Workflow Risk Auditor Pro shield and workflow icon">
+</p>
 
-
-Local-first Streamlit tool to explain, score, simulate, and document AI workflow risks before automation.
+**A local-first AI risk command center for deterministic review of AI-assisted workflows before automation.**
 
 [![CI](https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro-public/actions/workflows/ci.yml/badge.svg)](https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro-public/actions/workflows/ci.yml)
 ![Python 3.12](https://img.shields.io/badge/Python-3.12-blue)
 ![Streamlit](https://img.shields.io/badge/Streamlit-local--first-ff4b4b)
+![Local-first](https://img.shields.io/badge/privacy-local--first-14804A)
 [![License: Source-available non-commercial](https://img.shields.io/badge/license-source--available%20non--commercial-blue.svg)](LICENSE)
 
-> **Status:** Public source-available release for review, transparency, and non-commercial evaluation.
+> **Official public repository:** `GhostInTheShell-444/ai-workflow-risk-auditor-pro-public`
 >
-> **Privacy boundary:** Deterministic analysis runs locally. Workflow text is saved only after an explicit local save; optional Ollama support is restricted to loopback. Use synthetic or properly anonymized data only.
+> Public for review, transparency, and non-commercial evaluation. Commercial use, hosted clones, redistribution, rebranding, and competing derivative products require prior written permission.
 
-AI Workflow Risk Auditor Pro reviews a workflow description with inspectable local rules. It identifies evidence, calculates a deterministic review-priority score, recommends controls, simulates residual risk, and produces Markdown and JSON reports.
+![AI Workflow Risk Auditor Pro home audit with deterministic local analysis](screenshots/01_home_audit.png)
 
-This is a review aid—not a probability model, compliance certification, legal opinion, or production approval.
+AI Workflow Risk Auditor Pro turns a synthetic or anonymized workflow description into an engine-aware audit cockpit: inspectable evidence, deterministic risk factors, review-priority scoring, mapped controls, hypothetical residual-risk simulation, and local Markdown/JSON reports.
+
+It is a review aid. It is not a probability model, compliance certification, legal opinion, production approval, or automatic remediation system.
+
+## Why this exists
+
+AI workflows can begin drafting messages, changing records, approving refunds, ranking people, calling tools, or handling sensitive data before governance catches up. Teams need a local way to ask:
+
+- What data and impact areas are present?
+- Is AI advising a reviewer or acting autonomously?
+- Which wording triggered each finding?
+- Which controls are stated, missing, or still unproven?
+- What must a human verify before production use?
+
+## What it does
+
+- **Command:** presents the current score, severity, finding count, human-review state, local-only boundary, save state, and simulation state in one risk cockpit.
+- **Explain:** shows source evidence, rule ID, severity, confidence heuristic, score impact, why it matters, limitations, and reviewer questions.
+- **Score:** sums fixed local risk-factor weights into Low (0–4), Medium (5–9), High (10–15), or Critical (16+).
+- **Simulate:** applies only mapped control reductions and shows assumptions, evidence required, implementation checks, remaining factors, and human-review status.
+- **Document:** creates deterministic Markdown and JSON exports with stable technical keys.
+- **Save explicitly:** writes local SQLite history only after the user selects the save action.
+- **Review with optional local AI:** uses loopback-only Ollama for wording, missing-context prompts, evidence summaries, and challenge questions.
+
+## What it does not do
+
+- No compliance certification or conformity assessment.
+- No legal advice or regulatory conclusion.
+- No statistical probability or calibrated loss estimate.
+- No production approval or production-system integration.
+- No automatic remediation, execution, or vulnerability scanning.
+- No proof that a selected control exists or works.
+- No cloud requirement and no cloud fallback.
+- No replacement for qualified human review.
+
+## Local-first privacy model
+
+- Deterministic analysis uses local Python modules and local JSON knowledge files.
+- Workflow text remains in the active Streamlit session unless the user explicitly saves.
+- Explicit saves write to project-local `data/aiwra.db`.
+- Downloads do not require saving.
+- No cloud API, vendor key, telemetry service, remote database, or hidden analytics is required.
+- Optional Ollama calls accept only `localhost`, `127.0.0.1`, or `::1`.
+- Redirects and environment proxy use are disabled for Ollama requests.
+- Cloud/proxy-like model names and non-loopback endpoints are rejected.
+
+Use synthetic or appropriately anonymized workflow text. Do not paste real credentials, secrets, regulated records, confidential documents, private source code, or production data.
+
+## Risk engine v2
+
+The deterministic engine covers:
+
+- **Data sensitivity:** synthetic/anonymized, personal, customer, employee, candidate, financial, refund/payment, health, legal/compliance, confidential, credentials, source code, and private documents.
+- **Automation autonomy:** draft-only assistance, human review, monitoring, automatic communication/action, financial decisions, account/access decisions, full autonomy, and fallback behavior.
+- **Impact:** customer communication, finance, account/access/security, legal, HR, health, operations, internal productivity, and vendor/cloud exposure.
+- **Governance:** approval, reviewer identity, escalation, audit trail, retention, appeal/recourse, monitoring, rollback/fallback, access control, minimization, masking, change management, and incident handling.
+- **AI-specific risk:** prompt injection, untrusted input, tool use, hallucination-sensitive output, missing grounding, confidence misuse, cloud/proxy dependency, model provenance, model decision authority, external destinations, and opaque logic.
+
+Findings are deterministic text signals. Missing-control findings mean the submitted description did not provide evidence; they do not prove the real control is absent.
+
+Confidence is a repeatable heuristic based on rule severity and match type. It is not empirical confidence. Framework mappings are framework-inspired review categories only and do not claim certification.
+
+See [Score Explainability](docs/SCORE_EXPLAINABILITY.md), [Score Calculation Trace](docs/SCORE_CALCULATION_TRACE.md), and the local v2 knowledge files under [`knowledge_base/`](knowledge_base/).
+
+## Residual-risk simulation
+
+Selected controls are hypothetical unless implementation evidence proves otherwise. For each selected control, the simulation exposes:
+
+- mapped factors;
+- estimated score reduction;
+- implementation assumption;
+- evidence required;
+- implementation check;
+- limitation;
+- explicit “not proof of implementation” warning.
+
+Unrelated factors are not reduced, scores cannot fall below zero, and High/Critical residual states require human review. The result is a planning estimate, not real-world assurance.
+
+## Local AI reviewer role
+
+Optional local AI acts as a bounded reviewer assistant. It may:
+
+- draft executive wording;
+- summarize deterministic evidence;
+- identify missing context;
+- propose reviewer and challenge questions;
+- explain why human review remains necessary.
+
+It cannot change the deterministic analysis object, findings, score, recommended controls, or residual-risk math. The exact prompt is shown before an explicit local call, and output is displayed separately from deterministic results. If Ollama is unavailable, the deterministic application remains complete.
+
+See [Local AI / Ollama](docs/LOCAL_AI_OLLAMA_TAB.md).
+
+## Visual command center
+
+- Light, Dark, and operating-system-aware themes use local CSS tokens only.
+- Severity drives cockpit borders, score emphasis, finding cards, and simulation states; labels and symbols remain present so color is never the only signal.
+- High and Critical findings receive stronger evidence-card treatment without changing engine weights or thresholds.
+- Buttons, inputs, expanders, tables, tabs, sidebar controls, warnings, and disabled states share the same token layer.
+- Motion is limited to subtle status and hover feedback and is disabled by `prefers-reduced-motion`.
+- English, French, and Hebrew RTL use the same engine result structure.
+
+## Screenshots
+
+### English primary flow
+
+![Score explainability with source meaning and limits](screenshots/02_score_explainability.png)
+
+![Dashboard executive overview](screenshots/03_dashboard_overview.png)
+
+![Risk heatmap by category and severity](screenshots/04_risk_heatmap.png)
+
+![Evidence drill-down with rule and confidence](screenshots/05_evidence_drilldown.png)
+
+![Local AI Ollama boundary and prompt preview](screenshots/06_local_ai_ollama.png)
+
+![Deterministic report preview and export](screenshots/07_reports_preview.png)
+
+![Read-only local knowledge base](screenshots/08_knowledge_base.png)
+
+### Internationalization proof
+
+![French interface](screenshots/09_french_ui.png)
+
+![Hebrew RTL interface](screenshots/10_hebrew_rtl_ui.png)
+
+The current screenshots remain the previously reviewed public set and do not yet represent the full visual command-center redesign. Recapture is required after owner visual review. See [Screenshot Guidelines](docs/SCREENSHOT_GUIDELINES.md) and [Screenshot Capture Specification](docs/SCREENSHOTS_TODO.md).
 
 ## Quick start
 
@@ -45,176 +171,74 @@ python -m pip install -r requirements.txt
 python -m streamlit run app.py --server.address 127.0.0.1
 ```
 
-Open `http://127.0.0.1:8501`. See the full [installation guide](docs/INSTALLATION.md), [usage guide](docs/USAGE.md), and [synthetic examples](examples/README.md).
+Open `http://127.0.0.1:8501`.
 
-## Product gallery
+### Optional desktop launcher
 
-### Audit and explainability
+Linux is supported first. After the normal installation succeeds:
 
-![Home audit screen showing the local-first privacy boundary and audit controls](screenshots/01_home_audit.png)
+```bash
+.venv/bin/python scripts/install_desktop_launcher.py
+```
 
-![Deterministic score cards showing source, meaning, limitations, and detected findings](screenshots/02_score_explainability.png)
+This creates a user-local application launcher under `~/.local/share/applications/`, uses the local SVG icon, starts Streamlit on `127.0.0.1:8501`, and writes startup logs under `${XDG_STATE_HOME:-$HOME/.local/state}/aiwra/`. It does not use `sudo` or install system-wide files. Logs are private runtime artifacts and must be reviewed before sharing.
 
-### Dashboard, heatmap, and evidence
+To also create a shortcut on an existing `~/Desktop`:
 
-![Dashboard entry view for current and explicitly saved local audit signals](screenshots/03_dashboard_overview.png)
+```bash
+.venv/bin/python scripts/install_desktop_launcher.py --desktop
+```
 
-![Risk heatmap grouped by category and severity](screenshots/04_risk_heatmap.png)
+Remove both expected launcher locations:
 
-![Evidence drill-down showing matched text, local rule, confidence, severity, and recommended controls](screenshots/05_evidence_drilldown.png)
+```bash
+.venv/bin/python scripts/install_desktop_launcher.py --uninstall
+```
 
-### Local AI, reports, and knowledge base
+Windows and macOS user-local helper scripts are included. macOS support is documented but was not tested in this Linux implementation pass. See [Desktop Launcher](docs/DESKTOP_LAUNCHER.md) and [Installation](docs/INSTALLATION.md).
 
-These captures document the current tab layouts. Screenshots 06–08 can be recaptured later with more tab-specific content as a non-blocking presentation improvement.
+Run validation:
 
-![Optional Local AI and Ollama tab with localhost-only boundaries](screenshots/06_local_ai_ollama.png)
+```bash
+python -m pytest
+python -m compileall -q app.py analyzer.py database.py repositories.py workflow_parser.py report_renderer.py export_json.py score_explainability.py design_tokens.py ui_components.py tests locales
+python -m pip check
+```
 
-![Reports tab for deterministic Markdown and JSON preview and export](screenshots/07_reports_preview.png)
-
-![Read-only local knowledge base for rules, controls, categories, scenarios, and explanations](screenshots/08_knowledge_base.png)
-
-## Internationalization and RTL
-
-English, French, and Hebrew locale catalogs have matching keys. Hebrew uses an RTL-aware layout while technical identifiers, JSON, model names, and endpoints remain LTR where appropriate.
-
-![French interface showing translated audit guidance and navigation](screenshots/09_french_ui.png)
-
-![Hebrew RTL interface showing right-to-left navigation and evidence presentation](screenshots/10_hebrew_rtl_ui.png)
-
-See [screenshot guidelines](docs/SCREENSHOT_GUIDELINES.md) for privacy checks and recommended recaptures.
-
-## The problem
-
-AI-assisted workflows can introduce sensitive-data exposure, weak human oversight, uncontrolled external actions, and poor auditability before a team connects anything to production. Reviewers need an understandable way to trace concerns back to workflow text and inspect the rules behind a score.
-
-## What the tool does
-
-- Parses synthetic or anonymized workflow descriptions into reviewable steps.
-- Detects evidence with local JSON patterns and deterministic Python rules.
-- Calculates fixed, explainable score factors and severity thresholds.
-- Shows matched text, rule identifiers, confidence heuristics, and score impact.
-- Recommends defensive controls and human checkpoints.
-- Simulates residual risk from selected control mappings without changing the original result.
-- Presents current or explicitly saved signals in a dashboard and risk heatmap.
-- Generates local Markdown and JSON reports; saving to SQLite is explicit.
-- Provides a read-only local knowledge base.
-- Optionally uses a loopback-only Ollama model for narrative wording.
-
-## What the tool does not do
-
-- It does not certify compliance, provide legal advice, or approve production use.
-- It does not calculate statistical probabilities or calibrated loss estimates.
-- It does not prove that a recommended control is implemented or effective.
-- It does not authenticate users, isolate tenants, or provide encrypted storage.
-- It does not connect to production systems, execute actions, remediate findings, or scan for vulnerabilities.
-- It does not require or fall back to a cloud model.
-
-## Features
-
-- **Deterministic scoring:** fixed local factor weights and thresholds.
-- **Explainability:** source, meaning, and limitation for important scores and findings.
-- **Evidence drill-down:** matched phrase, local rule, severity, confidence, and proposed action.
-- **Control recommendations:** inspectable mappings to defensive controls and human review.
-- **Residual-risk simulation:** before/after planning estimates from selected controls.
-- **Dashboard:** executive cards, heatmap, matrix, workflow graph, controls, and local history.
-- **Reports:** Markdown and JSON previews, downloads, and explicit-save local history.
-- **SQLite persistence:** project-local `data/aiwra.db`, created at runtime and ignored by Git.
-- **Knowledge Base:** read-only local rules, controls, data categories, scenarios, and explanations.
-- **Optional local AI:** localhost-only Ollama narrative assistance that cannot change deterministic results.
-- **Localization:** English, French, and Hebrew with RTL-aware Hebrew presentation.
-
-## How scoring works
-
-Matched evidence maps to fixed risk factors in `risk_rules.py`. The factor weights are summed and mapped to these review-priority thresholds:
-
-- 0–4: Low
-- 5–9: Medium
-- 10–15: High
-- 16+: Critical
-
-Finding count is a count of detected attention points, not proof of harm. Confidence values are deterministic heuristics, not empirical confidence probabilities. Residual risk is a simulation of mapped control effects, not evidence that real-world risk was reduced.
-
-See [Score Explainability](docs/SCORE_EXPLAINABILITY.md) and [Score Calculation Trace](docs/SCORE_CALCULATION_TRACE.md).
-
-## Local-first privacy model
-
-- Core analysis uses local Python modules and JSON knowledge files.
-- Analysis does not automatically write workflow text to SQLite.
-- Downloads are generated locally without creating saved history.
-- Explicit saves write project, workflow, assessment, finding, control, report, and audit-event data to `data/aiwra.db`.
-- No cloud API, vendor key, telemetry service, or external database is required.
-- Optional Ollama requests accept only `localhost`, `127.0.0.1`, or `::1`; there is no cloud fallback.
-
-Read the full [privacy model](docs/PRIVACY_MODEL.md) and [security policy](SECURITY.md).
+See [Installation](docs/INSTALLATION.md), [Desktop Launcher](docs/DESKTOP_LAUNCHER.md), [Usage](docs/USAGE.md), [FAQ](docs/FAQ.md), and [Synthetic Examples](examples/README.md).
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    A[Synthetic or anonymized workflow] --> B[Parser and evidence engine]
-    B --> C[Deterministic risk rules]
-    C --> D[Explainability and controls]
-    D --> E[Residual-risk simulation]
-    D --> F[Markdown and JSON exports]
-    F --> G[(Explicit-save local SQLite)]
-    H[Optional loopback Ollama] -. narrative wording only .-> F
+    A[Synthetic or anonymized workflow] --> B[Local parser]
+    B --> C[Evidence and control-gap engine]
+    C --> D[Deterministic risk factors]
+    D --> E[Explainability and reviewer questions]
+    E --> F[Hypothetical residual simulation]
+    E --> G[Markdown and JSON exports]
+    G --> H[(Explicit-save local SQLite)]
+    I[Optional loopback Ollama] -. reviewer wording only .-> G
 ```
 
-See [Architecture](docs/ARCHITECTURE.md) for module responsibilities, data flow, trust boundaries, and test design.
+## Limitations
 
-## Usage overview
-
-1. Choose a bundled synthetic scenario or paste an anonymized workflow.
-2. Select **Analyze Workflow**.
-3. Review the raw score, severity, evidence, rules, confidence, and recommended controls.
-4. Use **Simulation** to estimate residual risk from selected controls.
-5. Download Markdown or JSON, or explicitly save the analysis to local history.
-6. Explore **Dashboard**, **Reports**, **Knowledge Base**, or optional **Local AI / Ollama**.
-
-The complete flow is in [Usage](docs/USAGE.md). Additional documentation is indexed in [docs/README.md](docs/README.md), and common questions are answered in the [FAQ](docs/FAQ.md).
-
-## Testing and quality
-
-```bash
-python -m pytest
-python -m compileall app.py analyzer.py database.py repositories.py workflow_parser.py report_renderer.py export_json.py score_explainability.py design_tokens.py ui_components.py tests locales
-```
-
-CI uses Python 3.12 and verifies tests, compilation, JSON parsing, and that common runtime/sensitive files are not tracked. Ollama, cloud APIs, credentials, and an existing database are not test prerequisites.
-
-## Limitations and safe use
-
-- Use synthetic or appropriately anonymized inputs. Do not paste real secrets, credentials, personal data, regulated records, or confidential production content.
-- The tool is not legal advice and is not a compliance certification.
-- Deterministic pattern matching can miss context or produce false positives.
-- SQLite data is not encrypted by this application.
-- The app has no multi-user authentication, authorization, or tenant isolation.
-- Do not expose the Streamlit server to untrusted networks; bind it to `127.0.0.1` on a trusted machine.
-- Optional local-model output may be inaccurate and always requires human review.
-- Review reports and screenshots before sharing because they can reproduce entered workflow text.
-
-## Project resources
-
-- [Installation](docs/INSTALLATION.md)
-- [Usage](docs/USAGE.md)
-- [Architecture](docs/ARCHITECTURE.md)
-- [Privacy model](docs/PRIVACY_MODEL.md)
-- [FAQ](docs/FAQ.md)
-- [Synthetic examples](examples/README.md)
-- [Security policy](SECURITY.md)
-- [Contributing guide](CONTRIBUTING.md)
-- [Roadmap](ROADMAP.md)
+- Pattern matching can miss context and produce false positives.
+- Missing-control findings infer absence from submitted wording, not from production evidence.
+- Factor weights and thresholds are deterministic review-priority choices, not scientific validation.
+- SQLite is local and not encrypted by this application.
+- The app has no authentication, authorization, or tenant isolation.
+- Optional local-model output can be inaccurate and always requires review.
+- Reports and screenshots can reproduce submitted text; inspect them before sharing.
+- Bind Streamlit to `127.0.0.1` on a trusted machine.
+- Native review of Hebrew wording remains recommended.
 
 ## License
 
-Released under a [source-available non-commercial license](LICENSE). See [NOTICE.md](NOTICE.md) and [Licensing and commercial use](docs/LICENSING_AND_COMMERCIAL_USE.md).
+Released under the [source-available non-commercial license](LICENSE).
 
-## Licensing and commercial use
+- [NOTICE.md](NOTICE.md)
+- [Licensing and commercial use](docs/LICENSING_AND_COMMERCIAL_USE.md)
+- Official clone URL: `https://github.com/GhostInTheShell-444/ai-workflow-risk-auditor-pro-public.git`
 
-AI Workflow Risk Auditor Pro is released under a source-available non-commercial license.
-
-- License: [LICENSE](LICENSE)
-- Notice: [NOTICE.md](NOTICE.md)
-- Commercial-use details: [docs/LICENSING_AND_COMMERCIAL_USE.md](docs/LICENSING_AND_COMMERCIAL_USE.md)
-
-Commercial use, hosted clones, redistribution, rebranding, and competing derivative products require prior written permission from GhostInTheShell-444.
+There is no release, tag, package, or compliance certification implied by this repository.

@@ -18,12 +18,22 @@ def test_evidence_findings_include_required_fields():
         "severity",
         "confidence",
         "matched_text_evidence",
+        "evidence_type",
+        "source_excerpt",
+        "inference_basis",
+        "is_hypothesis",
         "matched_rule_id",
         "workflow_step_reference",
         "explanation",
         "recommended_controls",
         "risk_factor_mapping",
         "language_detected_when_possible",
+        "score_impact",
+        "why_it_matters",
+        "recommended_control",
+        "human_review_question",
+        "residual_simulation_assumption",
+        "limitation",
     ]:
         assert key in finding
 
@@ -94,3 +104,40 @@ def test_language_detection_avoids_english_false_positives():
 def test_workflow_step_extraction_handles_numbered_steps():
     steps = extract_workflow_steps("1. Receive customer email.\n2. Human review before sending.")
     assert steps == ["Receive customer email.", "Human review before sending."]
+
+
+def test_missing_control_findings_are_explicit_assumptions():
+    findings = run_evidence_engine("AI automatically approves customer refunds from billing data.")["findings"]
+    gaps = [finding for finding in findings if finding["matched_rule_id"].startswith("gap_")]
+    assert gaps
+    assert any(finding["matched_rule_id"] == "gap_missing_appeal_process" for finding in gaps)
+    assert all("does not prove" in finding["limitation"].casefold() for finding in gaps)
+    assert all(finding["evidence_type"] == "inferred_gap" for finding in gaps)
+    assert all(finding["source_excerpt"] is None for finding in gaps)
+    assert all(finding["inference_basis"] for finding in gaps)
+    assert all(finding["is_hypothesis"] is True for finding in gaps)
+    assert all("not source evidence" in finding["matched_text_evidence"].casefold() for finding in gaps)
+
+
+def test_source_matches_remain_distinct_from_inferred_gaps():
+    findings = run_evidence_engine("Support receives a synthetic message from demo.user@example.test for review.")[
+        "findings"
+    ]
+    source_findings = [finding for finding in findings if finding["evidence_type"] == "source_excerpt"]
+    assert source_findings
+    assert all(finding["source_excerpt"] == finding["matched_text_evidence"] for finding in source_findings)
+    assert all(finding["inference_basis"] is None for finding in source_findings)
+    assert all(finding["is_hypothesis"] is False for finding in source_findings)
+
+
+def test_synthetic_portfolio_fillers_do_not_affect_runtime_findings():
+    findings = run_evidence_engine("A retention policy is documented for a reviewed support draft.")["findings"]
+    assert not any("Synthetic portfolio-safe rule" in finding["explanation"] for finding in findings)
+
+
+def test_negated_fallback_does_not_count_as_present():
+    findings = run_evidence_engine("AI automatically issues refunds without human review or fallback.")["findings"]
+    rule_ids = {finding["matched_rule_id"] for finding in findings}
+    assert "rp_v2_fallback_present" not in rule_ids
+    assert "ctrl_signal_fallback_present" not in rule_ids
+    assert "gap_missing_fallback_plan" in rule_ids

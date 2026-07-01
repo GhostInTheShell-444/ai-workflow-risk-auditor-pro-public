@@ -93,7 +93,7 @@ Preferred reset method:
 2. Select the confirmation checkbox.
 3. Select **Reset demo database**.
 
-This deletes saved local reports and recreates synthetic seed data. Back up the database first if you need its contents.
+This deletes saved local projects, workflows, assessments, findings, simulations, reports, and audit events, then recreates synthetic seed data. Back up the database first if you need its contents. This global reset is different from deleting one active non-demo project and from clearing only the current input or session.
 
 Manual reset:
 
@@ -160,5 +160,23 @@ gh auth status -h github.com
 ```
 
 Never paste access tokens into issue text, documentation, shared command output, or AI prompts. See [GitHub Repository Setup](GITHUB_REPOSITORY_SETUP.md).
+
+## Optional desktop launcher
+
+Linux is supported first. After `.venv` and dependencies are ready:
+
+```bash
+.venv/bin/python scripts/install_desktop_launcher.py
+```
+
+Add `--desktop` to create a second shortcut on an existing `~/Desktop`. Add `--terminal` if visible terminal output is preferred. The launcher is installed only for the current user, requires no `sudo`, binds Streamlit to `127.0.0.1:8501`, and logs under `${XDG_STATE_HOME:-$HOME/.local/state}/aiwra/`. Review this private runtime log before sharing it.
+
+Remove it with:
+
+```bash
+.venv/bin/python scripts/install_desktop_launcher.py --uninstall
+```
+
+Windows and macOS helpers are provided without changing the Linux path. See [Optional Desktop Launcher](DESKTOP_LAUNCHER.md) for creation, removal, logs, validation, and troubleshooting.
 
 Continue with the [Usage Guide](USAGE.md).

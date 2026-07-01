@@ -5,6 +5,7 @@ These examples are fictional and intended only for local demonstrations, documen
 - [Low risk: internal document summarization](workflow_low_risk.md)
 - [Medium risk: reviewed support workflow](workflow_medium_risk.md)
 - [High risk: synthetic automated eligibility workflow](workflow_high_risk.md)
+- [Golden v2 manual workflows](golden_workflows.md)
 
 ## Use an example
 

@@ -53,6 +53,117 @@ def list_projects(db_path: str | Path | None = None) -> list[dict[str, Any]]:
     return rows_to_dicts(rows)
 
 
+def delete_project(project_id: int, db_path: str | Path | None = None) -> bool:
+    init_db(db_path)
+    with get_connection(db_path) as connection:
+        project = connection.execute(
+            "SELECT id, name, is_demo FROM projects WHERE id = ?",
+            (project_id,),
+        ).fetchone()
+        if project is None:
+            return False
+        if bool(project["is_demo"]):
+            raise ValueError("The synthetic demo project cannot be deleted.")
+
+        workflow_ids = [
+            int(row[0])
+            for row in connection.execute(
+                "SELECT id FROM workflows WHERE project_id = ?",
+                (project_id,),
+            ).fetchall()
+        ]
+        assessment_ids = [
+            int(row[0])
+            for row in connection.execute(
+                "SELECT id FROM assessments WHERE project_id = ?",
+                (project_id,),
+            ).fetchall()
+        ]
+        report_ids = [
+            int(row[0])
+            for row in connection.execute(
+                "SELECT id FROM reports WHERE project_id = ?",
+                (project_id,),
+            ).fetchall()
+        ]
+        simulation_ids = []
+        if assessment_ids:
+            placeholders = ",".join("?" for _ in assessment_ids)
+            simulation_ids = [
+                int(row[0])
+                for row in connection.execute(
+                    f"SELECT id FROM simulation_runs WHERE assessment_id IN ({placeholders})",
+                    assessment_ids,
+                ).fetchall()
+            ]
+            for table in (
+                "detected_findings",
+                "risk_factors",
+                "recommended_controls",
+                "simulation_runs",
+            ):
+                connection.execute(
+                    f"DELETE FROM {table} WHERE assessment_id IN ({placeholders})",
+                    assessment_ids,
+                )
+            connection.execute(
+                f"DELETE FROM reports WHERE assessment_id IN ({placeholders})",
+                assessment_ids,
+            )
+            connection.execute(
+                f"DELETE FROM assessments WHERE id IN ({placeholders})",
+                assessment_ids,
+            )
+        if workflow_ids:
+            placeholders = ",".join("?" for _ in workflow_ids)
+            connection.execute(
+                f"DELETE FROM workflow_steps WHERE workflow_id IN ({placeholders})",
+                workflow_ids,
+            )
+            connection.execute(
+                f"DELETE FROM workflows WHERE id IN ({placeholders})",
+                workflow_ids,
+            )
+
+        linked_entities = {
+            "project": [project_id],
+            "workflow": workflow_ids,
+            "assessment": assessment_ids,
+            "report": report_ids,
+            "simulation": simulation_ids,
+        }
+        for entity_type, entity_ids in linked_entities.items():
+            if not entity_ids:
+                continue
+            placeholders = ",".join("?" for _ in entity_ids)
+            connection.execute(
+                f"DELETE FROM audit_events WHERE entity_type = ? AND entity_id IN ({placeholders})",
+                [entity_type, *entity_ids],
+            )
+        connection.execute("DELETE FROM projects WHERE id = ?", (project_id,))
+        cursor = connection.execute(
+            """
+            INSERT INTO audit_events(event_type, entity_type, entity_id, details_json)
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                "project_deleted",
+                "project",
+                project_id,
+                json.dumps(
+                    {
+                        "name": str(project["name"]),
+                        "deleted_workflows": len(workflow_ids),
+                        "deleted_assessments": len(assessment_ids),
+                        "deleted_reports": len(report_ids),
+                    },
+                    ensure_ascii=False,
+                ),
+            ),
+        )
+        return int(cursor.lastrowid) > 0
+
+
 def save_workflow(
     project_id: int,
     name: str,

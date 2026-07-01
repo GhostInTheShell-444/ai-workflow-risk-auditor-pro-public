@@ -26,7 +26,21 @@ A narrower scan for vendor key assignments, bearer-like values, authorization as
 
 Deterministic audits, scoring, simulations, reports, and tests require no network service. Optional requests in `ollama_client.py` accept loopback endpoints only. The client rejects non-loopback URLs and cloud/proxy-like model names or metadata before generation. Ollama output cannot replace or mutate deterministic analysis, scoring, controls, or simulation.
 
+The AI Provider Gateway is disabled by default. Its implemented Ollama client disables environment proxy routing, blocks redirect following, rejects 3xx responses, and has no cloud fallback or API key storage. OpenAI-compatible local endpoints remain a future opt-in design and are not active.
+
 The app contains no telemetry, cloud API integration, external database, authentication, authorization, tenant isolation, vulnerability scanner, or automated remediation.
+
+## HTML, Markdown, and export rendering
+
+- `unsafe_allow_html=True` is limited to controlled UI component markup and the sanitized report preview wrapper.
+- Dynamic values inserted into controlled component HTML are escaped with `html.escape`.
+- Workflow evidence and local AI output are rendered through normal Streamlit text/code components.
+- `markdown_to_html` escapes every report heading, paragraph, and list item before the preview is passed to Streamlit.
+- JSON export is data-only and does not execute markup.
+- Regression tests verify that workflow and local AI strings containing `<script>` or event-handler markup remain escaped.
+- Runtime CSS uses no external font, CDN, script, remote image, telemetry, or analytics resource.
+
+This review reduces known rendering risks but is not a penetration test or browser-security guarantee.
 
 ## Reproducible checks
 
