@@ -4,9 +4,9 @@ The current ten screenshots are published in the README gallery and must remain 
 
 ## Visual command-center refresh status
 
-The visual command-center upgrade materially changes the hero, risk cockpit, engine-aware findings, simulation comparison, Local AI reviewer module, dark mode, sidebar, controls, buttons, and reset panel. Automated browser capture was not assumed during implementation. The existing ten screenshots remain present but are stale and should be recaptured manually only after owner visual review.
+The visual command-center upgrade materially changes the hero, risk cockpit, engine-aware findings, simulation comparison, Local AI reviewer module, dark mode, sidebar, controls, buttons, and reset panel. The current ten screenshots have been replaced with normalized public-gallery captures using bundled synthetic workflows. Treat every future replacement as a new release artifact requiring the same checks.
 
-`SCREENSHOTS UPDATED: NO`
+`SCREENSHOTS UPDATED: YES`
 
 Human recapture requirements:
 

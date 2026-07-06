@@ -22,9 +22,9 @@ The primary English gallery should tell a compact product story:
 3. dashboard metrics;
 4. risk heatmap;
 5. evidence drill-down;
-6. reports and exports;
-7. read-only knowledge base;
-8. optional localhost Ollama boundary.
+6. optional localhost Ollama boundary;
+7. reports and exports;
+8. read-only knowledge base.
 
 Place French and Hebrew RTL screenshots in a separate internationalization section. This demonstrates localization without interrupting the primary English flow.
 
@@ -40,14 +40,16 @@ Place French and Hebrew RTL screenshots in a separate internationalization secti
 - If feasible, hide or crop the Streamlit **Deploy** button for public polish without obscuring product content.
 - Give every README image meaningful alt text that describes the feature, not the filename.
 
-## Recommended recaptures
+## Current public gallery checks
 
-- `03_dashboard_overview.png`: show populated executive metrics or widgets, clearly indicating whether signals are current-session or explicitly saved local data.
-- `06_local_ai_ollama.png`: show localhost endpoint restrictions, availability, score guardrail, or synthetic test content.
-- `07_reports_preview.png`: show a synthetic Markdown or JSON preview and export controls.
-- `08_knowledge_base.png`: show rule/control/category counts and representative read-only rows.
+The current public gallery uses the ten stable README filenames:
 
-Keep the current privacy-reviewed images until improved captures pass the same review. Visual recaptures that do not address a privacy defect are non-blocking polish.
+- `03_dashboard_overview.png`: shows populated executive metrics or widgets and distinguishes current-session signals from saved local data.
+- `06_local_ai_ollama.png`: shows localhost endpoint restrictions, availability, score guardrail, or synthetic test content.
+- `07_reports_preview.png`: shows synthetic report/export content.
+- `08_knowledge_base.png`: shows read-only local knowledge-base counts and representative content.
+
+Keep privacy-reviewed images until improved captures pass the same review. Visual recaptures that do not address a privacy defect are non-blocking polish.
 
 ## Validation
 
@@ -65,8 +67,8 @@ strings -a -n 8 screenshots/*.png | grep -Ei "(/(Users|home)/|token|secret|passw
 
 Also inspect pixels manually; a string scan cannot detect visible text rendered into the image.
 
-## Visual redesign recapture gate
+## Visual redesign review gate
 
-The current gallery predates the latest command-center styling. Do not replace it until a human has reviewed both Light and Dark modes at desktop and narrow widths. The review must include the risk cockpit, a High or Critical evidence card, the simulation assumptions banner, the Local AI authority boundary, the integrated sidebar, disabled reset button, and Hebrew RTL behavior.
+Do not replace the gallery until a human has reviewed both Light and Dark modes at desktop and narrow widths. The review must include the risk cockpit, a High or Critical evidence card, the simulation assumptions banner, the Local AI authority boundary, the integrated sidebar, disabled reset button, and Hebrew RTL behavior.
 
 Temporary automated captures, if created, belong under `.aiwra-audit-output/visual-smoke/` and must not be added to Git.

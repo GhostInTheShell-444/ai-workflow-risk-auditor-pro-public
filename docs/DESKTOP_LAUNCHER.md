@@ -75,7 +75,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\create_windows_shortcut.ps1
 The script creates `AI Workflow Risk Auditor Pro.lnk` on the current user’s desktop. The shortcut opens PowerShell in the project directory and runs:
 
 ```powershell
-.\.venv\Scripts\python.exe -m streamlit run app.py --server.address 127.0.0.1 --server.port 8501
+.\.venv\Scripts\python.exe -m streamlit run app.py --server.address 127.0.0.1 --server.port 8501 --server.headless true --browser.gatherUsageStats false
 ```
 
 No administrator rights are required. Remove it with:

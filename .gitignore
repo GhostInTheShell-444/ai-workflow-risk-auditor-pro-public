@@ -14,14 +14,34 @@ env/
 Thumbs.db
 *.tmp
 *.log
+*.runlog
+*.bak
+*.orig
 temp_reports/
 local_reports/
 data/*.db
+data/*.sqlite
+data/*.sqlite3
+data/*.db-wal
+data/*.db-shm
 !data/.gitkeep
 *.db
+*.sqlite
+*.sqlite3
+*.db-wal
+*.db-shm
 .mypy_cache/
 .cache/
 .ipynb_checkpoints/
 
 # AIWRA local audit outputs
 .aiwra-audit-output/
+.codex-audit-output/
+CODEX_OUTPUT/
+codex-output/
+runtime-watchlist*
+git-before*
+git-after*
+screenshots-inventory*
+final-summary.txt
+Texte collé.txt

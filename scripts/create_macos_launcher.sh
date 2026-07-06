@@ -28,7 +28,7 @@ ESCAPED_PROJECT=$(printf '%s' "$PROJECT_DIR" | sed "s/'/'\\\\''/g")
     printf '%s\n' 'mkdir -p "$LOG_DIR"'
     printf '%s\n' '(sleep 2; open "http://127.0.0.1:8501") &'
     printf '%s\n' 'cd "$PROJECT_DIR"'
-    printf '%s\n' 'exec "$PROJECT_DIR/.venv/bin/python" -m streamlit run "$PROJECT_DIR/app.py" --server.address 127.0.0.1 --server.port 8501 --browser.gatherUsageStats false >>"$LOG_FILE" 2>&1'
+    printf '%s\n' 'exec "$PROJECT_DIR/.venv/bin/python" -m streamlit run "$PROJECT_DIR/app.py" --server.address 127.0.0.1 --server.port 8501 --server.headless true --browser.gatherUsageStats false >>"$LOG_FILE" 2>&1'
 } >"$DESTINATION"
 
 chmod 755 "$DESTINATION"

@@ -104,7 +104,16 @@ def apply_global_styles(language: str, theme: str = "light") -> None:
             font-size: 15px;
             line-height: 1.6;
         }}
-        [class*="css"] {{
+        [data-testid="stMarkdownContainer"],
+        [data-testid="stWidgetLabel"],
+        [data-testid="stTextInput"],
+        [data-testid="stTextArea"],
+        [data-testid="stSelectbox"],
+        [data-testid="stRadio"],
+        [data-testid="stCheckbox"],
+        [data-testid="stToggle"],
+        [data-testid="stButton"],
+        [data-testid="stDownloadButton"] {{
             font-family: var(--aiwra-font-stack);
         }}
         .stApp,
@@ -685,49 +694,6 @@ def apply_global_styles(language: str, theme: str = "light") -> None:
                 radial-gradient(circle at 40% 0%, color-mix(in srgb, var(--aiwra-primary) 24%, transparent), transparent 46%),
                 color-mix(in srgb, var(--aiwra-primary-soft) 72%, var(--aiwra-card-bg)) !important;
         }}
-        .st-key-aiwra_power_shutdown_zone {{
-            margin-top: 1.15rem;
-            padding: 0.95rem 0.3rem 0.35rem;
-            border-top: 1px solid color-mix(in srgb, #ef4444 18%, var(--aiwra-border-soft));
-            text-align: center;
-        }}
-        .st-key-aiwra_power_shutdown_button [data-testid="stButton"] {{
-            display: flex;
-            justify-content: center;
-        }}
-        .st-key-aiwra_power_shutdown_button button {{
-            width: 2.85rem !important;
-            height: 2.85rem !important;
-            min-height: 2.85rem !important;
-            padding: 0 !important;
-            border-radius: 999px !important;
-            border: 1px solid color-mix(in srgb, #ef4444 48%, var(--aiwra-border-soft)) !important;
-            background:
-                radial-gradient(circle at 50% 8%, color-mix(in srgb, #ef4444 32%, transparent), transparent 48%),
-                color-mix(in srgb, var(--aiwra-elevated-card-bg) 84%, transparent) !important;
-            color: color-mix(in srgb, #ef4444 78%, var(--aiwra-text-primary)) !important;
-            box-shadow:
-                0 0 0 1px color-mix(in srgb, #ef4444 12%, transparent),
-                0 14px 34px color-mix(in srgb, #ef4444 16%, transparent) !important;
-            font-size: 1.18rem !important;
-            font-weight: 900 !important;
-            line-height: 1 !important;
-        }}
-        .st-key-aiwra_power_shutdown_button button:hover:not(:disabled) {{
-            transform: translateY(-1px) scale(1.02);
-            border-color: color-mix(in srgb, #ef4444 70%, var(--aiwra-border-soft)) !important;
-            background:
-                radial-gradient(circle at 50% 8%, color-mix(in srgb, #ef4444 42%, transparent), transparent 52%),
-                color-mix(in srgb, #ef4444 8%, var(--aiwra-elevated-card-bg)) !important;
-        }}
-        .st-key-aiwra_power_shutdown_zone [data-testid="stCaptionContainer"] {{
-            max-width: 12rem;
-            margin: 0.35rem auto 0;
-            color: var(--aiwra-text-secondary) !important;
-            font-size: 0.72rem !important;
-            line-height: 1.3 !important;
-        }}
-
         .st-key-main_example_selector_mode [role="radiogroup"],
         .st-key-main_example_selector [role="radiogroup"] {{
             display: flex;
@@ -2303,7 +2269,817 @@ def apply_global_styles(language: str, theme: str = "light") -> None:
         }}
         /* AIWRA_P14_SIDEBAR_RESTORE_END */
 
-        </style>
+
+        /* AIWRA_P15_VISUAL_EXPERT_DARK_FIX_BEGIN */
+
+        /*
+         * P15 visual hardening.
+         * Scope:
+         * - dark/light-safe Streamlit selectboxes and virtual dropdowns;
+         * - sidebar project selector readability;
+         * - collapsed/expanded sidebar control visibility;
+         * - disabled controls readable without looking active.
+         *
+         * Accessibility targets:
+         * - normal text aims for WCAG AA 4.5:1;
+         * - UI component borders/focus/interactive states aim for 3:1.
+         */
+
+        [data-baseweb="select"] > div,
+        [data-testid="stSelectbox"] [data-baseweb="select"] > div,
+        [data-testid="stSidebar"] [data-baseweb="select"] > div,
+        .st-key-sidebar_ollama_model [data-baseweb="select"] > div {{
+            min-height: 2.75rem !important;
+            background:
+                linear-gradient(
+                    180deg,
+                    color-mix(in srgb, var(--aiwra-input-bg) 92%, var(--aiwra-surface-alt) 8%),
+                    var(--aiwra-input-bg)
+                ) !important;
+            border: 1px solid var(--aiwra-input-border) !important;
+            border-radius: 0.72rem !important;
+            color: var(--aiwra-text-primary) !important;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.055),
+                0 0 0 1px rgba(0, 0, 0, 0.08) !important;
+            opacity: 1 !important;
+        }}
+
+        [data-baseweb="select"] *,
+        [data-testid="stSelectbox"] [data-baseweb="select"] *,
+        [data-testid="stSidebar"] [data-baseweb="select"] *,
+        .st-key-sidebar_ollama_model [data-baseweb="select"] * {{
+            color: var(--aiwra-text-primary) !important;
+            opacity: 1 !important;
+        }}
+
+        [data-baseweb="select"] svg,
+        [data-testid="stSelectbox"] svg,
+        [data-testid="stSidebar"] [data-baseweb="select"] svg {{
+            color: var(--aiwra-text-secondary) !important;
+            fill: currentColor !important;
+            opacity: 1 !important;
+        }}
+
+        [data-baseweb="select"] > div:hover,
+        [data-testid="stSelectbox"] [data-baseweb="select"] > div:hover,
+        [data-testid="stSidebar"] [data-baseweb="select"] > div:hover {{
+            border-color: color-mix(in srgb, var(--aiwra-focus-ring) 72%, var(--aiwra-input-border)) !important;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.07),
+                0 0 0 1px color-mix(in srgb, var(--aiwra-focus-ring) 38%, transparent),
+                0 10px 24px rgba(0, 0, 0, 0.16) !important;
+        }}
+
+        [data-baseweb="select"] > div:focus-within,
+        [data-testid="stSelectbox"] [data-baseweb="select"] > div:focus-within,
+        [data-testid="stSidebar"] [data-baseweb="select"] > div:focus-within {{
+            border-color: var(--aiwra-focus-ring) !important;
+            box-shadow:
+                0 0 0 3px color-mix(in srgb, var(--aiwra-focus-ring) 34%, transparent),
+                0 12px 28px rgba(0, 0, 0, 0.18) !important;
+            outline: none !important;
+        }}
+
+        ul[data-testid="stSelectboxVirtualDropdown"],
+        div[data-baseweb="popover"] ul,
+        div[role="listbox"] {{
+            background:
+                linear-gradient(
+                    180deg,
+                    color-mix(in srgb, var(--aiwra-elevated-card-bg) 94%, #000000 6%),
+                    color-mix(in srgb, var(--aiwra-card-bg) 96%, #000000 4%)
+                ) !important;
+            border: 1px solid var(--aiwra-input-border) !important;
+            border-radius: 0.84rem !important;
+            box-shadow:
+                0 22px 48px rgba(0, 0, 0, 0.34),
+                0 0 0 1px rgba(255, 255, 255, 0.04) !important;
+            padding: 0.34rem !important;
+            overflow: hidden !important;
+        }}
+
+        ul[data-testid="stSelectboxVirtualDropdown"] li,
+        ul[data-testid="stSelectboxVirtualDropdown"] [role="option"],
+        div[data-baseweb="popover"] li,
+        div[role="listbox"] [role="option"] {{
+            color: var(--aiwra-text-primary) !important;
+            background: transparent !important;
+            border-radius: 0.56rem !important;
+            margin: 0.10rem 0 !important;
+            min-height: 2.15rem !important;
+            line-height: 1.35 !important;
+            opacity: 1 !important;
+        }}
+
+        ul[data-testid="stSelectboxVirtualDropdown"] li:hover,
+        ul[data-testid="stSelectboxVirtualDropdown"] [role="option"]:hover,
+        div[data-baseweb="popover"] li:hover,
+        div[role="listbox"] [role="option"]:hover {{
+            background: color-mix(in srgb, var(--aiwra-primary) 18%, var(--aiwra-elevated-card-bg)) !important;
+            color: var(--aiwra-text-primary) !important;
+        }}
+
+        ul[data-testid="stSelectboxVirtualDropdown"] li[aria-selected="true"],
+        ul[data-testid="stSelectboxVirtualDropdown"] [aria-selected="true"],
+        div[role="listbox"] [aria-selected="true"] {{
+            background:
+                linear-gradient(
+                    135deg,
+                    color-mix(in srgb, var(--aiwra-primary) 28%, var(--aiwra-elevated-card-bg)),
+                    color-mix(in srgb, var(--aiwra-accent) 18%, var(--aiwra-elevated-card-bg))
+                ) !important;
+            color: var(--aiwra-text-primary) !important;
+            box-shadow: inset 3px 0 0 var(--aiwra-focus-ring) !important;
+            font-weight: 760 !important;
+        }}
+
+        ul[data-testid="stSelectboxVirtualDropdown"] li[aria-disabled="true"],
+        ul[data-testid="stSelectboxVirtualDropdown"] [aria-disabled="true"],
+        div[role="listbox"] [aria-disabled="true"] {{
+            color: var(--aiwra-disabled-text) !important;
+            background: transparent !important;
+            opacity: 0.86 !important;
+        }}
+
+        button:disabled,
+        [data-testid="stButton"] button:disabled,
+        [data-testid="stDownloadButton"] button:disabled {{
+            color: var(--aiwra-button-disabled-text) !important;
+            background: var(--aiwra-button-disabled-bg) !important;
+            border-color: var(--aiwra-button-disabled-border) !important;
+            opacity: 1 !important;
+            box-shadow: none !important;
+            cursor: not-allowed !important;
+        }}
+
+        [data-testid="collapsedControl"] button,
+        [data-testid="stExpandSidebarButton"],
+        [data-testid="stHeader"] [data-testid="stExpandSidebarButton"] {{
+            min-width: 2.45rem !important;
+            min-height: 2.45rem !important;
+            border-radius: 0.72rem !important;
+            border: 1px solid color-mix(in srgb, var(--aiwra-focus-ring) 46%, var(--aiwra-border)) !important;
+            background:
+                linear-gradient(
+                    180deg,
+                    color-mix(in srgb, var(--aiwra-elevated-card-bg) 84%, var(--aiwra-primary) 16%),
+                    color-mix(in srgb, var(--aiwra-surface) 88%, var(--aiwra-primary) 12%)
+                ) !important;
+            color: var(--aiwra-text-primary) !important;
+            opacity: 1 !important;
+            box-shadow:
+                0 8px 22px rgba(0, 0, 0, 0.22),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+        }}
+
+        [data-testid="collapsedControl"] button *,
+        [data-testid="stExpandSidebarButton"] *,
+        [data-testid="stHeader"] [data-testid="stExpandSidebarButton"] * {{
+            color: var(--aiwra-text-primary) !important;
+            fill: currentColor !important;
+            stroke: currentColor !important;
+            opacity: 1 !important;
+        }}
+
+        [data-testid="collapsedControl"] button:hover,
+        [data-testid="stExpandSidebarButton"]:hover,
+        [data-testid="stHeader"] [data-testid="stExpandSidebarButton"]:hover {{
+            border-color: var(--aiwra-focus-ring) !important;
+            background:
+                linear-gradient(
+                    180deg,
+                    color-mix(in srgb, var(--aiwra-primary) 24%, var(--aiwra-elevated-card-bg)),
+                    color-mix(in srgb, var(--aiwra-accent) 18%, var(--aiwra-surface))
+                ) !important;
+            transform: translateY(-1px) !important;
+            box-shadow:
+                0 14px 30px rgba(0, 0, 0, 0.28),
+                0 0 0 3px color-mix(in srgb, var(--aiwra-focus-ring) 22%, transparent) !important;
+        }}
+
+        [data-testid="collapsedControl"] button:focus-visible,
+        [data-testid="stExpandSidebarButton"]:focus-visible,
+        [data-testid="stHeader"] [data-testid="stExpandSidebarButton"]:focus-visible {{
+            outline: none !important;
+            border-color: var(--aiwra-focus-ring) !important;
+            box-shadow:
+                0 0 0 3px color-mix(in srgb, var(--aiwra-focus-ring) 42%, transparent),
+                0 14px 30px rgba(0, 0, 0, 0.28) !important;
+        }}
+
+        /* AIWRA_P15_VISUAL_EXPERT_DARK_FIX_END */
+
+
+        /* AIWRA_P17_EXACT_DOM_SIDEBAR_BUTTON_BEGIN */
+
+        /*
+         * P17 exact DOM emergency patch.
+         * Target provided from browser inspector:
+         *
+         * <div data-testid="stSidebarCollapseButton" class="st-emotion-cache-1gwooyg eelgd2m10">
+         *   <button kind="headerNoPadding" data-testid="stBaseButton-headerNoPadding">
+         *     <span color="rgba(16, 32, 51, 0.6)">
+         *       <span data-testid="stIconMaterial">keyboard_double_arrow_left</span>
+         *     </span>
+         *   </button>
+         * </div>
+         *
+         * Purpose: make only this collapse control unmistakably visible.
+         */
+
+        div[data-testid="stSidebarHeader"] > div[data-testid="stSidebarCollapseButton"],
+        div[data-testid="stSidebarCollapseButton"],
+        div[data-testid="stSidebarCollapseButton"].st-emotion-cache-1gwooyg,
+        .st-emotion-cache-1gwooyg[data-testid="stSidebarCollapseButton"] {{
+            position: relative !important;
+            z-index: 99999 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+
+            width: 2.65rem !important;
+            height: 2.65rem !important;
+            min-width: 2.65rem !important;
+            min-height: 2.65rem !important;
+            max-width: 2.65rem !important;
+            max-height: 2.65rem !important;
+
+            padding: 0 !important;
+            margin: 0 0 0 auto !important;
+            overflow: visible !important;
+
+            border-radius: 999px !important;
+            border: 2px solid #FCFEFF !important;
+            outline: 1px solid rgba(15, 74, 90, 0.72) !important;
+            outline-offset: 1px !important;
+
+            background:
+                radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 0.92), rgba(245, 188, 74, 0.92) 42%, rgba(232, 149, 69, 0.96) 100%) !important;
+
+            color: #09131F !important;
+            box-shadow:
+                0 0 0 4px rgba(245, 188, 74, 0.28),
+                0 14px 34px rgba(0, 0, 0, 0.34),
+                inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+
+            transform: none !important;
+            transition:
+                transform 120ms ease,
+                box-shadow 120ms ease,
+                border-color 120ms ease,
+                background 120ms ease !important;
+        }}
+
+        div[data-testid="stSidebarCollapseButton"] button,
+        div[data-testid="stSidebarCollapseButton"] button[kind="headerNoPadding"],
+        div[data-testid="stSidebarCollapseButton"] button[data-testid="stBaseButton-headerNoPadding"],
+        div[data-testid="stSidebarHeader"] div[data-testid="stSidebarCollapseButton"] button[data-testid="stBaseButton-headerNoPadding"] {{
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+
+            width: 100% !important;
+            height: 100% !important;
+            min-width: 100% !important;
+            min-height: 100% !important;
+
+            padding: 0 !important;
+            margin: 0 !important;
+
+            background: transparent !important;
+            border: 0 !important;
+            border-radius: inherit !important;
+            box-shadow: none !important;
+
+            color: #09131F !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            pointer-events: auto !important;
+        }}
+
+        div[data-testid="stSidebarCollapseButton"] span,
+        div[data-testid="stSidebarCollapseButton"] span[color],
+        div[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
+        div[data-testid="stSidebarCollapseButton"] .st-emotion-cache-snk3wv,
+        div[data-testid="stSidebarCollapseButton"] button[data-testid="stBaseButton-headerNoPadding"] span,
+        div[data-testid="stSidebarCollapseButton"] button[data-testid="stBaseButton-headerNoPadding"] [data-testid="stIconMaterial"] {{
+            color: #09131F !important;
+            fill: #09131F !important;
+            stroke: #09131F !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            font-weight: 900 !important;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.22) !important;
+        }}
+
+        div[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"] {{
+            font-size: 1.58rem !important;
+            line-height: 1 !important;
+            width: 1.58rem !important;
+            height: 1.58rem !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }}
+
+        div[data-testid="stSidebarCollapseButton"]::after {{
+            content: "" !important;
+            position: absolute !important;
+            inset: -0.32rem !important;
+            border-radius: 999px !important;
+            border: 1px solid rgba(245, 188, 74, 0.42) !important;
+            pointer-events: none !important;
+        }}
+
+        div[data-testid="stSidebarCollapseButton"]:hover,
+        div[data-testid="stSidebarCollapseButton"]:has(button:hover) {{
+            border-color: #FFFFFF !important;
+            outline-color: rgba(15, 74, 90, 0.96) !important;
+            background:
+                radial-gradient(circle at 30% 18%, rgba(255, 255, 255, 1), rgba(255, 204, 92, 1) 42%, rgba(232, 149, 69, 1) 100%) !important;
+            box-shadow:
+                0 0 0 5px rgba(245, 188, 74, 0.38),
+                0 18px 42px rgba(0, 0, 0, 0.42),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            transform: translateY(-1px) scale(1.03) !important;
+        }}
+
+        div[data-testid="stSidebarCollapseButton"]:focus-within,
+        div[data-testid="stSidebarCollapseButton"] button:focus-visible {{
+            outline: 3px solid #8DB8FF !important;
+            outline-offset: 3px !important;
+            box-shadow:
+                0 0 0 6px rgba(141, 184, 255, 0.34),
+                0 18px 42px rgba(0, 0, 0, 0.42) !important;
+        }}
+
+        @media (prefers-reduced-motion: reduce) {{
+            div[data-testid="stSidebarCollapseButton"],
+            div[data-testid="stSidebarCollapseButton"]:hover {{
+                transition: none !important;
+                transform: none !important;
+            }}
+        }}
+
+        /* AIWRA_P17_EXACT_DOM_SIDEBAR_BUTTON_END */
+
+/* AIWRA_2026_VISUAL_SYSTEM_BEGIN
+   P18.7 Visual System Consolidation.
+   Scope: presentation only. Theme comes from AIWRA tokens.
+   Icon rule: normal text inherits Lato stack; Material glyphs keep icon fonts.
+   Shutdown rule: one compact top-left sidebar control, no hover displacement.
+*/
+
+html, body, .stApp, [data-testid="stAppViewContainer"] {{
+  font-family: var(--aiwra-font-stack);
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--aiwra-primary) 7%, transparent), transparent 32rem),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--aiwra-accent) 7%, transparent), transparent 30rem),
+    var(--aiwra-page-bg) !important;
+  color: var(--aiwra-text-primary) !important;
+}}
+
+:where(
+  [data-testid="stMarkdownContainer"],
+  [data-testid="stWidgetLabel"],
+  [data-testid="stTextInput"],
+  [data-testid="stTextArea"],
+  [data-testid="stSelectbox"],
+  [data-testid="stRadio"],
+  [data-testid="stCheckbox"],
+  [data-testid="stToggle"],
+  [data-testid="stButton"] button,
+  [data-testid="stDownloadButton"] button,
+  [data-baseweb="select"],
+  [data-baseweb="popover"],
+  [role="listbox"],
+  [role="option"],
+  button,
+  input,
+  textarea,
+  label
+) {{
+  font-family: var(--aiwra-font-stack) !important;
+}}
+
+[data-testid="stIconMaterial"],
+[data-testid="collapsedControl"] [data-testid="stIconMaterial"],
+div[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
+[data-testid="stExpandSidebarButton"] [data-testid="stIconMaterial"],
+[data-testid="stExpander"] details summary [data-testid="stIconMaterial"],
+[data-testid="stExpander"] summary [data-testid="stIconMaterial"],
+details summary [data-testid="stIconMaterial"],
+.material-symbols-outlined,
+.material-symbols-rounded,
+.material-symbols-sharp,
+.material-icons,
+.material-icons-outlined,
+.material-icons-round,
+.material-icons-sharp,
+.material-icons-two-tone {{
+  font-family:
+    "Material Symbols Rounded",
+    "Material Symbols Outlined",
+    "Material Symbols Sharp",
+    "Material Icons",
+    "Material Icons Outlined",
+    "Material Icons Round",
+    "Material Icons Sharp",
+    "Material Icons Two Tone" !important;
+  font-weight: normal !important;
+  font-style: normal !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  white-space: nowrap !important;
+  word-wrap: normal !important;
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  -webkit-font-feature-settings: "liga" !important;
+  font-feature-settings: "liga" !important;
+  -webkit-font-smoothing: antialiased !important;
+  text-rendering: optimizeLegibility !important;
+}}
+
+[data-testid="stHeader"] {{
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--aiwra-page-bg) 92%, transparent),
+    color-mix(in srgb, var(--aiwra-page-bg) 64%, transparent),
+    transparent
+  ) !important;
+  border-bottom: 1px solid color-mix(in srgb, var(--aiwra-border-soft) 72%, transparent) !important;
+  backdrop-filter: blur(18px) saturate(130%) !important;
+}}
+
+[data-testid="stToolbar"] {{
+  opacity: 0.16 !important;
+  transform: scale(0.94) !important;
+  transform-origin: top right !important;
+  transition: opacity 140ms ease, transform 140ms ease !important;
+}}
+[data-testid="stToolbar"]:hover,
+[data-testid="stToolbar"]:focus-within {{
+  opacity: 0.88 !important;
+  transform: scale(1) !important;
+}}
+
+[data-testid="stSidebar"] {{
+  background: var(--aiwra-sidebar-bg) !important;
+  color: var(--aiwra-text-primary) !important;
+  border-right: 1px solid var(--aiwra-border) !important;
+  box-shadow: 14px 0 42px color-mix(in srgb, var(--aiwra-shadow) 24%, transparent) !important;
+}}
+[data-testid="stSidebarContent"] {{
+  background: transparent !important;
+  color: var(--aiwra-text-primary) !important;
+  padding-block: 3.95rem 1rem !important;
+}}
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"],
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] span:not([data-testid="stIconMaterial"]),
+[data-testid="stSidebar"] small {{
+  color: var(--aiwra-text-secondary) !important;
+}}
+[data-testid="stSidebar"] h1,
+[data-testid="stSidebar"] h2,
+[data-testid="stSidebar"] h3,
+[data-testid="stSidebar"] strong,
+[data-testid="stSidebar"] b {{
+  color: var(--aiwra-text-primary) !important;
+}}
+[data-testid="stSidebarHeader"] {{
+  min-height: 3.15rem !important;
+  border-bottom: 1px solid var(--aiwra-border-soft) !important;
+}}
+
+[data-testid="collapsedControl"],
+div[data-testid="stSidebarHeader"] > div[data-testid="stSidebarCollapseButton"],
+div[data-testid="stSidebarCollapseButton"],
+[data-testid="stExpandSidebarButton"] {{
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  z-index: 999999 !important;
+}}
+
+[data-testid="collapsedControl"] button,
+div[data-testid="stSidebarCollapseButton"] button[data-testid="stBaseButton-headerNoPadding"],
+[data-testid="stExpandSidebarButton"] button,
+[data-testid="stExpandSidebarButton"] [data-testid="stBaseButton-headerNoPadding"] {{
+  display: grid !important;
+  place-items: center !important;
+  width: 2.35rem !important;
+  height: 2.35rem !important;
+  min-width: 2.35rem !important;
+  min-height: 2.35rem !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  background: var(--aiwra-button-secondary-bg, var(--aiwra-card-bg)) !important;
+  color: var(--aiwra-text-primary) !important;
+  border: 1px solid var(--aiwra-border) !important;
+  box-shadow: var(--aiwra-shadow-sm) !important;
+}}
+
+[data-testid="collapsedControl"] [data-testid="stIconMaterial"],
+div[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
+[data-testid="stExpandSidebarButton"] [data-testid="stIconMaterial"] {{
+  color: var(--aiwra-text-primary) !important;
+  font-size: 1.28rem !important;
+}}
+
+[data-testid="stMarkdownContainer"] {{
+  color: var(--aiwra-text-secondary) !important;
+}}
+[data-testid="stMarkdownContainer"] h1,
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3 {{
+  color: var(--aiwra-text-primary) !important;
+  letter-spacing: 0 !important;
+}}
+
+.aiwra-card,
+.aiwra-panel,
+.aiwra-kpi-card,
+.aiwra-cockpit-card,
+.aiwra-evidence-card,
+.aiwra-control-card,
+.aiwra-local-ai-card,
+.aiwra-risk-card,
+[data-testid="stMetric"],
+[data-testid="stExpander"] details {{
+  background: var(--aiwra-card-bg) !important;
+  color: var(--aiwra-text-primary) !important;
+  border: 1px solid var(--aiwra-border) !important;
+  border-radius: var(--aiwra-radius-lg) !important;
+  box-shadow: var(--aiwra-shadow-sm) !important;
+}}
+
+.aiwra-badge,
+.aiwra-status-chip,
+.aiwra-local-chip,
+.aiwra-risk-chip,
+.aiwra-pill {{
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.38rem !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--aiwra-border) !important;
+  background: var(--aiwra-surface-alt) !important;
+  color: var(--aiwra-text-primary) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0 !important;
+}}
+
+[data-testid="stButton"] button,
+[data-testid="stBaseButton-secondary"],
+button[kind="secondary"],
+button[kind="primary"] {{
+  border-radius: var(--aiwra-radius-md) !important;
+  border: 1px solid var(--aiwra-border) !important;
+  color: var(--aiwra-text-primary) !important;
+  background: var(--aiwra-button-secondary-bg, var(--aiwra-card-bg)) !important;
+  box-shadow: var(--aiwra-shadow-sm) !important;
+  font-weight: 800 !important;
+  transition: transform 120ms ease, border-color 120ms ease, box-shadow 120ms ease, background 120ms ease !important;
+}}
+[data-testid="stButton"] button:hover,
+[data-testid="stBaseButton-secondary"]:hover,
+button[kind="secondary"]:hover,
+button[kind="primary"]:hover {{
+  transform: translateY(-1px) !important;
+  border-color: var(--aiwra-primary) !important;
+}}
+[data-testid="stButton"] button:disabled,
+button:disabled,
+[aria-disabled="true"] {{
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}}
+
+button:focus-visible,
+[role="button"]:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[data-baseweb="select"] div:focus-visible,
+[data-testid="stBaseButton-secondary"]:focus-visible,
+div[role="combobox"]:focus-visible {{
+  outline: none !important;
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--aiwra-primary) 30%, transparent),
+    0 0 0 1px var(--aiwra-primary) !important;
+}}
+
+[data-testid="stSelectbox"],
+[data-testid="stRadio"],
+[data-testid="stCheckbox"],
+[data-testid="stTextArea"],
+[data-testid="stTextInput"] {{
+  color: var(--aiwra-text-primary) !important;
+}}
+[data-testid="stSelectbox"] [data-baseweb="select"],
+[data-baseweb="select"] {{
+  background: var(--aiwra-input-bg) !important;
+  border-radius: var(--aiwra-radius-md) !important;
+}}
+[data-baseweb="select"] > div,
+[data-baseweb="select"] div[role="combobox"],
+textarea,
+input {{
+  background: var(--aiwra-input-bg) !important;
+  border-color: var(--aiwra-input-border) !important;
+  color: var(--aiwra-text-primary) !important;
+  border-radius: var(--aiwra-radius-md) !important;
+}}
+textarea::placeholder,
+input::placeholder {{
+  color: var(--aiwra-muted) !important;
+}}
+ul[data-testid="stSelectboxVirtualDropdown"],
+div[role="listbox"] {{
+  background: var(--aiwra-input-bg) !important;
+  color: var(--aiwra-text-primary) !important;
+  border: 1px solid var(--aiwra-input-border) !important;
+  border-radius: var(--aiwra-radius-md) !important;
+  box-shadow: var(--aiwra-shadow-md) !important;
+}}
+ul[data-testid="stSelectboxVirtualDropdown"] li,
+ul[data-testid="stSelectboxVirtualDropdown"] [role="option"],
+div[role="listbox"] [role="option"] {{
+  color: var(--aiwra-text-primary) !important;
+  background: transparent !important;
+}}
+ul[data-testid="stSelectboxVirtualDropdown"] li:hover,
+ul[data-testid="stSelectboxVirtualDropdown"] [role="option"]:hover,
+div[role="listbox"] [role="option"]:hover {{
+  background: color-mix(in srgb, var(--aiwra-primary) 12%, var(--aiwra-input-bg)) !important;
+  color: var(--aiwra-text-primary) !important;
+}}
+ul[data-testid="stSelectboxVirtualDropdown"] [aria-selected="true"],
+div[role="listbox"] [aria-selected="true"] {{
+  background: color-mix(in srgb, var(--aiwra-primary) 18%, var(--aiwra-input-bg)) !important;
+  color: var(--aiwra-text-primary) !important;
+}}
+
+[data-testid="stExpander"] details summary,
+[data-testid="stExpander"] summary,
+details summary {{
+  color: var(--aiwra-text-primary) !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+}}
+[data-testid="stExpander"] details summary [data-testid="stIconMaterial"],
+[data-testid="stExpander"] summary [data-testid="stIconMaterial"],
+details summary [data-testid="stIconMaterial"] {{
+  color: var(--aiwra-text-primary) !important;
+  font-size: 1.22rem !important;
+}}
+
+.aiwra-danger,
+.aiwra-danger-zone,
+.aiwra-reset-zone,
+[data-testid="stAlert"] {{
+  border-radius: var(--aiwra-radius-lg) !important;
+}}
+.aiwra-danger-zone,
+.aiwra-reset-zone {{
+  background: color-mix(in srgb, var(--aiwra-danger) 10%, var(--aiwra-card-bg)) !important;
+  border: 1px solid color-mix(in srgb, var(--aiwra-danger) 34%, transparent) !important;
+}}
+.aiwra-danger-zone button,
+.aiwra-reset-zone button {{
+  border-color: color-mix(in srgb, var(--aiwra-danger) 55%, transparent) !important;
+}}
+
+.st-key-aiwra_power_shutdown_zone {{
+  position: fixed !important;
+  top: 0.88rem !important;
+  left: 1.05rem !important;
+  width: 3.25rem !important;
+  min-width: 3.25rem !important;
+  max-width: 3.25rem !important;
+  z-index: 1000002 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}}
+
+.st-key-aiwra_power_shutdown_zone [data-testid="stCaptionContainer"] {{
+  display: none !important;
+}}
+
+.st-key-aiwra_power_shutdown_button [data-testid="stButton"] {{
+  display: grid !important;
+  place-items: center !important;
+  width: 3.25rem !important;
+  min-width: 3.25rem !important;
+  max-width: 3.25rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}}
+
+.st-key-aiwra_power_shutdown_button button {{
+  display: grid !important;
+  place-items: center !important;
+  width: 2.82rem !important;
+  min-width: 2.82rem !important;
+  max-width: 2.82rem !important;
+  height: 2.82rem !important;
+  min-height: 2.82rem !important;
+  max-height: 2.82rem !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 1.05rem !important;
+  background: var(--aiwra-card-bg) !important;
+  color: var(--aiwra-text-primary) !important;
+  border: 1px solid var(--aiwra-border) !important;
+  box-shadow: var(--aiwra-shadow-md) !important;
+  transform: none !important;
+  overflow: visible !important;
+}}
+
+.st-key-aiwra_power_shutdown_button button:hover,
+.st-key-aiwra_power_shutdown_button button:focus,
+.st-key-aiwra_power_shutdown_button button:active {{
+  transform: none !important;
+  background: var(--aiwra-card-bg) !important;
+  color: var(--aiwra-text-primary) !important;
+  border-color: color-mix(in srgb, var(--aiwra-danger) 48%, var(--aiwra-border)) !important;
+}}
+
+.st-key-aiwra_power_shutdown_button button [data-testid="stMarkdownContainer"],
+.st-key-aiwra_power_shutdown_button button [data-testid="stMarkdownContainer"] p,
+.st-key-aiwra_power_shutdown_button button p,
+.st-key-aiwra_power_shutdown_button button span:not([data-testid="stIconMaterial"]) {{
+  display: inline-grid !important;
+  place-items: center !important;
+  width: auto !important;
+  min-width: 0 !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: var(--aiwra-text-primary) !important;
+  font-family: var(--aiwra-font-stack) !important;
+  font-size: 1.42rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  text-indent: 0 !important;
+  white-space: nowrap !important;
+}}
+
+[dir="rtl"] .aiwra-card,
+[dir="rtl"] .aiwra-panel,
+[dir="rtl"] .aiwra-cockpit-card,
+[dir="rtl"] [data-testid="stMarkdownContainer"] {{
+  text-align: start !important;
+}}
+[dir="rtl"] code,
+[dir="rtl"] pre,
+[dir="rtl"] .aiwra-code,
+[dir="rtl"] .aiwra-ltr,
+[dir="rtl"] .aiwra-model-name,
+[dir="rtl"] .aiwra-endpoint,
+[dir="rtl"] [data-aiwra-ltr="true"] {{
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  text-align: left !important;
+}}
+
+@media (max-width: 900px) {{
+  .aiwra-card,
+  .aiwra-panel,
+  .aiwra-cockpit-card {{
+    border-radius: var(--aiwra-radius-md) !important;
+  }}
+}}
+
+@media (prefers-reduced-motion: reduce) {{
+  [data-testid="stToolbar"],
+  [data-testid="stButton"] button,
+  [data-testid="stDownloadButton"] button,
+  div[data-testid="stSidebarCollapseButton"],
+  [data-testid="stExpandSidebarButton"] {{
+    transition: none !important;
+    transform: none !important;
+  }}
+}}
+
+/* AIWRA_2026_VISUAL_SYSTEM_END */
+</style>
         """
     )
 

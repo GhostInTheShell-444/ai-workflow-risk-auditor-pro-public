@@ -200,21 +200,147 @@ def _toggle_theme_header() -> None:
 
 
 def _schedule_aiwra_shutdown() -> None:
-    # Stop only the current AIWRA Streamlit server process.
-    # This does not stop the OS and does not kill unrelated local tools.
-    if st.session_state.get("aiwra_shutdown_requested"):
-        return
+    """Request local shutdown and schedule backend stop directly from the button callback."""
+    import time
+
     st.session_state["aiwra_shutdown_requested"] = True
-    current_pid = os.getpid()
-    subprocess.Popen(
-        [
-            "bash",
-            "-lc",
-            f"sleep 0.9; kill -TERM {current_pid} 2>/dev/null || kill -KILL {current_pid} 2>/dev/null",
-        ],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        start_new_session=True,
+    st.session_state["aiwra_shutdown_requested_at"] = time.time()
+    _aiwra_shutdown_backend_after_closed_screen(delay_seconds=2.25)
+
+
+def _aiwra_shutdown_backend_after_closed_screen(delay_seconds: float = 3.25) -> None:
+    """Stop the local Streamlit process after the closed screen had time to render."""
+    if st.session_state.get("aiwra_shutdown_backend_stop_scheduled"):
+        return
+    st.session_state["aiwra_shutdown_backend_stop_scheduled"] = True
+
+    def _stop_later() -> None:
+        import os
+        import signal
+        import time
+
+        time.sleep(delay_seconds)
+        os.kill(os.getpid(), signal.SIGTERM)
+
+    import threading
+
+    threading.Thread(target=_stop_later, name="aiwra-shutdown", daemon=True).start()
+
+
+def _render_aiwra_closed_screen(language: str) -> None:
+    """Render a local shutdown screen and hide Streamlit connection overlays after stop."""
+    title = html.escape(t("shutdown_closed_title", language, "AIWRA closed"))
+    subtitle = html.escape(
+        t(
+            "shutdown_closed_subtitle",
+            language,
+            "The local AIWRA interface is shutting down. You can close this tab.",
+        )
+    )
+    note = html.escape(
+        t(
+            "shutdown_closed_note",
+            language,
+            "No internet connection is required. The local backend is stopping now.",
+        )
+    )
+
+    st.markdown(
+        f"""
+        <style>
+        /* AIWRA_SHUTDOWN_CLOSED_SCREEN_BEGIN */
+        body:has(.aiwra-shutdown-closed-screen) [role="dialog"],
+        body:has(.aiwra-shutdown-closed-screen) div[role="dialog"],
+        body:has(.aiwra-shutdown-closed-screen) [data-testid="stModal"],
+        body:has(.aiwra-shutdown-closed-screen) [data-testid="stDialog"],
+        body:has(.aiwra-shutdown-closed-screen) [data-testid="stToast"],
+        body:has(.aiwra-shutdown-closed-screen) [data-testid="stConnectionStatus"],
+        body:has(.aiwra-shutdown-closed-screen) [data-testid="stStatusWidget"],
+        body:has(.aiwra-shutdown-closed-screen) div[role="alert"] {{
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }}
+
+        .aiwra-shutdown-closed-screen {{
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 2147483647 !important;
+            display: grid !important;
+            place-items: center !important;
+            padding: 2rem !important;
+            background:
+                radial-gradient(circle at top left, color-mix(in srgb, var(--aiwra-primary) 10%, transparent), transparent 28rem),
+                var(--aiwra-page-bg) !important;
+            color: var(--aiwra-text-primary) !important;
+            font-family: "Lato", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+        }}
+
+        .aiwra-shutdown-closed-card {{
+            width: min(38rem, calc(100vw - 3rem)) !important;
+            border-radius: 1.35rem !important;
+            border: 1px solid var(--aiwra-border-strong) !important;
+            background: var(--aiwra-card-bg) !important;
+            box-shadow: var(--aiwra-shadow-md) !important;
+            padding: 2rem !important;
+            text-align: center !important;
+        }}
+
+        .aiwra-shutdown-closed-icon {{
+            width: 4.25rem !important;
+            height: 4.25rem !important;
+            margin: 0 auto 1rem !important;
+            display: grid !important;
+            place-items: center !important;
+            border-radius: 1.25rem !important;
+            border: 1px solid var(--aiwra-border-strong) !important;
+            background: color-mix(in srgb, var(--aiwra-danger) 10%, var(--aiwra-card-bg)) !important;
+            color: var(--aiwra-text-primary) !important;
+            font-size: 2rem !important;
+            font-weight: 900 !important;
+            line-height: 1 !important;
+        }}
+
+        .aiwra-shutdown-closed-card h1 {{
+            margin: 0 0 0.5rem !important;
+            color: var(--aiwra-text-primary) !important;
+            font-size: clamp(1.65rem, 3vw, 2.4rem) !important;
+            line-height: 1.1 !important;
+        }}
+
+        .aiwra-shutdown-closed-card p {{
+            margin: 0.45rem 0 !important;
+            color: var(--aiwra-text-secondary) !important;
+            font-size: 1rem !important;
+            line-height: 1.55 !important;
+        }}
+
+        .aiwra-shutdown-closed-note {{
+            margin-top: 1.25rem !important;
+            padding: 0.8rem 1rem !important;
+            border-radius: 999px !important;
+            border: 1px solid var(--aiwra-border) !important;
+            background: var(--aiwra-surface-alt) !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: var(--aiwra-text-secondary) !important;
+            font-weight: 700 !important;
+        }}
+        /* AIWRA_SHUTDOWN_CLOSED_SCREEN_END */
+        </style>
+
+        <main class="aiwra-shutdown-closed-screen" aria-label="{title}">
+            <section class="aiwra-shutdown-closed-card">
+                <div class="aiwra-shutdown-closed-icon">⏻</div>
+                <h1>{title}</h1>
+                <p>{subtitle}</p>
+                <div class="aiwra-shutdown-closed-note">{note}</div>
+            </section>
+        </main>
+        """,
+        unsafe_allow_html=True,
     )
 
 
@@ -1082,6 +1208,22 @@ theme_mode = _initialize_theme_state()
 rtl = is_rtl(language)
 apply_global_styles(language, theme_mode)
 
+# Shutdown is intentionally rendered early in sidebar source order.
+# It shuts down the local Streamlit process; it does not delete project data.
+with st.sidebar.container(key="aiwra_power_shutdown_zone"):
+    st.button(
+        "⏻",
+        key="aiwra_power_shutdown_button",
+        on_click=_schedule_aiwra_shutdown,
+        help=t("shutdown_system_caption", language, "Shut down the local AIWRA system."),
+        type="secondary",
+    )
+
+if st.session_state.get("aiwra_shutdown_requested"):
+    _render_aiwra_closed_screen(language)
+    _aiwra_shutdown_backend_after_closed_screen()
+    st.stop()
+
 with st.container(key="settings_toolbar_header"):
     settings_language_col, settings_theme_col = st.columns([1.15, 0.85], vertical_alignment="center")
     with settings_language_col:
@@ -1290,17 +1432,6 @@ if local_data_notice:
 
 
 st.sidebar.divider()
-with st.sidebar.container(key="aiwra_power_shutdown_zone"):
-    st.button(
-        "⏻",
-        key="aiwra_power_shutdown_button",
-        on_click=_schedule_aiwra_shutdown,
-    )
-    st.caption(t("shutdown_system_caption", language, "Shut down the local AIWRA system."))
-    if st.session_state.get("aiwra_shutdown_requested"):
-        st.info(t("shutdown_system_notice", language, "Shutdown requested. The local server is stopping."))
-
-
 st.sidebar.caption(t("project_status", language))
 
 active_project_name = str(active_project["name"]) if active_project else t("not_available_label", language, "Not available")

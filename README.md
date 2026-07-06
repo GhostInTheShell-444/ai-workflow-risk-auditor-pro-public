@@ -143,7 +143,7 @@ See [Local AI / Ollama](docs/LOCAL_AI_OLLAMA_TAB.md).
 
 ![Hebrew RTL interface](screenshots/10_hebrew_rtl_ui.png)
 
-The current screenshots remain the previously reviewed public set and do not yet represent the full visual command-center redesign. Recapture is required after owner visual review. See [Screenshot Guidelines](docs/SCREENSHOT_GUIDELINES.md) and [Screenshot Capture Specification](docs/SCREENSHOTS_TODO.md).
+The screenshots use bundled synthetic workflows and were normalized for the public README gallery. Re-run the screenshot gate before replacing them: dimensions, metadata, visible text, privacy, local-only boundaries, and README path accuracy all remain publication checks. See [Screenshot Guidelines](docs/SCREENSHOT_GUIDELINES.md) and [Screenshot Capture Specification](docs/SCREENSHOTS_TODO.md).
 
 ## Quick start
 

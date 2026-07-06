@@ -40,4 +40,5 @@ cd "$PROJECT_DIR"
 exec "$PYTHON" -m streamlit run "$APP" \
     --server.address 127.0.0.1 \
     --server.port "$PORT" \
+    --server.headless true \
     --browser.gatherUsageStats false >>"$LOG_FILE" 2>&1

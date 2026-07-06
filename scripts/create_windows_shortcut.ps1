@@ -33,7 +33,7 @@ if ($LASTEXITCODE -ne 0) { throw "Streamlit is unavailable in .venv. Install req
 $EscapedProject = $ProjectDir.Replace("'", "''")
 $EscapedPython = $Python.Replace("'", "''")
 $EscapedApp = $App.Replace("'", "''")
-$Command = "Set-Location -LiteralPath '$EscapedProject'; Start-Process 'http://127.0.0.1:$Port'; & '$EscapedPython' -m streamlit run '$EscapedApp' --server.address 127.0.0.1 --server.port $Port --browser.gatherUsageStats false"
+$Command = "Set-Location -LiteralPath '$EscapedProject'; Start-Process 'http://127.0.0.1:$Port'; & '$EscapedPython' -m streamlit run '$EscapedApp' --server.address 127.0.0.1 --server.port $Port --server.headless true --browser.gatherUsageStats false"
 
 $Shell = New-Object -ComObject WScript.Shell
 $Shortcut = $Shell.CreateShortcut($ShortcutPath)
